@@ -5,4 +5,8 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.38"
+clap = { version = "4.5.20", features = ["cargo", "derive"] }
 dotenvy = "0.15.7"
+figlet-rs = "0.1.5"
+rand = "0.8.5"
+uuid = { version = "1.11.0", features = ["v4"] }
