@@ -14,12 +14,4 @@ pub struct Flags {
     #[arg(short, long)]
     /// Backup path
     pub folder: Option<String>,
-
-    #[arg(short, long)]
-    /// Set MySQL password
-    pub password: Option<String>,
-
-    #[arg(short, long)]
-    /// Set MySQL user
-    pub user: Option<String>,
 }

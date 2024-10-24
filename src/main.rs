@@ -35,18 +35,12 @@ fn main() {
     } else {
         Env::get_var("BACKUP_PATH")
     };
-
-    let user = if Flags::parse().user != None {
-        Flags::parse().user.unwrap()
-    } else {
-        Env::get_var("DB_USER")
-    };
-
-    let password = if Flags::parse().password != None {
-        Flags::parse().password.unwrap()
-    } else {
-        Env::get_var("DB_PASSWORD")
-    };
     
-    Dump::new(&user, &password, &dbname, &backup_path, interval).make_dump();
+    Dump::new(
+        &Env::get_var("DB_USER"), 
+        &Env::get_var("DB_PASSWORD"), 
+        &dbname, 
+        &backup_path, 
+        interval
+    ).make_dump();
 }
