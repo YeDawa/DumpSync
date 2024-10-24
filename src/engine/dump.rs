@@ -1,10 +1,5 @@
 use chrono::Local;
 
-use rand::{
-    Rng,
-    distributions::Alphanumeric,
-};
-
 use std::{
     thread,
     fs::File,
@@ -13,6 +8,8 @@ use std::{
     time::Duration,
     process::Command,
 };
+
+use crate::utils::generate::Generate;
 
 pub struct Dump {
     user: String,
@@ -34,16 +31,8 @@ impl Dump {
         }
     }
 
-    fn random_string(&self, size: usize) -> String {
-        let mut rng = rand::thread_rng();
-        
-        (0..size)
-            .map(|_| rng.sample(Alphanumeric) as char)
-            .collect()
-    }
-
     fn exec(&self) {
-        let unique_id = &self.random_string(6);
+        let unique_id = Generate.random_string(6);
 
         let dump_file_path = format!(
             "{}backup_{}_{}_{}.sql",

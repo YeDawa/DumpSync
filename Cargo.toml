@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 chrono = "0.4.38"
 clap = { version = "4.5.20", features = ["cargo", "derive"] }
+colored = "2.1.0"
 dotenvy = "0.15.7"
 figlet-rs = "0.1.5"
 rand = "0.8.5"
