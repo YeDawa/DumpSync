@@ -24,7 +24,11 @@ fn main() {
         Env::get_var("DUMP_INTERVAL")
     };
 
-    let interval = Env::get_var_u64("DUMP_INTERVAL");
+    let interval = if Flags::parse().interval != None {
+        Flags::parse().interval.unwrap()
+    } else {
+        Env::get_var_u64("DUMP_INTERVAL")
+    };
     
     Dump::new(
         &Env::get_var("DB_USER"), 
