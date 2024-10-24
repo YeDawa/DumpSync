@@ -10,4 +10,8 @@ pub struct Flags {
     #[arg(short, long)]
     /// Database name
     pub database: Option<String>,
+
+    #[arg(short, long)]
+    /// Backup path
+    pub folder: Option<String>,
 }

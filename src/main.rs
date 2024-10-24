@@ -21,7 +21,7 @@ fn main() {
     let dbname = if Flags::parse().database != None {
         Flags::parse().database.unwrap()
     } else {
-        Env::get_var("DUMP_INTERVAL")
+        Env::get_var("DB_NAME")
     };
 
     let interval = if Flags::parse().interval != None {
@@ -29,12 +29,18 @@ fn main() {
     } else {
         Env::get_var_u64("DUMP_INTERVAL")
     };
+
+    let backup_path = if Flags::parse().folder != None {
+        Flags::parse().folder.unwrap()
+    } else {
+        Env::get_var("BACKUP_PATH")
+    };
     
     Dump::new(
         &Env::get_var("DB_USER"), 
         &Env::get_var("DB_PASSWORD"), 
         &dbname, 
-        &Env::get_var("BACKUP_PATH"), 
+        &backup_path, 
         interval
     ).make_dump();
 }
