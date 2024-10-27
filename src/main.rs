@@ -1,3 +1,4 @@
+pub mod ui;
 pub mod utils;
 pub mod engine;
 pub mod args_cli;

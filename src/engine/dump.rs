@@ -3,13 +3,33 @@ use chrono::Local;
 use std::{
     thread,
     fs::File,
-    io::Write,
     path::Path,
     time::Duration,
     process::Command,
+
+    sync::{
+        Arc,
+
+        atomic::{
+            Ordering,
+            AtomicBool, 
+        },
+    },
+
+    io::{
+        self, 
+        Write
+    },
 };
 
-use crate::utils::generate::Generate;
+use crate::{
+    utils::generate::Generate,
+
+    ui::{
+        errors_alerts::ErrorsAlerts,
+        success_alerts::SuccessAlerts,
+    },
+};
 
 pub struct Dump {
     user: String,
@@ -27,13 +47,12 @@ impl Dump {
             password: password.to_string(),
             dbname: dbname.to_string(),
             interval,
-            dump_file_path: backup_path.to_string()
+            dump_file_path: backup_path.to_string(),
         }
     }
 
     fn exec(&self) {
         let unique_id = Generate.random_string(6);
-
         let dump_file_path = format!(
             "{}backup_{}_{}_{}.sql",
             self.dump_file_path,
@@ -63,18 +82,28 @@ impl Dump {
         if output.status.success() {
             let mut file = File::create(Path::new(&dump_file_path)).expect("Could not create the dump file.");
             file.write_all(&output.stdout).expect("Failed to write to the file.");
-            println!("Dump successfully completed and saved at {}", dump_file_path);
+
+            SuccessAlerts::dump(&dump_file_path);
+            io::stdout().flush().unwrap();
         } else {
             let stderr = String::from_utf8_lossy(&output.stderr);
-            println!("Error: {}.", stderr);
+            ErrorsAlerts::dump(&stderr);
         }
     }
 
     pub fn make_dump(&self) {
-        loop {
+        let running = Arc::new(AtomicBool::new(true));
+        let r = running.clone();
+
+        ctrlc::set_handler(move || {
+            r.store(false, Ordering::SeqCst);
+            SuccessAlerts::terminate();
+        }).expect("Error setting Ctrl-C handler");
+
+        while running.load(Ordering::SeqCst) {
             self.exec();
             thread::sleep(Duration::from_secs(self.interval));
         }
     }
-
+    
 }
