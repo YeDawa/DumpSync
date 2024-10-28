@@ -18,17 +18,17 @@ cargo install dumpsync
 
 The tool uses three main parameters, which can be configured via arguments or environment variables.
 
-1. **Database Name (`dbname`)**The name of the database to be dumped. This parameter is required for the dump to execute successfully.
+1. **Database Name (`dbname`)** The name of the database to be dumped. This parameter is required for the dump to execute successfully.
 
    - **Command-Line Argument**: `--database`
    - **Environment Variable**: `DB_NAME`
    - **Behavior**: If the `--database` argument is provided, it will be used. Otherwise, the `DB_NAME` environment variable will be used.
-2. **Dump Interval (`interval`)**Time interval, in seconds, between each database dump. This parameter defines the frequency of automatic backups.
+2. **Dump Interval (`interval`)** Time interval, in seconds, between each database dump. This parameter defines the frequency of automatic backups.
 
    - **Command-Line Argument**: `--interval`
    - **Environment Variable**: `DS_DUMP_INTERVAL`
    - **Behavior**: If the `--interval` argument is provided, it will be used. Otherwise, the `DS_DUMP_INTERVAL` environment variable will be used.
-3. **Backup Path (`backup_path`)**Directory where dump files will be saved. You can specify a local or remote folder as needed.
+3. **Backup Path (`backup_path`)** Directory where dump files will be saved. You can specify a local or remote folder as needed.
 
    - **Command-Line Argument**: `--folder`
    - **Environment Variable**: `DS_DUMP_PATH`
