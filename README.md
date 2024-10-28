@@ -39,7 +39,7 @@ The tool uses three main parameters, which can be configured via arguments or en
 **Command-Line Arguments**:
 
 ```bash
-dumpsync -d my_database -i 3600 -f /backups/mysql
+dumpsync -d my_database -i 3600 -f /path/to/
 ```
 
 **Environment Variables**:
