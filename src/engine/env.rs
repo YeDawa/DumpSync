@@ -18,8 +18,4 @@ impl Env {
         env::var(var).expect(&format!("{} is not defined in the .env", var)).parse().expect(&format!("{} is not a valid number", var))
     }
 
-    pub fn get_var_bool(var: &str) -> bool {
-        env::var(var).expect(&format!("{} is not defined in the .env", var)).parse().expect(&format!("{} is not a valid boolean", var))
-    }
-
 }

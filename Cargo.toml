@@ -2,6 +2,13 @@
 name = "dumpsync"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+authors = ["kremilly"]
+keywords = ["mysql", "dump", "restore", "backup"]
+description = "A simple tool for dump and restore a MySQL database. It can be used for backup and restore purposes, or for transferring a database from one server to another."
+repository = "https://github.com/kremilly/DumpSync"
+documentation = "https://kremilly.com/docs/dumpsync"
+homepage = "https://kremilly.com"
 
 [dependencies]
 chrono = "0.4.38"
@@ -11,4 +18,3 @@ ctrlc = "3.4.5"
 dotenvy = "0.15.7"
 figlet-rs = "0.1.5"
 rand = "0.8.5"
-uuid = { version = "1.11.0", features = ["v4"] }

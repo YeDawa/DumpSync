@@ -1,10 +1,10 @@
-pub mod ui;
-pub mod utils;
-pub mod engine;
-pub mod args_cli;
-pub mod dumpsync;
+mod ui;
+mod utils;
+mod engine;
+mod args_cli;
+mod dump_sync;
 
-use dumpsync::DumpSync;
+use crate::dump_sync::DumpSync;
 
 fn main() {
     DumpSync::init();

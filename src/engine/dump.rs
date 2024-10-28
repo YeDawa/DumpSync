@@ -33,9 +33,9 @@ use crate::{
 
 pub struct Dump {
     user: String,
-    password: String,
-    dbname: String,
     interval: u64,
+    dbname: String,
+    password: String,
     dump_file_path: String,
 }
 

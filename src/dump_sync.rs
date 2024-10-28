@@ -36,7 +36,7 @@ impl DumpSync {
             Env::get_var("DS_DUMP_PATH")
         };
 
-        UI::label("Press CTRL+C to exit the tool", "info");
+        UI::label("Press CTRL+C to exit the tool", "normal");
         
         UI::section_header("Dumping the database", "info");
 

@@ -27,13 +27,20 @@ impl UI {
         
         if let Some(title) = standard_font.convert(&name) {
             println!("{}", &title.to_string().bold().cyan());
+
+            println!(
+                "Version: {} | Author: {} | License: {} | Home: {}",
+
+                env!("CARGO_PKG_VERSION").bold().green(),
+                env!("CARGO_PKG_AUTHORS").bold().cyan(),
+                env!("CARGO_PKG_LICENSE").bold().blue(),
+                env!("CARGO_PKG_HOMEPAGE").bold().yellow()
+            );
         }
     }
     
     pub fn section_header(text: &str, level: &str) {
-        let text = text.to_uppercase();
-        let message = Self::colorize(&text, level);
-
+        let message = Self::colorize(&text.to_uppercase(), level);
         println!("\n{}\n", message);
     }
     
