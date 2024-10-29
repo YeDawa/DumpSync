@@ -1,18 +1,18 @@
-# DumpSync
-
+---
+Title: DumpSync
+Category: Crate
+Description: A simple tool for dump and restore a MySQL database. It can be used for backup and restore purposes, or for transferring a database from one server to another.
+Package: cargo install dumpsync
+---
 A simple tool for dump and restore a MySQL database. It can be used for backup and restore purposes, or for transferring a database from one server to another.
 
 ## Overview
 
 This tool allows for automatic dumps of a MySQL database at configurable time intervals, saving the files in a specified directory. Configuration can be done via environment variables or command-line arguments, providing flexibility for different usage contexts.
 
-## Installation
+To Install using [crates.io](https://crates.io):
 
-To install the tool, you can use the following command:
-
-```bash
-cargo install dumpsync
-```
+> [!install] cargo install dumpsync
 
 ### Parameters
 
@@ -33,15 +33,15 @@ The tool uses three main parameters, which can be configured via arguments or en
    - **Command-Line Argument**: `--folder`
    - **Environment Variable**: `DS_DUMP_PATH`
    - **Behavior**: If the `--folder` argument is provided, it will be used. Otherwise, the `DS_DUMP_PATH` environment variable will be used.
-4. **Database Host (`db_host`)**: O endereço do host do banco de dados.
+4. **Database Host (`db_host`)**: The address of the database host.
 
    - **Environment Variable**: `DB_HOST`
 
-5. **Database Port (`db_port`)**: O número da porta do banco de dados.
+5. **Database Port (`db_port`)**: The port number of the database.
 
    - **Environment Variable**: `DB_PORT`
 
-#### Usage Example
+### Usage Example
 
 **Command-Line Arguments**:
 
@@ -62,7 +62,7 @@ DS_DUMP_INTERVAL="3600"
 DS_DUMP_PATH="/path/to/"
 ```
 
-#### Notes
+### Notes
 
 - The tool requires read and write permissions in the directory set for `backup_path`.
 - The MySQL database must be accessible for the dump to proceed.
