@@ -1,9 +1,5 @@
----
-Title: DumpSync
-Category: Crate
-Description: A simple tool for dump and restore a MySQL database. It can be used for backup and restore purposes, or for transferring a database from one server to another.
-Package: cargo install dumpsync
----
+# DumpSync
+
 A simple tool for dump and restore a MySQL database. It can be used for backup and restore purposes, or for transferring a database from one server to another.
 
 ## Overview
