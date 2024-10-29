@@ -8,7 +8,9 @@ This tool allows for automatic dumps of a MySQL database at configurable time in
 
 To Install using [crates.io](https://crates.io):
 
-> [!install] cargo install dumpsync
+```bash
+cargo install dumpsync
+```
 
 ### Parameters
 
