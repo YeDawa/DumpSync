@@ -41,6 +41,8 @@ impl DumpSync {
         UI::section_header("Dumping the database", "info");
 
         Dump::new(
+            &Env::get_var("DB_HOST"),
+            Env::get_var_u64("DB_PORT"),
             &Env::get_var("DB_USER"), 
             &Env::get_var("DB_PASSWORD"), 
             &dbname, 

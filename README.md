@@ -33,6 +33,13 @@ The tool uses three main parameters, which can be configured via arguments or en
    - **Command-Line Argument**: `--folder`
    - **Environment Variable**: `DS_DUMP_PATH`
    - **Behavior**: If the `--folder` argument is provided, it will be used. Otherwise, the `DS_DUMP_PATH` environment variable will be used.
+4. **Database Host (`db_host`)**: O endereço do host do banco de dados.
+
+   - **Environment Variable**: `DB_HOST`
+
+5. **Database Port (`db_port`)**: O número da porta do banco de dados.
+
+   - **Environment Variable**: `DB_PORT`
 
 #### Usage Example
 
@@ -45,6 +52,8 @@ dumpsync -d my_database -i 3600 -f /path/to/
 **Environment Variables**:
 
 ```bash
+DB_HOST="YOUR_HOST"
+DB_PORT="YOUR_PORT"
 DB_USER="YOUR_USERNAME"
 DB_PASSWORD="YOUR_PASSWORD"
 DB_NAME="YOUR_DATABASE"

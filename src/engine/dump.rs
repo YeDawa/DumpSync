@@ -32,6 +32,8 @@ use crate::{
 };
 
 pub struct Dump {
+    port: u64,
+    host: String,
     user: String,
     interval: u64,
     dbname: String,
@@ -41,8 +43,10 @@ pub struct Dump {
 
 impl Dump {
 
-    pub fn new(user: &str, password: &str, dbname: &str, backup_path: &str, interval: u64) -> Self {
+    pub fn new(host: &str, port: u64, user: &str, password: &str, dbname: &str, backup_path: &str, interval: u64) -> Self {
         Self {
+            host: host.to_string(),
+            port,
             user: user.to_string(),
             password: password.to_string(),
             dbname: dbname.to_string(),
@@ -63,6 +67,10 @@ impl Dump {
 
         let output = if self.password.is_empty() {
             Command::new("mysqldump")
+                .arg("-h")
+                .arg(&self.host)
+                .arg("-P")
+                .arg(&self.port.to_string())
                 .arg("-u")
                 .arg(&self.user)
                 .arg(&self.dbname)
@@ -70,6 +78,9 @@ impl Dump {
                 .expect("Failed to execute mysqldump")
         } else {
             Command::new("mysqldump")
+                .arg(&self.host)
+                .arg("-P")
+                .arg(&self.port.to_string())
                 .arg("-u")
                 .arg(&self.user)
                 .arg("-p")
