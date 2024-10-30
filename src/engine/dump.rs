@@ -2,10 +2,8 @@ use chrono::Local;
 
 use std::{
     thread,
-    fs::File,
     path::Path,
     time::Duration,
-    process::Command,
 
     sync::{
         Arc,
@@ -15,20 +13,12 @@ use std::{
             AtomicBool, 
         },
     },
-
-    io::{
-        self, 
-        Write
-    },
 };
 
 use crate::{
+    engine::export::Export,
     utils::generate::Generate,
-
-    ui::{
-        errors_alerts::ErrorsAlerts,
-        success_alerts::SuccessAlerts,
-    },
+    ui::success_alerts::SuccessAlerts,
 };
 
 pub struct Dump {
@@ -43,7 +33,15 @@ pub struct Dump {
 
 impl Dump {
 
-    pub fn new(host: &str, port: u64, user: &str, password: &str, dbname: &str, backup_path: &str, interval: u64) -> Self {
+    pub fn new(
+        host: &str, 
+        port: u64, 
+        user: &str, 
+        password: &str, 
+        dbname: &str, 
+        backup_path: &str, 
+        interval: u64
+    ) -> Self {
         Self {
             host: host.to_string(),
             port,
@@ -56,50 +54,28 @@ impl Dump {
     }
 
     fn exec(&self) {
-        let unique_id = Generate.random_string(6);
-        let dump_file_path = format!(
-            "{}backup_{}_{}_{}.sql",
-            self.dump_file_path,
-            self.dbname.replace(|c: char| !c.is_alphanumeric(), "_"),
-            Local::now().format("%Y_%m_%d_%H%M%S"),
-            unique_id
-        );
+        let dump_file_path = Path::new(&self.dump_file_path)
+            .join(format!(
+                "backup_{}_{}_{}.sql",
+                self.dbname.replace(|c: char| !c.is_alphanumeric(), "_"),
+                Local::now().format("%Y_%m_%d_%H%M%S"),
+                Generate.random_string(6)
+            ));
 
-        let output = if self.password.is_empty() {
-            Command::new("mysqldump")
-                .arg("-h")
-                .arg(&self.host)
-                .arg("-P")
-                .arg(&self.port.to_string())
-                .arg("-u")
-                .arg(&self.user)
-                .arg(&self.dbname)
-                .output()
-                .expect("Failed to execute mysqldump")
+        let password = if !self.password.is_empty() {
+            self.password.as_str()
         } else {
-            Command::new("mysqldump")
-                .arg(&self.host)
-                .arg("-P")
-                .arg(&self.port.to_string())
-                .arg("-u")
-                .arg(&self.user)
-                .arg("-p")
-                .arg(&self.password)
-                .arg(&self.dbname)
-                .output()
-                .expect("Failed to execute mysqldump")
+            ""
         };
 
-        if output.status.success() {
-            let mut file = File::create(Path::new(&dump_file_path)).expect("Could not create the dump file.");
-            file.write_all(&output.stdout).expect("Failed to write to the file.");
-
-            SuccessAlerts::dump(&dump_file_path);
-            io::stdout().flush().unwrap();
-        } else {
-            let stderr = String::from_utf8_lossy(&output.stderr);
-            ErrorsAlerts::dump(&stderr);
-        }
+        Export::new(
+            &self.host,
+            self.port as u16,
+            &self.user,
+            password,
+            &self.dbname,
+            dump_file_path.to_str().expect("Failed to convert PathBuf to str"),
+        ).dump().expect("Failed to execute mysqldump");
     }
 
     pub fn make_dump(&self) {
