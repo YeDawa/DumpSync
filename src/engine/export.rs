@@ -1,8 +1,3 @@
-use mysql::{
-    *,
-    prelude::*
-};
-
 use std::{
     io,
     fs::File,
@@ -12,6 +7,11 @@ use std::{
         Write,
         BufWriter,
     },
+};
+
+use mysql::{
+    *,
+    prelude::*
 };
 
 use chrono::Utc;
@@ -69,6 +69,7 @@ impl Export {
         let mut writer = BufWriter::new(file);
     
         let timestamp = Utc::now().format("%Y-%m-%d %H:%M:%S").to_string();
+        writeln!(writer, "-- Exporting using {} v.{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))?;
         writeln!(writer, "-- Database backup: {}", self.dbname)?;
         writeln!(writer, "-- Export date and time: {}", timestamp)?;
         writeln!(writer, "-- ---------------------------------------------------\n")?;
@@ -76,6 +77,7 @@ impl Export {
         let tables: Vec<String> = conn.query("SHOW TABLES")?;
         for table in tables {
             writeln!(writer, "-- Exporting the table: `{}`", table)?;
+            writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
 
             let row: Row = conn.query_first(format!("SHOW CREATE TABLE `{}`", table))?.unwrap();
             let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
@@ -100,7 +102,7 @@ impl Export {
                 }
             }
     
-            writeln!(writer, "-- End of table `{}`\n", table)?;
+            writeln!(writer, "-- End of table `{}`", table)?;
         }
     
         SuccessAlerts::dump(&self.dump_file_path);

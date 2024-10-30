@@ -34,7 +34,6 @@ The tool uses three main parameters, which can be configured via arguments or en
 4. **Database Host (`db_host`)**: The address of the database host.
 
    - **Environment Variable**: `DB_HOST`
-
 5. **Database Port (`db_port`)**: The port number of the database.
 
    - **Environment Variable**: `DB_PORT`
@@ -49,12 +48,23 @@ dumpsync -d my_database -i 3600 -f /path/to/
 
 **Environment Variables**:
 
-```bash
+```.env
 DB_HOST="YOUR_HOST"
 DB_PORT="YOUR_PORT"
 DB_USER="YOUR_USERNAME"
 DB_PASSWORD="YOUR_PASSWORD"
 DB_NAME="YOUR_DATABASE"
+
+DS_DUMP_INTERVAL="3600"
+DS_DUMP_PATH="/path/to/"
+
+# OR
+
+DS_DB_HOST="YOUR_HOST"
+DS_DB_PORT="YOUR_PORT"
+DS_DB_USER="YOUR_USERNAME"
+DS_DB_PASSWORD="YOUR_PASSWORD"
+DS_DB_NAME="YOUR_DATABASE"
 
 DS_DUMP_INTERVAL="3600"
 DS_DUMP_PATH="/path/to/"
@@ -65,3 +75,8 @@ DS_DUMP_PATH="/path/to/"
 - The tool requires read and write permissions in the directory set for `backup_path`.
 - The MySQL database must be accessible for the dump to proceed.
 - It is recommended to test the initial configuration to ensure that parameters are correct and the backup executes as expected.
+
+### Wahts New
+
+- Added support for new environment variables for connection.
+- Added support for `DROP TABLE IF EXISTS` in the dump file.
