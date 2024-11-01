@@ -2,6 +2,7 @@ use chrono::Local;
 
 use std::{
     thread,
+    process,
     path::Path,
     time::Duration,
 
@@ -85,6 +86,7 @@ impl Dump {
         ctrlc::set_handler(move || {
             r.store(false, Ordering::SeqCst);
             SuccessAlerts::terminate();
+            process::exit(0);
         }).expect("Error setting Ctrl-C handler");
 
         while running.load(Ordering::SeqCst) {

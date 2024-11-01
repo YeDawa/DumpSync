@@ -73,7 +73,10 @@ impl Export {
         writeln!(writer, "-- Database backup: {}", self.dbname)?;
         writeln!(writer, "-- Export date and time: {}", timestamp)?;
         writeln!(writer, "-- ---------------------------------------------------\n")?;
-    
+        writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
+        writeln!(writer, "USE `{}`;", self.dbname)?;
+        writeln!(writer, "-- ---------------------------------------------------\n")?;
+
         let tables: Vec<String> = conn.query("SHOW TABLES")?;
         for table in tables {
             writeln!(writer, "-- Exporting the table: `{}`", table)?;
