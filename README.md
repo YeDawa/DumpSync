@@ -76,8 +76,8 @@ DS_DUMP_PATH="/path/to/"
 - The MySQL database must be accessible for the dump to proceed.
 - It is recommended to test the initial configuration to ensure that parameters are correct and the backup executes as expected.
 
-### Whats New
+### What's New
 
-- Added support for new environment variables for connection.
-- Added support for `DROP TABLE IF EXISTS` in the dump file.
-- Support to `CREATE DATABASE IF NOT EXISTS` in the dump file.
+- Added support to new environment variables for connection.
+- Added support to `DROP TABLE IF EXISTS` in the dump file.
+- Added support to `CREATE DATABASE IF NOT EXISTS` in the dump file.
