@@ -1,4 +1,4 @@
-# DumpSync
+<div align='center'><img src='https://i.imgur.com/N7mW943.png'/></div>
 
 A simple tool for dump and restore a MySQL database. It can be used for backup and restore purposes, or for transferring a database from one server to another.
 
