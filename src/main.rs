@@ -7,5 +7,6 @@ mod dump_sync;
 use crate::dump_sync::DumpSync;
 
 fn main() {
-    DumpSync::init();
+    let dump_sync = DumpSync;
+    dump_sync.init();
 }
