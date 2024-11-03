@@ -22,7 +22,7 @@ impl SuccessAlerts {
         let current_datetime = Date::date_time();
     
         println!(
-            "{} Table '{}' successfully exported.", 
+            "{} Table '{}' successfully imported.", 
             current_datetime.green().bold(), 
             table.blue()
         );
