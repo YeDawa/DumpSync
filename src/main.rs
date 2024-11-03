@@ -1,5 +1,6 @@
 mod ui;
 mod utils;
+mod consts;
 mod engine;
 mod args_cli;
 mod dump_sync;

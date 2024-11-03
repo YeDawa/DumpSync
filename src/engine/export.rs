@@ -17,8 +17,12 @@ use mysql::{
 
 use crate::{
     utils::date::Date,
-    engine::connection::Connection,
     ui::success_alerts::SuccessAlerts,
+
+    engine::{
+        configs::Configs,
+        connection::Connection,
+    },
 };
 
 pub struct Export {
@@ -31,6 +35,16 @@ pub struct Export {
 }
 
 impl Export {
+
+    fn settings(&self, option: &str) -> serde_yaml::Value {
+        let configs = Configs::load();
+
+        configs
+            .get("exports")
+            .and_then(|exports| exports.get(option))
+            .cloned()
+            .unwrap_or(serde_yaml::Value::Bool(true))
+    }
 
     pub fn new(host: &str, port: u16, user: &str, password: &str, dbname: &str, dump_file_path: &str) -> Self {
         Self {
@@ -53,29 +67,38 @@ impl Export {
     }
 
     fn write_create_new_database(&self, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
-        writeln!(writer, "USE `{}`;", self.dbname)?;
-        writeln!(writer, "-- ---------------------------------------------------\n")?;
+        let database_if_not_exists = self.settings("database_if_not_exists").as_bool().unwrap_or(true);
+
+        if database_if_not_exists {
+            writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
+            writeln!(writer, "USE `{}`;", self.dbname)?;
+            writeln!(writer, "-- ---------------------------------------------------\n")?;
+        }
 
         Ok(())
     }
 
     fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
-        if rows.is_empty() {
-            writeln!(writer, "-- Table `{}` contains no data.", table)?;
-        } else {
-            for row in rows {
-                let values: Vec<String> = row.clone().unwrap().into_iter().map(|value| match value {
-                    Value::NULL => "NULL".to_string(),
-                    Value::Bytes(bytes) => format!("'{}'", String::from_utf8_lossy(&bytes)),
-                    Value::Int(int) => int.to_string(),
-                    Value::UInt(uint) => uint.to_string(),
-                    Value::Float(float) => float.to_string(),
-                    _ => "NULL".to_string(),
-                }).collect();
-    
-                writeln!(writer, "INSERT INTO `{}` VALUES ({});", table, values.join(", "))?;
+        let export_data = self.settings("dump_data").as_bool().unwrap_or(true);
+
+        if export_data {
+            let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
+
+            if rows.is_empty() {
+                writeln!(writer, "-- Table `{}` contains no data.", table)?;
+            } else {
+                for row in rows {
+                    let values: Vec<String> = row.clone().unwrap().into_iter().map(|value| match value {
+                        Value::NULL => "NULL".to_string(),
+                        Value::Bytes(bytes) => format!("'{}'", String::from_utf8_lossy(&bytes)),
+                        Value::Int(int) => int.to_string(),
+                        Value::UInt(uint) => uint.to_string(),
+                        Value::Float(float) => float.to_string(),
+                        _ => "NULL".to_string(),
+                    }).collect();
+        
+                    writeln!(writer, "INSERT INTO `{}` VALUES ({});", table, values.join(", "))?;
+                }
             }
         }
 
@@ -83,8 +106,13 @@ impl Export {
     }
 
     fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
+        let drop_table_if_exists = self.settings("drop_table_if_exists").as_bool().unwrap_or(true);
+
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
-        writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
+
+        if drop_table_if_exists {
+            writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
+        }
 
         let row: Row = conn.query_first(format!("SHOW CREATE TABLE `{}`", table))?.unwrap();
         let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
