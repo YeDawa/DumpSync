@@ -1,4 +1,4 @@
-name: Rust
+name: Rust CI and Publish
 
 on:
   push:
@@ -11,21 +11,32 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
-      
-    - name: Cargo Publish
-      # You may pin to the exact commit or the version.
-      # uses: ryohidaka/action-cargo-publish@be41ba19145bd21857b40009c3fc6512748be4be
-      uses: ryohidaka/action-cargo-publish@v0.1.0
-      with:
-        # The token to publish to crates.io.
-        token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-          
+      - uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose
+
+  publish:
+    if: ${{ github.event_name == 'push' && github.event.head_commit.modified && contains(github.event.head_commit.modified, 'Cargo.toml') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Cargo Publish
+        uses: ryohidaka/action-cargo-publish@v0.1.0
+        with:
+          token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
