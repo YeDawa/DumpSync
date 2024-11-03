@@ -18,4 +18,16 @@ impl ErrorsAlerts {
         );
     }
 
+    pub fn import(database: &str, command: &str, error: &str) {
+        let current_datetime = Date::date_time();
+
+        print!(
+            "{} Failed to execute the command to '{}': '{}'. Error: '{}'", 
+            current_datetime.red().bold(), 
+            database.cyan(),
+            command.yellow(),
+            error.red()
+        );
+    }
+
 }

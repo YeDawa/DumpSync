@@ -17,9 +17,13 @@ use std::{
 };
 
 use crate::{
-    engine::export::Export,
     utils::generate::Generate,
     ui::success_alerts::SuccessAlerts,
+
+    engine::{
+        export::Export,
+        import::Import,
+    },
 };
 
 pub struct Dump {
@@ -41,7 +45,7 @@ impl Dump {
         password: &str, 
         dbname: &str, 
         backup_path: &str, 
-        interval: u64
+        interval: Option<u64>
     ) -> Self {
         Self {
             host: host.to_string(),
@@ -49,7 +53,7 @@ impl Dump {
             user: user.to_string(),
             password: password.to_string(),
             dbname: dbname.to_string(),
-            interval,
+            interval: interval.unwrap_or(3600),
             dump_file_path: backup_path.to_string(),
         }
     }
@@ -93,6 +97,17 @@ impl Dump {
             self.exec();
             thread::sleep(Duration::from_secs(self.interval));
         }
+    }
+
+    pub fn import(&self) {
+        Import::new(
+            &self.host,
+            self.port as u16,
+            &self.user,
+            &self.password,
+            &self.dbname,
+            &self.dump_file_path,
+        ).dump().expect("Failed to import dump");
     }
     
 }

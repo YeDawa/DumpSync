@@ -6,18 +6,43 @@ use crate::{
     args_cli::{
         Cli,
         Commands,
-        ExportOptions,
-    },
-
+        ExportOptions, 
+        ImportOptions,
+    }, 
+    
     engine::{
         env::Env,
-        dump::Dump,
-    },
+        dump::Dump, 
+    }, 
 };
 
 pub struct DumpSync;
 
 impl DumpSync {
+
+    fn import(&self, options: ImportOptions) {
+        Env::new();
+        UI::header();
+
+        let dbname = options.database.unwrap_or_else(|| {
+            std::env::var("DB_NAME").or_else(|_| std::env::var("DS_DB_NAME")).unwrap_or_default()
+        });
+
+        let backup_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
+
+        let host = std::env::var("DB_HOST").or_else(|_| std::env::var("DS_DB_HOST")).unwrap_or_default();
+        let user = std::env::var("DB_USER").or_else(|_| std::env::var("DS_DB_USER")).unwrap_or_default();
+        let password = std::env::var("DB_PASSWORD").or_else(|_| std::env::var("DS_DB_PASSWORD")).unwrap_or_default();
+
+        let port = std::env::var("DB_PORT")
+            .or_else(|_| std::env::var("DS_DB_PORT"))
+            .unwrap_or_default()
+            .parse::<u64>()
+            .expect("Invalid port");
+
+        UI::section_header("Importing dump to server", "info");
+        Dump::new(&host, port, &user, &password, &dbname, &backup_path, None).import();
+    }
 
     fn export(&self, options: ExportOptions) {
         Env::new();
@@ -41,12 +66,11 @@ impl DumpSync {
             .or_else(|_| std::env::var("DS_DB_PORT"))
             .unwrap_or_default()
             .parse::<u64>()
-            .expect("Porta inválida");
+            .expect("Invalid port");
 
         UI::label("Press CTRL+C to exit the tool", "normal");
         UI::section_header("Dumping the database", "info");
-
-        Dump::new(&host, port, &user, &password, &dbname, &backup_path, interval).make_dump();
+        Dump::new(&host, port, &user, &password, &dbname, &backup_path, Some(interval)).make_dump();
     }
 
     pub fn init(&self) {
@@ -57,8 +81,8 @@ impl DumpSync {
                 self.export(options);
             },
 
-            Commands::Import(_options) => {
-                println!("Soon...");
+            Commands::Import(options) => {
+                self.import(options);
             },
         }
     }

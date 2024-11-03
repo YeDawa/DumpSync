@@ -18,6 +18,27 @@ impl SuccessAlerts {
         );
     }
 
+    pub fn table(table: &str) {
+        let current_datetime = Date::date_time();
+    
+        println!(
+            "{} Table '{}' successfully exported.", 
+            current_datetime.green().bold(), 
+            table.blue()
+        );
+    }
+
+    pub fn import(database: &str) {
+        let current_datetime = Date::date_time();
+    
+        println!("{}", "-".repeat(16));
+        println!(
+            "{} Dump successfully imported into the database `{}`", 
+            current_datetime.green().bold(), 
+            database.blue()
+        );
+    }
+
     pub fn terminate() {
         let current_datetime = Date::date_time();
 

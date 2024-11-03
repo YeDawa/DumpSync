@@ -56,6 +56,6 @@ pub struct ImportOptions {
     pub database: Option<String>,
 
     #[arg(short, long)]
-    /// Backup path
-    pub folder: Option<String>,
+    /// Dump file path
+    pub file: Option<String>,
 }

@@ -13,7 +13,7 @@ pub struct Connection {
     pub port: u16,
     pub user: String,
     pub password: String,
-    pub dbname: String,
+    pub dbname: Option<String>,
 }
 
 impl Connection {
@@ -30,10 +30,12 @@ impl Connection {
             );
         }
 
-        if !self.dbname.is_empty() {
-            opts_builder = opts_builder.db_name(
-                Some(&self.dbname)
-            );
+        if let Some(ref dbname) = self.dbname {
+            if !dbname.is_empty() {
+                opts_builder = opts_builder.db_name(Some(dbname));
+            } else {
+                opts_builder = opts_builder.db_name::<String>(None);
+            }
         } else {
             opts_builder = opts_builder.db_name::<String>(None);
         }

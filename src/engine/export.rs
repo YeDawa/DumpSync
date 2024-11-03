@@ -99,7 +99,7 @@ impl Export {
             port: self.port,
             user: self.user.clone(),
             password: self.password.clone(),
-            dbname: self.dbname.clone(),
+            dbname: Some(self.dbname.clone()),
         }.create_pool()?;
 
         let mut conn = pool.get_conn()?;
