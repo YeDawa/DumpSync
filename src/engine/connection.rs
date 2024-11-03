@@ -5,6 +5,7 @@ use mysql::{
 };
 
 use std::error::Error;
+
 use crate::ui::errors_alerts::ErrorsAlerts;
 
 pub struct Connection {
@@ -21,11 +22,20 @@ impl Connection {
         let mut opts_builder = OptsBuilder::new()
             .ip_or_hostname(Some(&self.host))
             .tcp_port(self.port)
-            .user(Some(&self.user))
-            .db_name(Some(&self.dbname));
+            .user(Some(&self.user));
 
         if !self.password.is_empty() {
-            opts_builder = opts_builder.pass(Some(&self.password));
+            opts_builder = opts_builder.pass(
+                Some(&self.password)
+            );
+        }
+
+        if !self.dbname.is_empty() {
+            opts_builder = opts_builder.db_name(
+                Some(&self.dbname)
+            );
+        } else {
+            opts_builder = opts_builder.db_name::<String>(None);
         }
 
         Pool::new(Opts::from(opts_builder)).map_err(|e| {
