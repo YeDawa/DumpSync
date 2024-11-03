@@ -1,17 +1,38 @@
-name: Publish to crates.io
+name: Rust CI and Publish
 
 on:
   push:
+    branches: [ "main" ]
     paths:
-      - "Cargo.toml"
+      - "Cargo.toml" # Executa o job de publicação apenas quando há mudanças no Cargo.toml
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose
+
+  publish:
+    if: github.event_name == 'push' && github.event.path == 'Cargo.toml'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
 
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
@@ -38,5 +59,4 @@ jobs:
       - name: Publish to crates.io
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: |
-          cargo publish --token $CARGO_REGISTRY_TOKEN
+        run: cargo publish --token $CARGO_REGISTRY_TOKEN
