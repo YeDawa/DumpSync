@@ -14,11 +14,10 @@ use mysql::{
     prelude::*
 };
 
-use chrono::Utc;
-
-use crate::ui::{
-    errors_alerts::ErrorsAlerts,
-    success_alerts::SuccessAlerts,
+use crate::{
+    utils::date::Date,
+    engine::connection::Connection,
+    ui::success_alerts::SuccessAlerts,
 };
 
 pub struct Export {
@@ -43,36 +42,30 @@ impl Export {
         }
     }
 
+    fn comments_header(&self, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
+        writeln!(writer, "-- Exporting using {} v.{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))?;
+        writeln!(writer, "-- Database backup: {}", self.dbname)?;
+        writeln!(writer, "-- Export date and time: {}", Date::timestamp())?;
+        writeln!(writer, "-- ---------------------------------------------------\n")?;
+
+        Ok(())
+    }
+
     pub fn dump(&self) -> Result<(), Box<dyn Error>> {
-        let mut opts_builder = OptsBuilder::new()
-            .ip_or_hostname(Some(&self.host))
-            .tcp_port(self.port)
-            .user(Some(&self.user))
-            .db_name(Some(&self.dbname));
-
-        if !self.password.is_empty() {
-            opts_builder = opts_builder.pass(Some(&self.password));
-        }
-
-        let pool = match Pool::new(
-            Opts::from(opts_builder)
-        ) {
-            Ok(pool) => pool,
-            Err(e) => {
-                ErrorsAlerts::dump(&e.to_string());
-                return Err(Box::new(e));
-            }
-        };
+        let pool = Connection {
+            host: self.host.clone(),
+            port: self.port,
+            user: self.user.clone(),
+            password: self.password.clone(),
+            dbname: self.dbname.clone(),
+        }.create_pool()?;
 
         let mut conn = pool.get_conn()?;
         let file = File::create(&self.dump_file_path)?;
         let mut writer = BufWriter::new(file);
-    
-        let timestamp = Utc::now().format("%Y-%m-%d %H:%M:%S").to_string();
-        writeln!(writer, "-- Exporting using {} v.{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))?;
-        writeln!(writer, "-- Database backup: {}", self.dbname)?;
-        writeln!(writer, "-- Export date and time: {}", timestamp)?;
-        writeln!(writer, "-- ---------------------------------------------------\n")?;
+
+        let _ = &self.comments_header(&mut writer)?;
+        
         writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
         writeln!(writer, "USE `{}`;", self.dbname)?;
         writeln!(writer, "-- ---------------------------------------------------\n")?;
