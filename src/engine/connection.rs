@@ -24,12 +24,10 @@ impl Connection {
             .user(Some(&self.user))
             .db_name(Some(&self.dbname));
 
-        // Adiciona a senha caso não esteja vazia
         if !self.password.is_empty() {
             opts_builder = opts_builder.pass(Some(&self.password));
         }
 
-        // Tenta criar o pool de conexão
         Pool::new(Opts::from(opts_builder)).map_err(|e| {
             ErrorsAlerts::dump(&e.to_string());
             Box::new(e) as Box<dyn Error>
