@@ -11,6 +11,7 @@ use std::{
 
 use mysql::{
     *,
+    Row,
     prelude::*
 };
 
@@ -51,6 +52,47 @@ impl Export {
         Ok(())
     }
 
+    fn write_create_new_database(&self, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
+        writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
+        writeln!(writer, "USE `{}`;", self.dbname)?;
+        writeln!(writer, "-- ---------------------------------------------------\n")?;
+
+        Ok(())
+    }
+
+    fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
+        let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
+        if rows.is_empty() {
+            writeln!(writer, "-- Table `{}` contains no data.", table)?;
+        } else {
+            for row in rows {
+                let values: Vec<String> = row.clone().unwrap().into_iter().map(|value| match value {
+                    Value::NULL => "NULL".to_string(),
+                    Value::Bytes(bytes) => format!("'{}'", String::from_utf8_lossy(&bytes)),
+                    Value::Int(int) => int.to_string(),
+                    Value::UInt(uint) => uint.to_string(),
+                    Value::Float(float) => float.to_string(),
+                    _ => "NULL".to_string(),
+                }).collect();
+    
+                writeln!(writer, "INSERT INTO `{}` VALUES ({});", table, values.join(", "))?;
+            }
+        }
+
+        Ok(())
+    }
+
+    fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
+        writeln!(writer, "-- Exporting the table: `{}`", table)?;
+        writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
+
+        let row: Row = conn.query_first(format!("SHOW CREATE TABLE `{}`", table))?.unwrap();
+        let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
+
+        writeln!(writer, "{};\n", create_table)?;
+        Ok(())
+    }
+
     pub fn dump(&self) -> Result<(), Box<dyn Error>> {
         let pool = Connection {
             host: self.host.clone(),
@@ -65,39 +107,12 @@ impl Export {
         let mut writer = BufWriter::new(file);
 
         let _ = &self.comments_header(&mut writer)?;
-        
-        writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
-        writeln!(writer, "USE `{}`;", self.dbname)?;
-        writeln!(writer, "-- ---------------------------------------------------\n")?;
+        let _ = &self.write_create_new_database(&mut writer)?;
 
         let tables: Vec<String> = conn.query("SHOW TABLES")?;
         for table in tables {
-            writeln!(writer, "-- Exporting the table: `{}`", table)?;
-            writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
-
-            let row: Row = conn.query_first(format!("SHOW CREATE TABLE `{}`", table))?.unwrap();
-            let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
-    
-            writeln!(writer, "{};\n", create_table)?;
-    
-            let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
-            if rows.is_empty() {
-                writeln!(writer, "-- Table `{}` contains no data.", table)?;
-            } else {
-                for row in rows {
-                    let values: Vec<String> = row.unwrap().into_iter().map(|value| match value {
-                        Value::NULL => "NULL".to_string(),
-                        Value::Bytes(bytes) => format!("'{}'", String::from_utf8_lossy(&bytes)),
-                        Value::Int(int) => int.to_string(),
-                        Value::UInt(uint) => uint.to_string(),
-                        Value::Float(float) => float.to_string(),
-                        _ => "NULL".to_string(),
-                    }).collect();
-    
-                    writeln!(writer, "INSERT INTO `{}` VALUES ({});", table, values.join(", "))?;
-                }
-            }
-    
+            self.write_structure_for_table(&table, &mut conn, &mut writer)?;
+            self.write_inserts_for_table(&table, &mut conn, &mut writer)?;
             writeln!(writer, "-- End of table `{}`", table)?;
         }
     
