@@ -20,7 +20,3 @@ To install DumpSync using [crates.io](https://crates.io), run the following comm
 ```bash
 cargo install dumpsync
 ```
-
----
-
-This version enhances clarity, adds structure, and highlights key features, making it more informative and appealing to users.
