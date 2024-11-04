@@ -10,20 +10,26 @@ use std::{
         Arc,
 
         atomic::{
-            Ordering,
-            AtomicBool, 
+            Ordering, 
+            AtomicBool
         },
     },
 };
 
 use crate::{
     utils::generate::Generate,
-    ui::success_alerts::SuccessAlerts,
+
+    ui::{
+        normal_alerts::NormalAlerts,
+        errors_alerts::ErrorsAlerts, 
+        success_alerts::SuccessAlerts
+    }, 
 
     engine::{
         export::Export,
         import::Import,
-    },
+        configs::Configs,
+    }, 
 };
 
 pub struct Dump {
@@ -58,7 +64,7 @@ impl Dump {
         }
     }
 
-    fn exec(&self) {
+    fn exec(&self) -> Result<(), &'static str> {
         let dump_file_path = Path::new(&self.dump_file_path)
             .join(format!(
                 "backup_{}_{}_{}.sql",
@@ -80,21 +86,44 @@ impl Dump {
             password,
             &self.dbname,
             dump_file_path.to_str().expect("Failed to convert PathBuf to str"),
-        ).dump().expect("Failed to execute mysqldump");
+        ).dump().map_err(|_| "Failed to generate dump file")
     }
 
-    pub fn make_dump(&self) {
+    pub fn export(&self) {
         let running = Arc::new(AtomicBool::new(true));
         let r = running.clone();
-
+        
         ctrlc::set_handler(move || {
             r.store(false, Ordering::SeqCst);
             SuccessAlerts::terminate();
             process::exit(0);
         }).expect("Error setting Ctrl-C handler");
+        
+        let mut attempt = 0;
+        let max_retries = Configs.conn("max_retries").as_u64().unwrap();
+        let retry_connection_interval = Configs.conn("retry_connection_interval").as_u64().unwrap();
 
         while running.load(Ordering::SeqCst) {
-            self.exec();
+            match self.exec() {
+                Ok(_) => {
+                    attempt = 0;
+                }
+
+                Err(e) => {
+                    ErrorsAlerts::attempt(e);
+                    attempt += 1;
+
+                    if attempt >= 3 {
+                        ErrorsAlerts::max_attempts();
+                        break;
+                    } else {
+                        NormalAlerts::reconnect(attempt, max_retries);
+                        thread::sleep(Duration::from_secs(retry_connection_interval));
+                        continue;
+                    }
+                }
+            }
+
             thread::sleep(Duration::from_secs(self.interval));
         }
     }
@@ -109,5 +138,5 @@ impl Dump {
             &self.dump_file_path,
         ).dump().expect("Failed to import dump");
     }
-    
+
 }

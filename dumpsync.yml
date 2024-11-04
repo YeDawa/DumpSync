@@ -2,3 +2,7 @@ exports:
   dump_data: true
   drop_table_if_exists: true
   database_if_not_exists: true
+
+connection:
+  max_retries: 3
+  retry_connection_interval: 5

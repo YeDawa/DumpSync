@@ -37,4 +37,26 @@ impl Configs {
         }
     }
 
+    pub fn exports(&self, option: &str) -> bool {
+        let configs = Configs.load();
+
+        configs
+            .get("exports")
+            .and_then(|exports| exports.get(option))
+            .cloned()
+            .unwrap_or(serde_yaml::Value::Bool(true));
+
+        configs.as_bool().unwrap_or(true)
+    }
+
+    pub fn conn(&self, option: &str) -> serde_yaml::Value {
+        let configs = Configs.load();
+
+        configs
+            .get("connection")
+            .and_then(|exports| exports.get(option))
+            .cloned()
+            .unwrap_or(serde_yaml::Value::Bool(true))
+    }
+
 }

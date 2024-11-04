@@ -35,17 +35,7 @@ pub struct Export {
 }
 
 impl Export {
-
-    fn settings(&self, option: &str) -> serde_yaml::Value {
-        let configs = Configs.load();
-
-        configs
-            .get("exports")
-            .and_then(|exports| exports.get(option))
-            .cloned()
-            .unwrap_or(serde_yaml::Value::Bool(true))
-    }
-
+    
     pub fn new(host: &str, port: u16, user: &str, password: &str, dbname: &str, dump_file_path: &str) -> Self {
         Self {
             host: host.to_string(),
@@ -67,7 +57,7 @@ impl Export {
     }
 
     fn write_create_new_database(&self, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let database_if_not_exists = self.settings("database_if_not_exists").as_bool().unwrap_or(true);
+        let database_if_not_exists = Configs.exports("database_if_not_exists");
 
         if database_if_not_exists {
             writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
@@ -79,9 +69,9 @@ impl Export {
     }
 
     fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let export_data = self.settings("dump_data").as_bool().unwrap_or(true);
+        let dump_data = Configs.exports("dump_data");
 
-        if export_data {
+        if dump_data {
             let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
 
             if rows.is_empty() {
@@ -106,7 +96,7 @@ impl Export {
     }
 
     fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let drop_table_if_exists = self.settings("drop_table_if_exists").as_bool().unwrap_or(true);
+        let drop_table_if_exists = Configs.exports("drop_table_if_exists");
 
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
 

@@ -70,7 +70,7 @@ impl DumpSync {
 
         UI::label("Press CTRL+C to exit the tool", "normal");
         UI::section_header("Dumping the database", "info");
-        Dump::new(&host, port, &user, &password, &dbname, &backup_path, Some(interval)).make_dump();
+        Dump::new(&host, port, &user, &password, &dbname, &backup_path, Some(interval)).export();
     }
 
     pub fn init(&self) {
