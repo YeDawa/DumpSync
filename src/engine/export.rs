@@ -1,9 +1,9 @@
 use std::{
-    io,
     fs::File,
     error::Error,
 
     io::{
+        self,
         Write,
         BufWriter,
     },
@@ -37,7 +37,7 @@ pub struct Export {
 impl Export {
 
     fn settings(&self, option: &str) -> serde_yaml::Value {
-        let configs = Configs::load();
+        let configs = Configs.load();
 
         configs
             .get("exports")

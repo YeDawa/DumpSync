@@ -2,4 +2,3 @@ exports:
   dump_data: true
   drop_table_if_exists: true
   database_if_not_exists: true
-  
