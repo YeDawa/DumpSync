@@ -49,7 +49,7 @@ impl Configs {
         configs.as_bool().unwrap_or(true)
     }
 
-    pub fn conn(&self, option: &str) -> serde_yaml::Value {
+    pub fn conn(&self, option: &str) -> Value {
         let configs = Configs.load();
 
         configs

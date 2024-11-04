@@ -12,32 +12,6 @@ To Install using [crates.io](https://crates.io):
 cargo install dumpsync
 ```
 
-### Parameters
-
-The tool uses three main parameters, which can be configured via arguments or environment variables.
-
-1. **Database Name (`dbname`)** The name of the database to be dumped. This parameter is required for the dump to execute successfully.
-
-   - **Command-Line Argument**: `--database`
-   - **Environment Variable**: `DB_NAME`
-   - **Behavior**: If the `--database` argument is provided, it will be used. Otherwise, the `DB_NAME` environment variable will be used.
-2. **Dump Interval (`interval`)** Time interval, in seconds, between each database dump. This parameter defines the frequency of automatic backups.
-
-   - **Command-Line Argument**: `--interval`
-   - **Environment Variable**: `DS_DUMP_INTERVAL`
-   - **Behavior**: If the `--interval` argument is provided, it will be used. Otherwise, the `DS_DUMP_INTERVAL` environment variable will be used.
-3. **Backup Path (`backup_path`)** Directory where dump files will be saved. You can specify a local or remote folder as needed.
-
-   - **Command-Line Argument**: `--folder`
-   - **Environment Variable**: `DS_DUMP_PATH`
-   - **Behavior**: If the `--folder` argument is provided, it will be used. Otherwise, the `DS_DUMP_PATH` environment variable will be used.
-4. **Database Host (`db_host`)**: The address of the database host.
-
-   - **Environment Variable**: `DB_HOST`
-5. **Database Port (`db_port`)**: The port number of the database.
-
-   - **Environment Variable**: `DB_PORT`
-
 ### Usage Example
 
 **To make a dump, use like this:**:
@@ -85,8 +59,7 @@ exports:
   database_if_not_exists: true
 ```
 
-> [!important]
-> Save as `dumpsync.yaml` to the same directory where your project is running.
+Save as `dumpsync.yaml` to the same directory where your project is running.
 
 ### Notes
 
