@@ -101,3 +101,4 @@ exports:
 - Added support to `CREATE DATABASE IF NOT EXISTS` in the dump file.
 - Added support to `EXPORT` command to make a dump file.
 - Added support to `IMPORT` command to restore a dump file.
+- Added support to custom settings file.
