@@ -19,7 +19,7 @@ cargo install dumpsync
 
 ## Documentation
 
-For detailed usage instructions and configuration options, please refer to the [official documentation](link-to-documentation).
+For detailed usage instructions and configuration options, please refer to the [official documentation](https://kremilly.github.io/DumpSync/).
 
 ## License
 
