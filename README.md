@@ -76,6 +76,18 @@ DS_DUMP_INTERVAL="3600"
 DS_DUMP_PATH="/path/to/"
 ```
 
+**Optional settings file**:
+
+```yaml
+exports:
+  dump_data: true
+  drop_table_if_exists: true
+  database_if_not_exists: true
+```
+
+> [!important]
+> Save as `dumpsync.yaml` to the same directory where your project is running.
+
 ### Notes
 
 - The tool requires read and write permissions in the directory set for `backup_path`.
