@@ -468,7 +468,7 @@
 
 
 <h1 id="settings-file-for-dumpsync">Settings File for DumpSync</h1>
-<p>The configuration file <code>dumpsync.yml</code> allows you to customize the options for the dump process. It should be saved as <code>dumpsync.yaml</code> in the same directory where your project is running.</p>
+<p>The configuration file <code>dumpsync.yml</code> allows you to customize the options for the dump process. It should be saved as <code>dumpsync.yml</code> in the same directory where your project is running.</p>
 <h2 id="file-structure">File Structure</h2>
 <p>Example structure:</p>
 <pre><code class="language-yaml">exports:
@@ -482,24 +482,14 @@ connection:
 </code></pre>
 <h3 id="properties-of-exports">Properties of <code>exports</code></h3>
 <ul>
-<li>
-<p><strong>dump_data</strong> (<code>boolean</code>): Determines whether all data in your database should be exported. If set to <code>true</code>, the content of all tables will be included in the dump. If <code>false</code>, only the structures of the tables will be exported.</p>
-</li>
-<li>
-<p><strong>drop_table_if_exists</strong> (<code>boolean</code>): Specifies whether existing tables should be dropped before being recreated during the import process. Setting this to <code>true</code> will include a <code>DROP TABLE IF EXISTS</code> statement before the <code>CREATE TABLE</code> statement, preventing table duplication conflicts.</p>
-</li>
-<li>
-<p><strong>database_if_not_exists</strong> (<code>boolean</code>): Indicates whether the database should be created only if it does not exist. If set to <code>true</code>, a <code>CREATE DATABASE IF NOT EXISTS</code> statement will be included in the dump, avoiding errors if the database is already present.</p>
-</li>
+<li><strong>dump_data</strong> (<code>boolean</code>): Determines whether all data in your database should be exported. If set to <code>true</code>, the content of all tables will be included in the dump. If <code>false</code>, only the structures of the tables will be exported.</li>
+<li><strong>drop_table_if_exists</strong> (<code>boolean</code>): Specifies whether existing tables should be dropped before being recreated during the import process. Setting this to <code>true</code> will include a <code>DROP TABLE IF EXISTS</code> statement before the <code>CREATE TABLE</code> statement, preventing table duplication conflicts.</li>
+<li><strong>database_if_not_exists</strong> (<code>boolean</code>): Indicates whether the database should be created only if it does not exist. If set to <code>true</code>, a <code>CREATE DATABASE IF NOT EXISTS</code> statement will be included in the dump, avoiding errors if the database is already present.</li>
 </ul>
 <h3 id="properties-of-connection">Properties of <code>connection</code></h3>
 <ul>
-<li>
-<p><strong>max_retries</strong> (<code>integer</code>): Defines the maximum number of retry attempts to establish a connection to the database. If a connection attempt fails, the application will retry up to this number.</p>
-</li>
-<li>
-<p><strong>retry_connection_interval</strong> (<code>integer</code>): Specifies the interval (in seconds) to wait between each retry attempt when attempting to connect to the database. This allows for gradual retries rather than immediate retries.</p>
-</li>
+<li><strong>max_retries</strong> (<code>integer</code>): Defines the maximum number of retry attempts to establish a connection to the database. If a connection attempt fails, the application will retry up to this number.</li>
+<li><strong>retry_connection_interval</strong> (<code>integer</code>): Specifies the interval (in seconds) to wait between each retry attempt when attempting to connect to the database. This allows for gradual retries rather than immediate retries.</li>
 </ul>
 
 
