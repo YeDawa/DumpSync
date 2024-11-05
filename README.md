@@ -2,6 +2,10 @@
 
 DumpSync is a lightweight tool designed for efficiently dumping and restoring MySQL databases. Whether you need to create backups, restore databases, or transfer data between servers, DumpSync provides a simple and automated solution.
 
+<div align='center'>
+<img src='https://i.imgur.com/R8VOwQB.png'>
+</div>
+
 ## Features
 
 - **Automated Backups**: Schedule regular database dumps at configurable intervals.
