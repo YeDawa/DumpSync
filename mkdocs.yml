@@ -2,6 +2,11 @@ site_name: DumpSync
 repo_url: https://github.com/kremilly/DumpSync
 theme:
   name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.footer
+  
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -16,8 +21,23 @@ theme:
         name: Switch to light mode
 
 nav:
-  - Install: index.md
+  - Overview: index.md
+  - Install: install.md
   - Connection: connection.md
   - Settings: settings.md
   - Export: export.md
   - Import: import.md
+
+extra:
+    social:
+      - icon: fontawesome/solid/blog
+        link: https://kremilly.com
+        name: Blog
+        
+      - icon: fontawesome/brands/x-twitter
+        link: https://x.com/import_kremilly
+        name: Twitter
+    
+    generator: false
+
+copyright: Copyright &copy; 2024 Kremillly
