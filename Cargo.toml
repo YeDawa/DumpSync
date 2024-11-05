@@ -7,7 +7,7 @@ authors = ["kremilly"]
 keywords = ["mysql", "dump", "restore", "backup", "database"]
 description = "A simple tool for dump and restore a MySQL database. It can be used for backup and restore purposes, or for transferring a database from one server to another."
 repository = "https://github.com/kremilly/DumpSync"
-documentation = "https://kremilly.github.io/DumpSync/"
+documentation = "https://dumpsync.kremilly.com/"
 homepage = "https://kremilly.com"
 
 [dependencies]

@@ -1,6 +1,8 @@
 # Settings File for DumpSync
 
-The configuration file `dumpsync.yml` allows you to customize the options for the dump process. It should be saved as `dumpsync.yml` in the same directory where your project is running.
+The configuration file `dumpsync.yml` allows you to customize the options for the dump process. 
+
+It should be saved as `dumpsync.yml` in the same directory where your project is running.
 
 ## File Structure
 
