@@ -70,6 +70,7 @@ impl Export {
 
     fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
         let dump_data = Configs.exports("dump_data");
+        let insert_ignore_into = Configs.exports("insert_ignore_data");
 
         if dump_data {
             let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
@@ -86,8 +87,14 @@ impl Export {
                         Value::Float(float) => float.to_string(),
                         _ => "NULL".to_string(),
                     }).collect();
+
+                    let line = if insert_ignore_into {
+                        format!("INSERT IGNORE INTO `{}` VALUES ({});", table, values.join(", "))
+                    } else {
+                        format!("INSERT INTO `{}` VALUES ({});", table, values.join(", "))
+                    };
         
-                    writeln!(writer, "INSERT INTO `{}` VALUES ({});", table, values.join(", "))?;
+                    writeln!(writer, "{}", line)?;
                 }
             }
         }
