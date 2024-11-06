@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.43">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
     
     
       
@@ -519,6 +519,7 @@
 <p>Example structure:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">exports</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">dump_data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">insert_ignore_into</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">  </span><span class="nt">drop_table_if_exists</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">database_if_not_exists</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
@@ -530,6 +531,7 @@
 <ul>
 <li><strong>dump_data</strong> (<code>boolean</code>): Determines whether all data in your database should be exported. If set to <code>true</code>, the content of all tables will be included in the dump. If <code>false</code>, only the structures of the tables will be exported.</li>
 <li><strong>drop_table_if_exists</strong> (<code>boolean</code>): Specifies whether existing tables should be dropped before being recreated during the import process. Setting this to <code>true</code> will include a <code>DROP TABLE IF EXISTS</code> statement before the <code>CREATE TABLE</code> statement, preventing table duplication conflicts.</li>
+<li><strong>insert_ignore_into</strong> (<code>boolean</code>): The <code>insert_ignore_into</code> property specifies whether data should be inserted using the <code>INSERT IGNORE INTO</code> statement during the import process. Setting it to <code>true</code> will ensure that duplicate records are ignored, preventing errors from duplicate entries in the table.</li>
 <li><strong>database_if_not_exists</strong> (<code>boolean</code>): Indicates whether the database should be created only if it does not exist. If set to <code>true</code>, a <code>CREATE DATABASE IF NOT EXISTS</code> statement will be included in the dump, avoiding errors if the database is already present.</li>
 </ul>
 <h3 id="properties-of-connection">Properties of <code>connection</code></h3>
