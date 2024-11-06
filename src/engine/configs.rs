@@ -1,10 +1,14 @@
-use reqwest;
+use reqwest::blocking;
 use serde_yaml::Value;
 
 use std::{
-    fs::File,
-    error::Error, 
+    error::Error,
     io::BufReader,
+
+    fs::{
+        File, 
+        metadata
+    },
 };
 
 use crate::consts::global::Global;
@@ -14,17 +18,18 @@ pub struct Configs;
 impl Configs {
     
     fn default_config(&self) -> Result<Value, Box<dyn Error>> {
-        let response = reqwest::blocking::get(Global::APP_CONFIGS)?.text()?;
+        let response = blocking::get(Global::APP_CONFIGS)?.text()?;
         let config: Value = serde_yaml::from_str(&response)?;
         Ok(config)
     }
 
     pub fn load(&self) -> Value {
-        let file = File::open(Global::app_config());
-
-        match file {
-            Ok(f) => {
-                let reader = BufReader::new(f);
+        let file_path = Global::app_config();
+        
+        match metadata(&file_path) {
+            Ok(_) => {
+                let file = File::open(file_path).expect("Failed to open local config file");
+                let reader = BufReader::new(file);
 
                 serde_yaml::from_reader(reader).unwrap_or_else(|_| {
                     self.default_config().expect("Error loading default config")
@@ -38,25 +43,23 @@ impl Configs {
     }
 
     pub fn exports(&self, option: &str, default: bool) -> bool {
-        let configs = Configs.load();
+        let configs = self.load();
 
         configs
             .get("exports")
             .and_then(|exports| exports.get(option))
-            .cloned()
-            .unwrap_or(serde_yaml::Value::Bool(true));
-
-        configs.as_bool().unwrap_or(default)
+            .and_then(|val| val.as_bool())
+            .unwrap_or(default)
     }
 
     pub fn conn(&self, option: &str) -> Value {
-        let configs = Configs.load();
+        let configs = self.load();
 
         configs
             .get("connection")
-            .and_then(|exports| exports.get(option))
+            .and_then(|conn| conn.get(option))
             .cloned()
-            .unwrap_or(serde_yaml::Value::Bool(true))
+            .unwrap_or(serde_yaml::Value::Null) // Return Null if not found
     }
 
 }

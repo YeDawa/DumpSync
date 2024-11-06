@@ -70,7 +70,7 @@ impl Export {
 
     fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
         let dump_data = Configs.exports("dump_data", true);
-        let insert_ignore_into = Configs.exports("insert_ignore_data", false);
+        let insert_ignore_into = Configs.exports("insert_ignore_into", false);
 
         if dump_data {
             let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
@@ -103,7 +103,7 @@ impl Export {
     }
 
     fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let drop_table_if_exists = Configs.exports("drop_table_if_exists", true);
+        let drop_table_if_exists = Configs.exports("drop_table_if_exists", false);
 
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
 
