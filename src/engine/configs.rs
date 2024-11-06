@@ -59,7 +59,7 @@ impl Configs {
             .get("connection")
             .and_then(|conn| conn.get(option))
             .cloned()
-            .unwrap_or(serde_yaml::Value::Null) // Return Null if not found
+            .unwrap_or(serde_yaml::Value::Null)
     }
 
 }
