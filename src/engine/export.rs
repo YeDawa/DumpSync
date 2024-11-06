@@ -57,7 +57,7 @@ impl Export {
     }
 
     fn write_create_new_database(&self, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let database_if_not_exists = Configs.exports("database_if_not_exists");
+        let database_if_not_exists = Configs.exports("database_if_not_exists", true);
 
         if database_if_not_exists {
             writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
@@ -69,8 +69,8 @@ impl Export {
     }
 
     fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let dump_data = Configs.exports("dump_data");
-        let insert_ignore_into = Configs.exports("insert_ignore_data");
+        let dump_data = Configs.exports("dump_data", true);
+        let insert_ignore_into = Configs.exports("insert_ignore_data", false);
 
         if dump_data {
             let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
@@ -103,7 +103,7 @@ impl Export {
     }
 
     fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let drop_table_if_exists = Configs.exports("drop_table_if_exists");
+        let drop_table_if_exists = Configs.exports("drop_table_if_exists", true);
 
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
 

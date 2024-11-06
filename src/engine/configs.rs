@@ -2,8 +2,8 @@ use reqwest;
 use serde_yaml::Value;
 
 use std::{
-    fs::File, 
-    error::Error,
+    fs::File,
+    error::Error, 
     io::BufReader,
 };
 
@@ -37,7 +37,7 @@ impl Configs {
         }
     }
 
-    pub fn exports(&self, option: &str) -> bool {
+    pub fn exports(&self, option: &str, default: bool) -> bool {
         let configs = Configs.load();
 
         configs
@@ -46,7 +46,7 @@ impl Configs {
             .cloned()
             .unwrap_or(serde_yaml::Value::Bool(true));
 
-        configs.as_bool().unwrap_or(true)
+        configs.as_bool().unwrap_or(default)
     }
 
     pub fn conn(&self, option: &str) -> Value {
