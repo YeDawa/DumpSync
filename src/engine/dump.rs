@@ -67,7 +67,7 @@ impl Dump {
     fn exec(&self) -> Result<(), &'static str> {
         let dump_file_path = Path::new(&self.dump_file_path)
             .join(format!(
-                "backup_{}_{}_{}.sql",
+                "{}_{}_{}.sql",
                 self.dbname.replace(|c: char| !c.is_alphanumeric(), "_"),
                 Local::now().format("%Y_%m_%d_%H%M%S"),
                 Generate.random_string(6)

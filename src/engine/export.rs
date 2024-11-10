@@ -114,7 +114,7 @@ impl Export {
         if drop_table_if_exists {
             writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
         }
-
+        
         let row: Row = conn.query_first(format!("SHOW CREATE TABLE `{}`", table))?.unwrap();
         let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
 
@@ -129,29 +129,35 @@ impl Export {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
-
-        if FileUtils::check_path_exists(&self.dump_file_path) {
-            FileUtils::create_path(&self.dump_file_path);
         }
+        .create_pool()?;
+
+        FileUtils::create_path(&self.dump_file_path);
 
         let mut conn = pool.get_conn()?;
         let file = File::create(&self.dump_file_path)?;
         let mut writer = BufWriter::new(file);
 
-        let _ = &self.comments_header(&mut writer)?;
-        let _ = &self.write_create_new_database(&mut writer)?;
+        self.comments_header(&mut writer)?;
+        self.write_create_new_database(&mut writer)?;
 
         let tables: Vec<String> = conn.query("SHOW TABLES")?;
+        let ignore_tables = Configs.list("exports", "ignore_tables").unwrap_or_default();
+
         for table in tables {
+            if ignore_tables.contains(&serde_yaml::Value::String(table.clone())) {
+                writeln!(writer, "-- Table `{}` is ignored.", table)?;
+                continue;
+            }
+
             self.write_structure_for_table(&table, &mut conn, &mut writer)?;
             self.write_inserts_for_table(&table, &mut conn, &mut writer)?;
             writeln!(writer, "-- End of table `{}`", table)?;
         }
-    
+
         SuccessAlerts::dump(&self.dump_file_path);
         io::stdout().flush().unwrap();
-        
+
         Ok(())
     }
 

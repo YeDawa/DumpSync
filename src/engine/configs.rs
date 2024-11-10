@@ -62,4 +62,14 @@ impl Configs {
             .unwrap_or(default)
     }
 
+    pub fn list(&self, section: &str, option: &str) -> Option<Vec<Value>> {
+        let configs = self.load();
+
+        configs
+            .get(section)
+            .and_then(|exports| exports.get(option))
+            .and_then(|ignore_tables| ignore_tables.as_sequence())
+            .cloned()
+    }
+
 }
