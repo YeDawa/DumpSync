@@ -16,8 +16,12 @@ use mysql::{
 };
 
 use crate::{
-    utils::date::Date,
     ui::success_alerts::SuccessAlerts,
+
+    utils::{
+        date::Date,
+        file::FileUtils,
+    },
 
     engine::{
         configs::Configs,
@@ -57,7 +61,7 @@ impl Export {
     }
 
     fn write_create_new_database(&self, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let database_if_not_exists = Configs.exports("database_if_not_exists", true);
+        let database_if_not_exists = Configs.boolean("exports", "database_if_not_exists", true);
 
         if database_if_not_exists {
             writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
@@ -69,8 +73,8 @@ impl Export {
     }
 
     fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let dump_data = Configs.exports("dump_data", true);
-        let insert_ignore_into = Configs.exports("insert_ignore_into", false);
+        let dump_data = Configs.boolean("exports", "dump_data", true);
+        let insert_ignore_into = Configs.boolean("exports", "insert_ignore_into", false);
 
         if dump_data {
             let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
@@ -103,7 +107,7 @@ impl Export {
     }
 
     fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut BufWriter<File>) -> Result<(), Box<dyn Error>> {
-        let drop_table_if_exists = Configs.exports("drop_table_if_exists", false);
+        let drop_table_if_exists = Configs.boolean("exports", "drop_table_if_exists", false);
 
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
 
@@ -126,6 +130,10 @@ impl Export {
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
         }.create_pool()?;
+
+        if FileUtils::check_path_exists(&self.dump_file_path) {
+            FileUtils::create_path(&self.dump_file_path);
+        }
 
         let mut conn = pool.get_conn()?;
         let file = File::create(&self.dump_file_path)?;

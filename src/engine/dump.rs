@@ -100,8 +100,8 @@ impl Dump {
         }).expect("Error setting Ctrl-C handler");
         
         let mut attempt = 0;
-        let max_retries = Configs.conn("max_retries").as_u64().unwrap();
-        let retry_connection_interval = Configs.conn("retry_connection_interval").as_u64().unwrap();
+        let max_retries = Configs.generic("connection", "max_retries").as_u64().unwrap();
+        let retry_connection_interval = Configs.generic("connection", "retry_connection_interval").as_u64().unwrap();
 
         while running.load(Ordering::SeqCst) {
             match self.exec() {

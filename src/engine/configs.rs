@@ -42,24 +42,24 @@ impl Configs {
         }
     }
 
-    pub fn exports(&self, option: &str, default: bool) -> bool {
+    pub fn generic(&self, section: &str, option: &str) -> Value {
         let configs = self.load();
 
         configs
-            .get("exports")
-            .and_then(|exports| exports.get(option))
-            .and_then(|val| val.as_bool())
-            .unwrap_or(default)
-    }
-
-    pub fn conn(&self, option: &str) -> Value {
-        let configs = self.load();
-
-        configs
-            .get("connection")
+            .get(section)
             .and_then(|conn| conn.get(option))
             .cloned()
             .unwrap_or(serde_yaml::Value::Null)
+    }
+
+    pub fn boolean(&self, section: &str, option: &str, default: bool) -> bool {
+        let configs = self.load();
+
+        configs
+            .get(section)
+            .and_then(|exports| exports.get(option))
+            .and_then(|val| val.as_bool())
+            .unwrap_or(default)
     }
 
 }
