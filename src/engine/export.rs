@@ -129,8 +129,7 @@ impl Export {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }
-        .create_pool()?;
+        }.create_pool()?;
 
         FileUtils::create_path(&self.dump_file_path);
 
