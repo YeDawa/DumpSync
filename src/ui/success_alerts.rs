@@ -43,7 +43,7 @@ impl SuccessAlerts {
         let current_datetime = Date::date_time();
 
         println!(
-            "\n\n{} {}",
+            "\n{} {}",
             current_datetime.green().bold(),
             "Process terminated by user. Exiting gracefully...".red().bold(),
         );
