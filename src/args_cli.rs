@@ -1,5 +1,5 @@
 use clap_cargo::style;
-use clap::builder::styling;
+use clap::builder::styling::Styles;
 
 use clap::{
     Parser,
@@ -7,7 +7,7 @@ use clap::{
     ColorChoice,
 };
 
-pub const CLAP_STYLING: styling::Styles = styling::Styles::styled()
+pub const CLAP_STYLING: Styles = Styles::styled()
     .header(style::HEADER)
     .usage(style::USAGE)
     .literal(style::LITERAL)
