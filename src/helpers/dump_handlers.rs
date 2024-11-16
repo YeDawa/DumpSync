@@ -1,9 +1,10 @@
 use chrono::Local;
 
 use std::{
-    fs,
-    thread,
-    path::Path,
+    fs, 
+    thread, 
+    process, 
+    path::Path, 
     time::Duration,
 };
 
@@ -58,6 +59,7 @@ impl DumpHandlers {
         *attempt += 1;
         if *attempt >= max_retries as usize {
             ErrorsAlerts::max_attempts();
+            process::exit(1);
         } else {
             NormalAlerts::reconnect(*attempt as u64, max_retries);
             thread::sleep(Duration::from_secs(retry_interval));
