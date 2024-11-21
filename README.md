@@ -23,7 +23,7 @@ cargo install dumpsync
 
 ## Documentation
 
-For detailed usage instructions and configuration options, please refer to the [official documentation](https://dumpsync.kremilly.com/).
+For detailed usage instructions and configuration options, please refer to the [official documentation](https://docs.dumpsync.com/).
 
 ## License
 
