@@ -11,7 +11,7 @@ impl SuccessAlerts {
     pub fn dump(file: &str) {
         let current_datetime = Date::date_time();
     
-        print!(
+        println!(
             "\r{} Dump successfully completed and saved at {}", 
             current_datetime.green().bold(), 
             file.blue()

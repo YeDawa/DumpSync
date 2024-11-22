@@ -10,6 +10,11 @@ use std::{
     fs::File, 
     error::Error,
 
+    path::{
+        Path, 
+        PathBuf
+    },
+
     io::{
         Read,
         BufReader, 
@@ -31,19 +36,32 @@ pub struct Import {
     user: String,
     password: String,
     dbname: String,
+    path: String,
     dump_file_path: String,
 }
 
 impl Import {
 
-    pub fn new(host: &str, port: u16, user: &str, password: &str, dbname: &str, dump_file_path: &str) -> Self {
+    pub fn new(host: &str, port: u16, user: &str, password: &str, dbname: &str, dump_file_path: &str, path: &str) -> Self {
         Self {
             host: host.to_string(),
             port,
             user: user.to_string(),
             password: password.to_string(),
             dbname: dbname.to_string(),
+            path: path.to_string(),
             dump_file_path: dump_file_path.to_string(),
+        }
+    }
+
+    fn complete_path(&self) -> Result<PathBuf, Box<dyn std::error::Error>> {
+        let path = Path::new(&self.dump_file_path);
+
+        if path.is_absolute() {
+            Ok(path.to_path_buf())
+        } else {
+            let dump_file_path = Path::new(&self.dump_file_path);
+            Ok(dump_file_path.join(&self.path))
         }
     }
 
@@ -59,8 +77,10 @@ impl Import {
         let mut conn = pool.get_conn()?;
         let is_compressed = self.dump_file_path.ends_with(".sql.gz");
 
+        let file = self.complete_path()?;
+
         let dump_content = if is_compressed {
-            let file = File::open(&self.dump_file_path)?;
+            let file = File::open(file)?;
 
             let mut decoder = GzDecoder::new(BufReader::new(file));
             let mut content = String::new();
@@ -79,7 +99,7 @@ impl Import {
 
         for statement in dump_content.split(';') {
             let trimmed = statement.trim();
-            
+
             if !trimmed.is_empty() {
                 match conn.query_drop(trimmed) {
                     Ok(_) => {

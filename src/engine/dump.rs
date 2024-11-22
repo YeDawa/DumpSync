@@ -1,17 +1,17 @@
 use std::{
-    thread,
-    process,
+    thread, 
+    process, 
     time::Duration,
-
+    
     sync::{
         Arc,
 
         atomic::{
-            Ordering,
             AtomicBool, 
             AtomicUsize, 
-        },
-    },
+            Ordering 
+        }
+    }, 
 };
 
 use crate::{
@@ -30,6 +30,7 @@ use crate::{
 
 pub struct Dump {
     port: u64,
+    path: String,
     host: String,
     user: String,
     interval: u64,
@@ -50,15 +51,17 @@ impl Dump {
         dbname: &str,
         backup_path: &str,
         interval: Option<u64>,
+        path: &str,
     ) -> Self {
         Self {
-            host: host.to_string(),
             port,
+            host: host.to_string(),
             user: user.to_string(),
-            password: password.to_string(),
             dbname: dbname.to_string(),
-            interval: interval.unwrap_or(3600),
+            password: password.to_string(),
             dump_file_path: backup_path.to_string(),
+            interval: interval.unwrap_or(3600),
+            path: path.to_string(),
         }
     }
 
@@ -102,6 +105,7 @@ impl Dump {
         let password_clone = self.password.clone();
         let dbname_clone = self.dbname.clone();
         let interval_clone = self.interval;
+        let path_clone = self.path.clone();
 
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
@@ -114,6 +118,7 @@ impl Dump {
                 dbname: dbname_clone.clone(),
                 interval: interval_clone,
                 dump_file_path: dump_file_path_clone.clone(),
+                path: path_clone.clone(),
             };
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
@@ -136,6 +141,7 @@ impl Dump {
             &self.password,
             &self.dbname,
             &self.dump_file_path,
+            &self.path,
         ).dump().expect("Failed to import dump");
     }
 
