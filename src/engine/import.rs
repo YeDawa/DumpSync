@@ -1,4 +1,5 @@
 use regex::Regex;
+use flate2::read::GzDecoder;
 
 use mysql::{
     *,
@@ -7,8 +8,12 @@ use mysql::{
 
 use std::{
     fs::File, 
-    io::Read, 
     error::Error,
+
+    io::{
+        Read,
+        BufReader, 
+    }, 
 };
 
 use crate::{
@@ -52,16 +57,28 @@ impl Import {
         }.create_pool()?;
 
         let mut conn = pool.get_conn()?;
+        let is_compressed = self.dump_file_path.ends_with(".sql.gz");
 
-        let mut dump_file = File::open(&self.dump_file_path)?;
-        let mut dump_content = String::new();
-        dump_file.read_to_string(&mut dump_content)?;
+        let dump_content = if is_compressed {
+            let file = File::open(&self.dump_file_path)?;
+
+            let mut decoder = GzDecoder::new(BufReader::new(file));
+            let mut content = String::new();
+
+            decoder.read_to_string(&mut content)?;
+            content
+        } else {
+            let mut file = File::open(&self.dump_file_path)?;
+            let mut content = String::new();
+
+            file.read_to_string(&mut content)?;
+            content
+        };
 
         let create_table_regex = Regex::new(r"(?i)CREATE TABLE\s+`?(\w+)`?").unwrap();
 
         for statement in dump_content.split(';') {
             let trimmed = statement.trim();
-
             if !trimmed.is_empty() {
                 match conn.query_drop(trimmed) {
                     Ok(_) => {
@@ -70,8 +87,7 @@ impl Import {
                                 SuccessAlerts::table(table_name.as_str());
                             }
                         }
-                    },
-
+                    }
                     Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
                 }
             }
@@ -80,4 +96,5 @@ impl Import {
         SuccessAlerts::import(&self.dbname);
         Ok(())
     }
+
 }
