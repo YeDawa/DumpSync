@@ -79,6 +79,7 @@ impl Import {
 
         for statement in dump_content.split(';') {
             let trimmed = statement.trim();
+            
             if !trimmed.is_empty() {
                 match conn.query_drop(trimmed) {
                     Ok(_) => {
