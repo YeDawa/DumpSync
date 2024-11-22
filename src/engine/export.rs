@@ -58,6 +58,7 @@ pub struct Export {
 }
 
 impl Export {
+    
     pub fn new(host: &str, port: u16, user: &str, password: &str, dbname: &str, dump_file_path: &str) -> Self {
         Self {
             host: host.to_string(),
@@ -83,11 +84,13 @@ impl Export {
         writeln!(writer, "-- Database backup: {}", self.dbname)?;
         writeln!(writer, "-- Export date and time: {}", Date::timestamp())?;
         writeln!(writer, "-- ---------------------------------------------------\n")?;
+
         Ok(())
     }
 
     fn write_create_new_database(&self, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         let database_if_not_exists = Configs.boolean("exports", "database_if_not_exists", true);
+
         if database_if_not_exists {
             writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
             writeln!(writer, "USE `{}`;", self.dbname)?;
@@ -99,8 +102,10 @@ impl Export {
     fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         let dump_data = Configs.boolean("exports", "dump_data", true);
         let insert_ignore_into = Configs.boolean("exports", "insert_ignore_into", false);
+
         if dump_data {
             let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
+
             if rows.is_empty() {
                 writeln!(writer, "-- Table `{}` contains no data.", table)?;
             } else {
@@ -124,18 +129,23 @@ impl Export {
                 }
             }
         }
+
         Ok(())
     }
 
     fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         let drop_table_if_exists = Configs.boolean("exports", "drop_table_if_exists", false);
+
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
+
         if drop_table_if_exists {
             writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
         }
+
         let row: Row = conn.query_first(format!("SHOW CREATE TABLE `{}`", table))?.unwrap();
         let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
         writeln!(writer, "{};\n", create_table)?;
+
         Ok(())
     }
 
