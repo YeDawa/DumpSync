@@ -11,12 +11,10 @@ Example structure:
 ```yaml
 exports:
   dump_data: true
+  compress_data: true
   insert_ignore_into: false
   drop_table_if_exists: true
   database_if_not_exists: true
-  ignore_tables:
-    - YOUR_TABLE_NAME
-    - ANOTHER_TABLE_NAME
 
 connection:
   max_retries: 3
@@ -26,6 +24,7 @@ connection:
 ### Properties of `exports`
 
 - **dump_data** (`boolean`): Determines whether all data in your database should be exported. If set to `true`, the content of all tables will be included in the dump. If `false`, only the structures of the tables will be exported.
+- **compress_data** (`boolean`): Specifies whether the dump should be compressed. If set to `true`, the dump will be compressed using the `gzip` algorithm, reducing the file size. If `false`, the dump will be saved as a plain SQL file.
 - **drop_table_if_exists** (`boolean`): Specifies whether existing tables should be dropped before being recreated during the import process. Setting this to `true` will include a `DROP TABLE IF EXISTS` statement before the `CREATE TABLE` statement, preventing table duplication conflicts.
 - **insert_ignore_into** (`boolean`): The `insert_ignore_into` property specifies whether data should be inserted using the `INSERT IGNORE INTO` statement during the import process. Setting it to `true` will ensure that duplicate records are ignored, preventing errors from duplicate entries in the table.
 - **database_if_not_exists** (`boolean`): Indicates whether the database should be created only if it does not exist. If set to `true`, a `CREATE DATABASE IF NOT EXISTS` statement will be included in the dump, avoiding errors if the database is already present.
