@@ -1,5 +1,6 @@
 exports:
   dump_data: true
+  compress_data: false
   insert_ignore_into: false
   drop_table_if_exists: true
   database_if_not_exists: true
