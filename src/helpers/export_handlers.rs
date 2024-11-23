@@ -21,7 +21,7 @@ use mysql::{
 
 use crate::{
     utils::date::Date,
-    engine::configs::Configs,
+    helpers::configs::Configs,
 };
 
 pub enum Writer {

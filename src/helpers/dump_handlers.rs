@@ -9,7 +9,7 @@ use std::{
 };
 
 use crate::{
-    engine::configs::Configs,
+    helpers::configs::Configs,
     utils::generate::Generate,
 
     ui::{
