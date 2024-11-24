@@ -30,3 +30,6 @@ Cargo.lock
 
 # Mkdocs
 /site
+
+# Obsolete settings file
+dumpsync1.yml
