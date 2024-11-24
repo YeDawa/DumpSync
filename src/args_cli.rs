@@ -1,10 +1,10 @@
 use clap_cargo::style;
-use clap::builder::styling::Styles;
 
 use clap::{
     Parser,
     Subcommand,
     ColorChoice,
+    builder::styling::Styles,
 };
 
 pub const CLAP_STYLING: Styles = Styles::styled()
@@ -32,6 +32,9 @@ pub enum Commands {
     
     /// Import the database dump
     Import(ImportOptions),
+    
+    /// Initialize the new dump sync project
+    Init,
 }
 
 #[derive(Parser)]

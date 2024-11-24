@@ -49,4 +49,13 @@ impl SuccessAlerts {
         );
     }
 
+    pub fn settings() {
+        let current_datetime = Date::date_time();
+    
+        println!(
+            "\r{} The settings file was successfully created", 
+            current_datetime.green().bold(),
+        );
+    }
+
 }

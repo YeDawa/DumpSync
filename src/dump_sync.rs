@@ -1,9 +1,17 @@
 use clap::Parser;
 
+use reqwest;
+use tokio::fs::File;
+use tokio::io::AsyncWriteExt;
+
+use std::error::Error;
+
 use crate::{
     ui::ui_base::UI,
     helpers::env::Env,
     engine::dump::Dump,
+    consts::global::Global,
+    ui::success_alerts::SuccessAlerts,
 
     args_cli::{
         Cli,
@@ -16,6 +24,17 @@ use crate::{
 pub struct DumpSync;
 
 impl DumpSync {
+
+    async fn initialize(&self) -> Result<(), Box<dyn Error>> {
+        let response = reqwest::get(Global::APP_CONFIGS).await?;
+        let content = response.bytes().await?;
+        
+        let mut file = File::create(Global::app_config()).await?;
+        file.write_all(&content).await?;
+        
+        SuccessAlerts::settings();
+        Ok(())
+    }
 
     fn import(&self, options: ImportOptions) {
         Env::new();
@@ -70,7 +89,7 @@ impl DumpSync {
         Dump::new(&host, port, &user, &password, &dbname, &backup_path, Some(interval), &backup_path).export();
     }
 
-    pub fn init(&self) {
+    pub async fn init(&self) -> Result<(), Box<dyn Error>> {
         let cli = Cli::parse();
 
         match cli.command {
@@ -81,7 +100,13 @@ impl DumpSync {
             Commands::Import(options) => {
                 self.import(options);
             },
+
+            Commands::Init => {
+                self.initialize().await?;
+            },
         }
+
+        Ok(())
     }
 
 }
