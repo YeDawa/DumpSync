@@ -26,6 +26,7 @@ theme:
 nav:
   - Overview: index.md
   - Install: install.md
+  - Init: init.md
   - Connection: connection.md
   - Settings: settings.md
   - Export: export.md
