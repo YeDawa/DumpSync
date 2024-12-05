@@ -9,23 +9,25 @@
       
       
       
+        <link rel="prev" href="../install/">
       
-        <link rel="next" href="install/">
+      
+        <link rel="next" href="../connection/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.43">
     
     
       
-        <title>DumpSync</title>
+        <title>Init - DumpSync</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -44,7 +46,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -70,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#overview" class="md-skip">
+        <a href="#command-init" class="md-skip">
           Skip to content
         </a>
       
@@ -86,7 +88,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="DumpSync" class="md-header__button md-logo" aria-label="DumpSync" data-md-component="logo">
+    <a href=".." title="DumpSync" class="md-header__button md-logo" aria-label="DumpSync" data-md-component="logo">
       
   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAAACXBIWXMAAC4jAAAuIwF4pT92AAADSklEQVR4nO2aP07jQBSHf95si0QQQgihIBJRUAfJgtocAY4ARwhHIFfIEcgRNjXVuqFBCGEkhBBCKC5ow5stHENY/Gb8Z5zYu++Tpkk8+jlfZuyZZztKKQjf+bHoE6gqIoZBxDCIGAYRwyBiGEQMg4hhEDEMIoZBxDCIGAYRwyBiGEQMg4hhSCPGA6AstTGAXwB6Gc+zCeB82jdv7gWAk7SBjqmCp5TypidkGx/AoeM4oSG/O81vWsodOo5zbDrIKOb9/b0sMQDgNxqNPU12G8Bv2JMS0280Gme6A4xTSSlVZutOJhN2eCulekqpZgm5vclk0tb97p8mMURkOqQoXU22V2KuB2DAfVkFMew/R0Taf7Ug2ulZBTGVzDaKSfncaQBgmPB5E9FtMhcpsgMAp7ZzAXsjJlhaWholffH29pb1nLJkl5ILzGEqFem/qL6AvalUSv+CfbXrFEQLTJa6j5jmeDxurqysfFs9Ly8v93MHo/5iugDGr6+vQ0QjYLi6uhrkDpyh7mJijqbt/OXlJQAwitva2pp2L8ZRdTEhsu+T2oh20ScA8Pz8/CFpfX1de12ZpepiRohGQhG8acPT01MA4GxjYyNpzfUF4yaSiFK1Iv01fftEFKY9hxStTUQXj4+P57UWs7m56RPRIREFFuWAiHoPDw/aDaq1skOR/jparZbfarU6SqlTpdRQKRVaKj1oxVT6GjPL1tbWANMywf39fXzd8KApWxjQ9quNmFm2t7fjOw3u7u7a+BR0BEvVvlqKmaXT6QT4LDid3t7exoKyFty/UHsxf7Ozs+MD8G9ubv5dMdfX16Yi/HB3dzexPFn67nrBCzxTzTexFlM0F6i+mIX0BezVY7yrq6ukzwvdIVJkH5WRC9gbMR/7EZukLDvkXcdokacEDFUQw5YCiCiA5rlTWbnAHGq+KWDvLEqpAaK3HOaaCyx+xAxc19XdcgeIVrG2ryPaXMBi2SFH67uum/Sw7APXdUMiOiYif565QLqpFMIw7DIQIprbo4ODg1Rlxv39/QDA3uXlZTxy8oyezLnG92P+V+QdPAYRwyBiGEQMg4hhEDEMIoZBxDCIGAYRwyBiGEQMg4hhEDEMIoZBxDCIGAYRw/AHZ4ENamm/WDkAAAAASUVORK5CYII=" alt="logo">
 
@@ -105,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview
+              Init
             
           </span>
         </div>
@@ -218,7 +220,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="DumpSync" class="md-nav__button md-logo" aria-label="DumpSync" data-md-component="logo">
+    <a href=".." title="DumpSync" class="md-nav__button md-logo" aria-label="DumpSync" data-md-component="logo">
       
   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAAACXBIWXMAAC4jAAAuIwF4pT92AAADSklEQVR4nO2aP07jQBSHf95si0QQQgihIBJRUAfJgtocAY4ARwhHIFfIEcgRNjXVuqFBCGEkhBBCKC5ow5stHENY/Gb8Z5zYu++Tpkk8+jlfZuyZZztKKQjf+bHoE6gqIoZBxDCIGAYRwyBiGEQMg4hhEDEMIoZBxDCIGAYRwyBiGEQMg4hhSCPGA6AstTGAXwB6Gc+zCeB82jdv7gWAk7SBjqmCp5TypidkGx/AoeM4oSG/O81vWsodOo5zbDrIKOb9/b0sMQDgNxqNPU12G8Bv2JMS0280Gme6A4xTSSlVZutOJhN2eCulekqpZgm5vclk0tb97p8mMURkOqQoXU22V2KuB2DAfVkFMew/R0Taf7Ug2ulZBTGVzDaKSfncaQBgmPB5E9FtMhcpsgMAp7ZzAXsjJlhaWholffH29pb1nLJkl5ILzGEqFem/qL6AvalUSv+CfbXrFEQLTJa6j5jmeDxurqysfFs9Ly8v93MHo/5iugDGr6+vQ0QjYLi6uhrkDpyh7mJijqbt/OXlJQAwitva2pp2L8ZRdTEhsu+T2oh20ScA8Pz8/CFpfX1de12ZpepiRohGQhG8acPT01MA4GxjYyNpzfUF4yaSiFK1Iv01fftEFKY9hxStTUQXj4+P57UWs7m56RPRIREFFuWAiHoPDw/aDaq1skOR/jparZbfarU6SqlTpdRQKRVaKj1oxVT6GjPL1tbWANMywf39fXzd8KApWxjQ9quNmFm2t7fjOw3u7u7a+BR0BEvVvlqKmaXT6QT4LDid3t7exoKyFty/UHsxf7Ozs+MD8G9ubv5dMdfX16Yi/HB3dzexPFn67nrBCzxTzTexFlM0F6i+mIX0BezVY7yrq6ukzwvdIVJkH5WRC9gbMR/7EZukLDvkXcdokacEDFUQw5YCiCiA5rlTWbnAHGq+KWDvLEqpAaK3HOaaCyx+xAxc19XdcgeIVrG2ryPaXMBi2SFH67uum/Sw7APXdUMiOiYif565QLqpFMIw7DIQIprbo4ODg1Rlxv39/QDA3uXlZTxy8oyezLnG92P+V+QdPAYRwyBiGEQMg4hhEDEMIoZBxDCIGAYRwyBiGEQMg4hhEDEMIoZBxDCIGAYRw/AHZ4ENamm/WDkAAAAASUVORK5CYII=" alt="logo">
 
@@ -244,6 +246,46 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Install
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -258,18 +300,18 @@
           
   
   <span class="md-ellipsis">
-    Overview
+    Init
   </span>
   
 
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="." class="md-nav__link md-nav__link--active">
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Overview
+    Init
   </span>
   
 
@@ -289,26 +331,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#command-init" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      Command init
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Key Features
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -327,47 +354,7 @@
   
   
     <li class="md-nav__item">
-      <a href="install/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Install
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="init/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Init
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="connection/" class="md-nav__link">
+      <a href="../connection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -387,7 +374,7 @@
   
   
     <li class="md-nav__item">
-      <a href="settings/" class="md-nav__link">
+      <a href="../settings/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -407,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="export/" class="md-nav__link">
+      <a href="../export/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -427,7 +414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="import/" class="md-nav__link">
+      <a href="../import/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -465,26 +452,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#command-init" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      Command init
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Key Features
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -506,20 +478,12 @@
   
 
 
-  <h1>Overview</h1>
+  <h1>Init</h1>
 
-<div align='center'><img src='https://camo.githubusercontent.com/bba1e2629a190a9a11efa835abf931ffd18488d4479ab45898a93c899d59fa2a/68747470733a2f2f692e696d6775722e636f6d2f4e376d573934332e706e67'/></div>
-
-<p>DumpSync is a simple yet powerful tool designed for dumping and restoring MySQL databases. It can be utilized for backup and restore operations or for transferring a database between different servers.</p>
-<h2 id="overview">Overview</h2>
-<p>DumpSync automates the process of creating dumps of a MySQL database at configurable time intervals. The generated dump files are saved in a user-specified directory, making it easy to manage backups. The tool offers flexibility through configuration options, which can be set via environment variables or command-line arguments, accommodating various usage scenarios.</p>
-<h3 id="key-features">Key Features</h3>
-<ul>
-<li><strong>Automated Dumps</strong>: Schedule regular backups of your MySQL database to ensure data safety.</li>
-<li><strong>Flexible Configuration</strong>: Customize settings through environment variables or command-line arguments based on your needs.</li>
-<li><strong>Simple Restore Process</strong>: Easily restore databases from existing dump files with minimal effort.</li>
-<li><strong>Cross-Server Transfers</strong>: Facilitate the migration of databases between different servers seamlessly.</li>
-</ul>
+<h3 id="command-init">Command init</h3>
+<p>The <code>init</code> command will create a <code>dumpsync.yml</code> file in the current directory with default settings. If the file already exists, it will be overwritten.</p>
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>init
+</code></pre></div>
 
 
 
@@ -550,15 +514,31 @@
       
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
+          
+          <a href="../install/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Install">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Install
+              </div>
+            </div>
+          </a>
+        
         
           
-          <a href="install/" class="md-footer__link md-footer__link--next" aria-label="Next: Install">
+          <a href="../connection/" class="md-footer__link md-footer__link--next" aria-label="Next: Connection">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Install
+                Connection
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -611,10 +591,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.sections", "navigation.footer", "content.tabs.link", "content.footnote.tooltips"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.sections", "navigation.footer", "content.tabs.link", "content.footnote.tooltips"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
       
     
   </body>
