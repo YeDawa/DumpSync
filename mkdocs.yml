@@ -31,6 +31,7 @@ nav:
   - Settings: settings.md
   - Export: export.md
   - Import: import.md
+  - Transfer: transfer.md
 
 markdown_extensions:
   - tables
