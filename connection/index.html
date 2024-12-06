@@ -486,14 +486,20 @@
 
 <h1 id="database-connection">Database Connection</h1>
 <p>To connect to the database, you need to configure the Environment System in your <code>.env</code> file. You should include the following settings:</p>
-<div class="highlight"><pre><span></span><code>DB_HOST=&quot;YOUR_HOST&quot;
-DB_PORT=&quot;YOUR_PORT&quot;
-DB_USER=&quot;YOUR_USERNAME&quot;
-DB_PASSWORD=&quot;YOUR_PASSWORD&quot;
-DB_NAME=&quot;YOUR_DATABASE&quot;
+<div class="highlight"><pre><span></span><code>DB_HOST=&quot;YOUR_HOST&quot; # Database host
+DB_PORT=&quot;YOUR_PORT&quot; # Database port
+DB_USER=&quot;YOUR_USERNAME&quot; # Database username
+DB_PASSWORD=&quot;YOUR_PASSWORD&quot; # Database password
+DB_NAME=&quot;YOUR_DATABASE&quot; # Database name
 
 DS_DUMP_INTERVAL=&quot;3600&quot;  # Interval for the dump process in seconds
 DS_DUMP_PATH=&quot;/path/to/&quot;  # Path where dumps will be saved
+
+DS_TRANSFER_HOST=&quot;YOUR_TRANSFER_HOST&quot; # Transfer database host
+DS_TRANSFER_PORT=&quot;YOUR_TRANSFER_PORT&quot; # Transfer database port
+DS_TRANSFER_USER=&quot;YOUR_TRANSFER_USERNAME&quot; # Transfer database username
+DS_TRANSFER_PASSWORD=&quot;YOUR_TRANSFER_PASSWORD&quot; # Transfer database password
+DS_TRANSFER_DB_NAME=&quot;YOUR_TRANSFER_DATABASE&quot; # Transfer database name
 
 # OR, alternatively
 
@@ -515,6 +521,11 @@ DS_DUMP_PATH=&quot;/path/to/&quot;  # Path where dumps will be saved
 <li><strong>DB_NAME</strong> / <strong>DS_DB_NAME</strong>: The name of the database you want to connect to.</li>
 <li><strong>DS_DUMP_INTERVAL</strong>: The interval (in seconds) for the dump process; defaults to 3600 seconds (1 hour).</li>
 <li><strong>DS_DUMP_PATH</strong>: The directory path where the database dumps will be saved.</li>
+<li><strong>DS_TRANSFER_HOST</strong>: The hostname or IP address of the transfer database server.</li>
+<li><strong>DS_TRANSFER_PORT</strong>: The port number on which the transfer database is listening.</li>
+<li><strong>DS_TRANSFER_USER</strong>: Your transfer database username.</li>
+<li><strong>DS_TRANSFER_PASSWORD</strong>: The password associated with the transfer database user.</li>
+<li><strong>DS_TRANSFER_DB_NAME</strong>: The name of the transfer database you want to connect to.</li>
 </ul>
 <p>You can choose to use either the <code>DB_</code> prefixed variables or the <code>DS_</code> prefixed variables for your configuration. Make sure to adjust the values accordingly to fit your environment.</p>
 
