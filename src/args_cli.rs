@@ -32,6 +32,9 @@ pub enum Commands {
     
     /// Import the database dump
     Import(ImportOptions),
+
+    /// Transfer the dump to other server
+    Transfer(TransferOptions),
     
     /// Initialize the new dump sync project
     Init,
@@ -54,6 +57,17 @@ pub struct ExportOptions {
 
 #[derive(Parser)]
 pub struct ImportOptions {
+    #[arg(short, long)]
+    /// Database name
+    pub database: Option<String>,
+
+    #[arg(short, long)]
+    /// Dump file path
+    pub file: Option<String>,
+}
+
+#[derive(Parser)]
+pub struct TransferOptions {
     #[arg(short, long)]
     /// Database name
     pub database: Option<String>,

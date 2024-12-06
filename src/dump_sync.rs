@@ -86,6 +86,27 @@ impl DumpSync {
         Dump::new(&host, port, &user, &password, &dbname, &backup_path, Some(interval), &backup_path).export();
     }
 
+    fn transfer(&self, options: TransferOptions) {
+        Env::new();
+        UI::header();
+
+        let backup_path = options.file.unwrap();
+        let dbname = std::env::var("DS_TRANSFER_DB_NAME").or_else(|_| std::env::var("DS_TRANSFER_DB_NAME")).unwrap_or_default();
+
+        let host = std::env::var("DS_TRANSFER_HOST").or_else(|_| std::env::var("DS_TRANSFER_HOST")).unwrap_or_default();
+        let user = std::env::var("DS_TRANSFER_USER").or_else(|_| std::env::var("DS_TRANSFER_USER")).unwrap_or_default();
+        let password = std::env::var("DS_TRANSFER_PASSWORD").or_else(|_| std::env::var("DS_TRANSFER_PASSWORD")).unwrap_or_default();
+
+        let port = std::env::var("DS_TRANSFER_PORT")
+            .or_else(|_| std::env::var("DS_TRANSFER_DB_PORT"))
+            .unwrap_or_default()
+            .parse::<u64>()
+            .expect("Invalid port");
+
+        UI::section_header("Importing dump to server", "info");
+        Dump::new(&host, port, &user, &password, &dbname, &backup_path, None, &backup_path).transfer();
+    }
+
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
         let cli = Cli::parse();
 
@@ -100,6 +121,10 @@ impl DumpSync {
 
             Commands::Init => {
                 self.initialize().await?;
+            },
+
+            Commands::Transfer(options) => {
+                self.transfer(options);
             },
         }
 
