@@ -23,6 +23,7 @@ use std::{
 
 use crate::{
     engine::connection::Connection,
+    helpers::transfer_handlers::TransferHandlers,
 
     ui::{
         errors_alerts::ErrorsAlerts,
@@ -102,6 +103,9 @@ impl Transfer {
             file.read_to_string(&mut content)?;
             content
         };
+
+        let transfer_handlers = TransferHandlers::new(&self.dbname, &dump_content);
+        let dump_content = transfer_handlers.check_db_name();
 
         let create_table_regex = Regex::new(r"(?i)CREATE TABLE\s+`?(\w+)`?").unwrap();
 
