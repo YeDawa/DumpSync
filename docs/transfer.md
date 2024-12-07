@@ -3,7 +3,7 @@
 To transfer a database from one server to another, you can use the following command:
 
 ```bash
-dumpsync import -f /path/to/dump.sql
+dumpsync transfer -f /path/to/dump.sql
 ```
 
 ### Command Breakdown
