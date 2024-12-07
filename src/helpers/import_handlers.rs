@@ -15,17 +15,23 @@ impl ImportHandlers {
     }
 
     pub fn check_db_name(&self) -> String {
-        let create_db_regex = Regex::new(r"(?i)(CREATE DATABASE IF NOT EXISTS\s+`?)(\w+)(`?)").unwrap();
+        let db_regex = Regex::new(r"(?i)CREATE DATABASE\s+(`?)(\w+)(`?)\s*(IF NOT EXISTS)?;").unwrap();
         let use_db_regex = Regex::new(r"(?i)(USE\s+`?)(\w+)(`?)").unwrap();
-    
-        let content = create_db_regex.replace_all(&self.dump_content, |caps: &regex::Captures| {
-            if &caps[2] != &self.dbname {
-                format!("{}{}{};", &caps[1], &self.dbname, &caps[3])
+        
+        let content = db_regex.replace_all(&self.dump_content, |caps: &regex::Captures| {
+            let db_name = if &caps[2] != self.dbname {
+                self.dbname.clone()
             } else {
-                caps[0].to_string()
+                caps[2].to_string()
+            };
+    
+            if caps.get(4).is_some() {
+                format!("CREATE DATABASE IF NOT EXISTS `{}`;", db_name)
+            } else {
+                format!("CREATE DATABASE IF NOT EXISTS `{}`;", db_name)
             }
         });
-    
+
         let dump_content = use_db_regex.replace_all(&content, |caps: &regex::Captures| {
             if &caps[2] != &self.dbname {
                 format!("{}{}{};", &caps[1], &self.dbname, &caps[3])
@@ -36,5 +42,5 @@ impl ImportHandlers {
     
         dump_content.to_string()
     }
-
+    
 }
