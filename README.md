@@ -5,6 +5,7 @@
 <div align='center'>
 <img src='https://img.shields.io/crates/v/dumpsync?style=flat-square&logo=rust'/>
 <img src='https://img.shields.io/crates/l/dumpsync?style=flat-square'/>
+<img src='https://img.shields.io/crates/d/dumpsync?style=flat-square&logo=rust'/>
 </div>
 
 DumpSync is a lightweight tool designed for efficiently dumping and restoring MySQL databases. Whether you need to create backups, restore databases, or transfer data between servers, DumpSync provides a simple and automated solution.
