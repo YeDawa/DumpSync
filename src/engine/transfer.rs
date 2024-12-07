@@ -22,6 +22,7 @@ use std::{
 };
 
 use crate::{
+    consts::regexp::RegExp,
     engine::connection::Connection,
     helpers::import_handlers::ImportHandlers,
 
@@ -106,7 +107,7 @@ impl Transfer {
 
         let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
 
-        let create_table_regex = Regex::new(r"(?i)CREATE TABLE\s+`?(\w+)`?").unwrap();
+        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
 
         for statement in dump_content.split(';') {
             let trimmed = statement.trim();

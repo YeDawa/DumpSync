@@ -1,5 +1,7 @@
 use regex::Regex;
 
+use crate::consts::regexp::RegExp;
+
 pub struct ImportHandlers {
     dbname: String,
     dump_content: String,
@@ -15,8 +17,8 @@ impl ImportHandlers {
     }
 
     pub fn check_db_name(&self) -> String {
-        let db_regex = Regex::new(r"(?i)CREATE DATABASE\s+(`?)(\w+)(`?)\s*(IF NOT EXISTS)?;").unwrap();
-        let use_db_regex = Regex::new(r"(?i)(USE\s+`?)(\w+)(`?)").unwrap();
+        let use_db_regex = Regex::new(RegExp::USE_CASE).unwrap();
+        let db_regex = Regex::new(RegExp::CREATE_DATABASE_CASES).unwrap();
         
         let content = db_regex.replace_all(&self.dump_content, |caps: &regex::Captures| {
             let db_name = if &caps[2] != self.dbname {
