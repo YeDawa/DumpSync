@@ -23,6 +23,7 @@ use std::{
 
 use crate::{
     engine::connection::Connection,
+    helpers::import_handlers::ImportHandlers,
 
     ui::{
         errors_alerts::ErrorsAlerts,
@@ -94,6 +95,8 @@ impl Import {
             file.read_to_string(&mut content)?;
             content
         };
+
+        let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
 
         let create_table_regex = Regex::new(r"(?i)CREATE TABLE\s+`?(\w+)`?").unwrap();
 

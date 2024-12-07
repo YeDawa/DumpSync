@@ -1,11 +1,11 @@
 use regex::Regex;
 
-pub struct TransferHandlers {
+pub struct ImportHandlers {
     dbname: String,
     dump_content: String,
 }
 
-impl TransferHandlers {
+impl ImportHandlers {
 
     pub fn new(dbname: &str, dump_content: &str) -> Self {
         Self {
