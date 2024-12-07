@@ -93,7 +93,6 @@ impl Export {
         }
 
         SuccessAlerts::dump(&dump_file_path);
-
         Ok(())
     }
 
