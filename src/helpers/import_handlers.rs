@@ -27,11 +27,7 @@ impl ImportHandlers {
                 caps[2].to_string()
             };
     
-            if caps.get(4).is_some() {
-                format!("CREATE DATABASE IF NOT EXISTS `{}`;", db_name)
-            } else {
-                format!("CREATE DATABASE IF NOT EXISTS `{}`;", db_name)
-            }
+            format!("CREATE DATABASE IF NOT EXISTS `{}`;", db_name)
         });
 
         let dump_content = use_db_regex.replace_all(&content, |caps: &regex::Captures| {
