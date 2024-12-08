@@ -32,6 +32,7 @@ nav:
   - Export: export.md
   - Import: import.md
   - Transfer: transfer.md
+  - Scan: scan.md
 
 markdown_extensions:
   - tables
