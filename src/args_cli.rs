@@ -38,6 +38,9 @@ pub enum Commands {
     
     /// Initialize the new dump sync project
     Init,
+
+    /// Scan the table for xss prevention
+    Scan(ScanOptions),
 }
 
 #[derive(Parser)]
@@ -75,4 +78,19 @@ pub struct TransferOptions {
     #[arg(short, long)]
     /// Dump file path
     pub file: Option<String>,
+}
+
+#[derive(Parser)]
+pub struct ScanOptions {
+    #[arg(short, long)]
+    /// Table name for scan
+    pub table: String,
+    
+    #[arg(short, long)]
+    /// Database name
+    pub database: Option<String>,
+
+    #[arg(short, long)]
+    /// Payload file path
+    pub payload: Option<String>,
 }

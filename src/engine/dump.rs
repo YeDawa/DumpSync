@@ -25,6 +25,7 @@ use crate::{
     engine::{
         export::Export,
         import::Import,
+        scan_xss::ScanXSS,
         transfer::Transfer,
     },
 };
@@ -38,6 +39,8 @@ pub struct Dump {
     dbname: String,
     password: String,
     dump_file_path: String,
+    table: String,
+    payload: Option<String>,
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -53,6 +56,8 @@ impl Dump {
         backup_path: &str,
         interval: Option<u64>,
         path: &str,
+        table: &str,
+        payload: Option<&str>,
     ) -> Self {
         Self {
             port,
@@ -63,6 +68,9 @@ impl Dump {
             dump_file_path: backup_path.to_string(),
             interval: interval.unwrap_or(3600),
             path: path.to_string(),
+
+            table: table.to_string(),
+            payload: payload.map(|s| s.to_string()),
         }
     }
 
@@ -120,6 +128,8 @@ impl Dump {
                 interval: interval_clone,
                 dump_file_path: dump_file_path_clone.clone(),
                 path: path_clone.clone(),
+                table: "".to_string(),
+                payload: None,
             };
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
@@ -156,6 +166,18 @@ impl Dump {
             &self.dump_file_path,
             &self.path,
         ).dump().expect("Failed to transfer dump");
+    }
+
+    pub async fn scan_xss(&self) {
+        ScanXSS::new(
+            &self.host,
+            self.port as u16,
+            &self.user,
+            &self.password,
+            &self.dbname,
+            &self.table,
+            self.payload.as_deref(),
+        ).scan().await.expect("Failed to scan tables for XSS");
     }
 
 }
