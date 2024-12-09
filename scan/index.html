@@ -9,10 +9,8 @@
       
       
       
-        <link rel="prev" href="../connection/">
+        <link rel="prev" href="../transfer/">
       
-      
-        <link rel="next" href="../export/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +18,7 @@
     
     
       
-        <title>Settings - DumpSync</title>
+        <title>Scan - DumpSync</title>
       
     
     
@@ -72,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#settings-file-for-dumpsync" class="md-skip">
+        <a href="#dumpsync-command-scan" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Settings
+              Scan
             
           </span>
         </div>
@@ -326,30 +324,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Settings
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -358,59 +336,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#file-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      File Structure
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="File Structure">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#properties-of-exports" class="md-nav__link">
-    <span class="md-ellipsis">
-      Properties of exports
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#properties-of-connection" class="md-nav__link">
-    <span class="md-ellipsis">
-      Properties of connection
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -479,10 +404,30 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../scan/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Scan
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -491,6 +436,71 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#command-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Breakdown
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notes
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -522,35 +532,47 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#file-structure" class="md-nav__link">
+  <a href="#command-breakdown" class="md-nav__link">
     <span class="md-ellipsis">
-      File Structure
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="File Structure">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#properties-of-exports" class="md-nav__link">
-    <span class="md-ellipsis">
-      Properties of exports
+      Command Breakdown
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#properties-of-connection" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      Properties of connection
+      Parameters
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notes
+    </span>
+  </a>
   
 </li>
       
@@ -572,38 +594,34 @@
   
 
 
-<h1 id="settings-file-for-dumpsync">Settings File for DumpSync</h1>
-<p>The configuration file <code>dumpsync.yml</code> allows you to customize the options for the dump process. </p>
-<p>It should be saved as <code>dumpsync.yml</code> in the same directory where your project is running.</p>
-<h2 id="file-structure">File Structure</h2>
-<p>Example structure:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">exports</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">dump_data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">compress_data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">insert_ignore_into</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">  </span><span class="nt">drop_table_if_exists</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">database_if_not_exists</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-
-<span class="nt">connection</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">max_retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="w">  </span><span class="nt">retry_connection_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<h1 id="dumpsync-command-scan">DumpSync Command: Scan</h1>
+<p>The dumpsync scan command is used to scan a database table for Cross-Site Scripting (XSS) vulnerabilities. It allows you to provide a payload file containing scripts that will be tested on the input fields of the specified table.</p>
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>&lt;table&gt;<span class="w"> </span>--payload<span class="w"> </span>&lt;path_or_url_to_payload_file&gt;
 </code></pre></div>
-<h3 id="properties-of-exports">Properties of <code>exports</code></h3>
+<h3 id="command-breakdown">Command Breakdown</h3>
 <ul>
-<li><strong>dump_data</strong> (<code>boolean</code>): Determines whether all data in your database should be exported. If set to <code>true</code>, the content of all tables will be included in the dump. If <code>false</code>, only the structures of the tables will be exported.</li>
-<li><strong>compress_data</strong> (<code>boolean</code>): Specifies whether the dump should be compressed. If set to <code>true</code>, the dump will be compressed using the <code>gzip</code> algorithm, reducing the file size. If <code>false</code>, the dump will be saved as a plain SQL file.</li>
-<li><strong>drop_table_if_exists</strong> (<code>boolean</code>): Specifies whether existing tables should be dropped before being recreated during the import process. Setting this to <code>true</code> will include a <code>DROP TABLE IF EXISTS</code> statement before the <code>CREATE TABLE</code> statement, preventing table duplication conflicts.</li>
-<li><strong>insert_ignore_into</strong> (<code>boolean</code>): The <code>insert_ignore_into</code> property specifies whether data should be inserted using the <code>INSERT IGNORE INTO</code> statement during the import process. Setting it to <code>true</code> will ensure that duplicate records are ignored, preventing errors from duplicate entries in the table.</li>
-<li><strong>database_if_not_exists</strong> (<code>boolean</code>): Indicates whether the database should be created only if it does not exist. If set to <code>true</code>, a <code>CREATE DATABASE IF NOT EXISTS</code> statement will be included in the dump, avoiding errors if the database is already present.</li>
-<li><strong>ignore_tables</strong> (<code>array</code> of <code>strings</code>): A list of tables to be ignored during the dump. Tables listed here will not have their structure or data exported. Example:</li>
+<li><strong>dumpsync</strong>: This is the main command to invoke the DumpSync tool.</li>
+<li><strong>scan</strong>: This subcommand initiates the scanning process to check for XSS vulnerabilities in the specified table.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="nt">ignore_tables</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">table</span>
-</code></pre></div>
-<h3 id="properties-of-connection">Properties of <code>connection</code></h3>
+<h3 id="parameters">Parameters</h3>
 <ul>
-<li><strong>max_retries</strong> (<code>integer</code>): Defines the maximum number of retry attempts to establish a connection to the database. If a connection attempt fails, the application will retry up to this number.</li>
-<li><strong>retry_connection_interval</strong> (<code>integer</code>): Specifies the interval (in seconds) to wait between each retry attempt when attempting to connect to the database. This allows for gradual retries rather than immediate retries.</li>
+<li><strong>-t <code>&lt;table&gt;</code></strong>: Specifies the name of the table to be scanned. The command will check the fields in the table for any inputs that could be vulnerable to XSS attacks.</li>
+<li><strong>-p <path_or_url_to_payload_file></strong>: Specifies the path or URL to the payload file containing XSS scripts that will be tested on the input fields of the table.</li>
+</ul>
+<h3 id="example">Example</h3>
+<p>Scan a table called example_table using a payload file <code>located at path/to/payload.txt</code>:</p>
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>example_table<span class="w"> </span>--payload<span class="w"> </span>path/to/payload.txt
+</code></pre></div>
+<h3 id="description">Description</h3>
+<ul>
+<li>The command will access the input fields of the specified table and attempt to inject each payload from the provided file.</li>
+<li>This process helps identify vulnerable points where XSS attacks could be performed, providing a way to improve the security of your application.</li>
+</ul>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>Ensure that the dump file exists and that you have the necessary permissions to read it.</li>
+<li>The transfer process will overwrite existing data in the database, so be cautious when using this command, especially if restoring to a production environment.</li>
+<li>It’s recommended to back up current data before performing an import to avoid accidental data loss.</li>
 </ul>
 
 
@@ -636,7 +654,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../connection/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Connection">
+          <a href="../transfer/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Transfer">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -646,27 +664,11 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Connection
+                Transfer
               </div>
             </div>
           </a>
         
-        
-          
-          <a href="../export/" class="md-footer__link md-footer__link--next" aria-label="Next: Export">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Export
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
         
       </nav>
     
