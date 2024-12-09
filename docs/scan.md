@@ -3,7 +3,7 @@
 The dumpsync scan command is used to scan a database table for Cross-Site Scripting (XSS) vulnerabilities. It allows you to provide a payload file containing scripts that will be tested on the input fields of the specified table.
 
 ```bash
-dumpsync scan --table <table> --payload <path_or_url_to_payload_file>
+dumpsync scan -t <table> --payload <path_or_url_to_payload_file>
 ```
 
 ### Command Breakdown
@@ -21,7 +21,7 @@ dumpsync scan --table <table> --payload <path_or_url_to_payload_file>
 Scan a table called example_table using a payload file `located at path/to/payload.txt`:
 
 ```bash
-dumpsync scan --table example_table --payload path/to/payload.txt
+dumpsync scan -t example_table --payload path/to/payload.txt
 ```
 
 ### Description
