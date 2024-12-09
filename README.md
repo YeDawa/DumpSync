@@ -20,7 +20,7 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 - **Flexible Configuration**: Easily configure settings using environment variables or command-line arguments.
 - **Simple Restoration**: Quickly restore your database from previously created dump files.
 - **Cross-Server Transfers**: Seamlessly transfer databases between different MySQL servers.
-- **XSS Scan (Soon)**: Scan for XSS vulnerabilities in your tables.
+- **XSS Scan**: Scan for XSS vulnerabilities in your tables.
 
 ## Installation
 
