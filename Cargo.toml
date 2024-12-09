@@ -4,6 +4,7 @@ version = "0.1.17"
 edition = "2021"
 license = "MIT"
 authors = ["kremilly"]
+categories = ["command-line-utilities"]
 keywords = ["mysql", "dump", "restore", "backup", "database"]
 description = "DumpSync is a lightweight tool designed for efficiently dumping and restoring MySQL databases. Whether you need to create backups, restore databases, or transfer data between servers."
 repository = "https://github.com/kremilly/DumpSync"
@@ -11,7 +12,7 @@ documentation = "https://docs.dumpsync.com/"
 homepage = "https://dumpsync.com"
 
 [dependencies]
-chrono = "0.4.38"
+chrono = "0.4.39"
 clap = { version = "4.5.21", features = ["cargo", "derive"] }
 clap-cargo = "0.14.1"
 colored = "2.1.0"
