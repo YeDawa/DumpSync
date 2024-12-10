@@ -50,7 +50,7 @@ impl ErrorsAlerts {
     }
 
     pub fn report_format() {
-        let message = "Invalid file format, only CSV and JSON are supported.";
+        let message = "Invalid file format, only CSV, HTM, HTML and JSON are supported.";
 
         println!("{}", "-".repeat(50));
         println!(

@@ -126,6 +126,8 @@ impl ScanXSS {
                 ReportsXSS.csv(detections, file)?;
             } else if file.ends_with(".json") {
                 ReportsXSS.json(detections, file)?;
+            } else if file.ends_with(".html") || file.ends_with(".htm") {
+                ReportsXSS.html(detections, file)?;
             } else {
                 ErrorsAlerts::report_format();
             }
