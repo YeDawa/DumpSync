@@ -75,7 +75,7 @@ impl ScanHandlers {
                 continue;
             }
 
-            let pattern = trimmed.split(" #").next().unwrap().trim();
+            let pattern = trimmed.split("//").next().unwrap().trim();
 
             if !pattern.is_empty() {
                 match Regex::new(pattern) {
