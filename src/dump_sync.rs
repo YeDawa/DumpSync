@@ -54,7 +54,21 @@ impl DumpSync {
             .expect("Invalid port");
 
         UI::section_header("Importing dump to server", "info");
-        Dump::new(&host, port, &user, &password, &dbname, &backup_path, None, &backup_path, "", None).import();
+
+        Dump::new(
+            &host, 
+            port, 
+            &user, 
+            &password, 
+            &dbname, 
+            &backup_path, 
+            None, 
+            &backup_path, 
+            "", 
+            None,
+            None,
+            None,
+        ).import();
     }
 
     fn export(&self, options: ExportOptions) {
@@ -83,7 +97,21 @@ impl DumpSync {
 
         UI::label("Press CTRL+C to exit the tool", "normal");
         UI::section_header("Dumping the database", "info");
-        Dump::new(&host, port, &user, &password, &dbname, &backup_path, Some(interval), &backup_path, "", None).export();
+
+        Dump::new(
+            &host, 
+            port, 
+            &user, 
+            &password, 
+            &dbname, 
+            &backup_path, 
+            Some(interval), 
+            &backup_path, 
+            "", 
+            None,
+            None,
+            None,
+        ).export();
     }
 
     async fn scan_xss(&self, options: ScanOptions) -> Result<(), Box<dyn Error>> {
@@ -94,6 +122,9 @@ impl DumpSync {
         let payload = options.payload.unwrap_or_else(|| {
             Global::XSS_DETECT_REGEX.to_string()
         });
+
+        let offset = options.offset.unwrap_or(0);
+        let limit = options.limit.unwrap_or(99999999999);
 
         let dbname = options.database.unwrap_or_else(|| {
             std::env::var("DB_NAME").or_else(|_| std::env::var("DS_DB_NAME")).unwrap_or_default()
@@ -112,7 +143,20 @@ impl DumpSync {
         let header = format!("Scaning table: '{}'", table);
         UI::section_header(&header, "info");
 
-        Dump::new(&host, port, &user, &password, &dbname, "", None, "", &table, Some(&payload)).scan_xss().await;
+        Dump::new(
+            &host, 
+            port, 
+            &user, 
+            &password, 
+            &dbname, 
+            "", 
+            None, 
+            "", 
+            &table, 
+            Some(&payload),
+            Some(offset),
+            Some(limit),
+        ).scan_xss().await;
         Ok(())
     }
 
@@ -134,7 +178,21 @@ impl DumpSync {
             .expect("Invalid port");
 
         UI::section_header("Importing dump to server", "info");
-        Dump::new(&host, port, &user, &password, &dbname, &backup_path, None, &backup_path, "", None).transfer();
+
+        Dump::new(
+            &host, 
+            port, 
+            &user, 
+            &password, 
+            &dbname, 
+            &backup_path, 
+            None, 
+            &backup_path, 
+            "", 
+            None,
+            None,
+            None,
+        ).transfer();
     }
 
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {

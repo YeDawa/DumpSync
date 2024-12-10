@@ -16,6 +16,20 @@ pub struct ScanHandlers;
 
 impl ScanHandlers {    
 
+    pub fn build_query(&self, table: &str, offset: Option<usize>, limit: Option<usize>) -> String {
+        let mut query = format!("SELECT * FROM `{}`", table);
+
+        if let Some(l) = limit {
+            query.push_str(&format!(" LIMIT {}", l));
+        }
+
+        if let Some(o) = offset {
+            query.push_str(&format!(" OFFSET {}", o));
+        }
+
+        query
+    }
+
     pub fn load_patterns_from_file(&self, path: &str) -> Result<Vec<Regex>, Box<dyn Error>> {
         let path = Path::new(path);
         let file = File::open(path)?;

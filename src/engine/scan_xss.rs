@@ -22,7 +22,10 @@ pub struct ScanXSS {
     password: String,
     dbname: String,
     table: String,
+    
     payload: Option<String>,
+    offset: Option<u64>,
+    limit: Option<u64>,
 }
 
 impl ScanXSS {
@@ -35,6 +38,9 @@ impl ScanXSS {
         dbname: &str,
         table: &str,
         payload: Option<&str>,
+
+        offset: Option<u64>,
+        limit: Option<u64>,
     ) -> Self {
         Self {
             host: host.to_string(),
@@ -44,6 +50,8 @@ impl ScanXSS {
             dbname: dbname.to_string(),
             table: table.to_string(),
             payload: payload.map(|s| s.to_string()),
+            offset,
+            limit,
         }
     }
 
@@ -74,7 +82,7 @@ impl ScanXSS {
             }
         };
     
-        let query = format!("SELECT * FROM `{}`", &self.table);
+        let query = ScanHandlers.build_query(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
         let rows: Vec<Row> = conn.query(query)?;
         
         for (row_index, row) in rows.iter().enumerate() {

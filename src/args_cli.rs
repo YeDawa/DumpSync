@@ -93,4 +93,12 @@ pub struct ScanOptions {
     #[arg(short, long)]
     /// Payload file path
     pub payload: Option<String>,
+
+    #[arg(short, long)]
+    /// Offset for scan
+    pub offset: Option<u64>,
+
+    #[arg(short, long)]
+    /// Limit for scan
+    pub limit: Option<u64>,
 }

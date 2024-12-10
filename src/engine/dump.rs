@@ -40,7 +40,10 @@ pub struct Dump {
     password: String,
     dump_file_path: String,
     table: String,
+
     payload: Option<String>,
+    offset: Option<u64>,
+    limit: Option<u64>,
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -57,7 +60,10 @@ impl Dump {
         interval: Option<u64>,
         path: &str,
         table: &str,
+
         payload: Option<&str>,
+        offset: Option<u64>,
+        limit: Option<u64>,
     ) -> Self {
         Self {
             port,
@@ -71,6 +77,8 @@ impl Dump {
 
             table: table.to_string(),
             payload: payload.map(|s| s.to_string()),
+            offset,
+            limit,
         }
     }
 
@@ -130,6 +138,8 @@ impl Dump {
                 path: path_clone.clone(),
                 table: "".to_string(),
                 payload: None,
+                offset: None,
+                limit: None,
             };
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
@@ -177,6 +187,8 @@ impl Dump {
             &self.dbname,
             &self.table,
             self.payload.as_deref(),
+            self.offset,
+            self.limit,
         ).scan().await.expect("Failed to scan tables for XSS");
     }
 
