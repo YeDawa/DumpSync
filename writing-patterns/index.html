@@ -9,10 +9,8 @@
       
       
       
-        <link rel="prev" href="../export/">
+        <link rel="prev" href="../scan/">
       
-      
-        <link rel="next" href="../transfer/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +18,7 @@
     
     
       
-        <title>Import - DumpSync</title>
+        <title>Writing patterns - DumpSync</title>
       
     
     
@@ -72,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#dumpsync-command-import" class="md-skip">
+        <a href="#writing-regular-expressions-to-detect-common-xss-tags" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Import
+              Writing patterns
             
           </span>
         </div>
@@ -366,30 +364,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Import
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../import/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -398,62 +376,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#command-breakdown" class="md-nav__link">
-    <span class="md-ellipsis">
-      Command Breakdown
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    <span class="md-ellipsis">
-      Options
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Notes
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -502,10 +424,30 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../writing-patterns/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Writing patterns
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -514,6 +456,215 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-regex-patterns-to-detect-xss-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Regex Patterns to Detect XSS Tags
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Regex Patterns to Detect XSS Tags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-detecting-script-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Detecting &lt;script&gt; Tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-detecting-iframe-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Detecting &lt;iframe&gt; Tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-detecting-object-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Detecting &lt;object&gt; Tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-xss-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional XSS Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional XSS Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-detecting-javascript-in-href-or-src-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Detecting javascript: in href or src Attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-detecting-inline-event-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Detecting Inline Event Handlers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comments-in-pattern-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comments in pattern file
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Comments in pattern file">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comments
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -545,38 +696,191 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#command-breakdown" class="md-nav__link">
+  <a href="#basic-regex-patterns-to-detect-xss-tags" class="md-nav__link">
     <span class="md-ellipsis">
-      Command Breakdown
+      Basic Regex Patterns to Detect XSS Tags
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Regex Patterns to Detect XSS Tags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-detecting-script-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Detecting &lt;script&gt; Tags
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#explanation" class="md-nav__link">
     <span class="md-ellipsis">
-      Options
+      Explanation:
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
     <span class="md-ellipsis">
-      Example
+      Purpose:
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#2-detecting-iframe-tags" class="md-nav__link">
     <span class="md-ellipsis">
-      Notes
+      2. Detecting &lt;iframe&gt; Tags
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-detecting-object-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Detecting &lt;object&gt; Tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-xss-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional XSS Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional XSS Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4-detecting-javascript-in-href-or-src-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Detecting javascript: in href or src Attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-detecting-inline-event-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Detecting Inline Event Handlers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comments-in-pattern-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comments in pattern file
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Comments in pattern file">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comments
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -598,28 +902,93 @@
   
 
 
-<h1 id="dumpsync-command-import">DumpSync Command: Import</h1>
-<p>To restore a database dump, you can use the following command:</p>
-<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>import<span class="w"> </span>-f<span class="w"> </span>/path/to/dump.sql
-</code></pre></div>
-<h3 id="command-breakdown">Command Breakdown</h3>
+<h1 id="writing-regular-expressions-to-detect-common-xss-tags">Writing Regular Expressions to Detect Common XSS Tags</h1>
+<p>This guide will help you write regular expressions (regex) to detect common XSS (Cross-Site Scripting) vectors used in HTML. These vectors typically involve the use of HTML tags like <code>&lt;script&gt;</code>, <code>&lt;iframe&gt;</code>, and <code>&lt;object&gt;</code> to inject or execute harmful JavaScript code. Below are custom regex examples tailored to detect these patterns and others commonly used in XSS attacks.</p>
+<h2 id="basic-regex-patterns-to-detect-xss-tags">Basic Regex Patterns to Detect XSS Tags</h2>
+<h3 id="1-detecting-script-tags">1. Detecting <code>&lt;script&gt;</code> Tags</h3>
+<p><strong>Regex Pattern</strong>:
+<div class="highlight"><pre><span></span><code>(?i)&lt;script[^&gt;]*?&gt;.*?&lt;/script&gt;
+</code></pre></div></p>
+<h3 id="explanation">Explanation:</h3>
 <ul>
-<li><strong>dumpsync</strong>: This is the main command to invoke the DumpSync tool.</li>
-<li><strong>import</strong>: This subcommand initiates the import process to restore the database from the specified dump file.</li>
+<li><code>(?i)</code>: Case-insensitive flag to match both uppercase and lowercase tag names, such as <code>&lt;SCRIPT&gt;</code> or <code>&lt;script&gt;</code>.</li>
+<li><code>&lt;script</code>: Matches the opening <code>&lt;script</code> tag.</li>
+<li><code>[^&gt;]*?</code>: Matches any characters except <code>&gt;</code>, non-greedily, inside the <code>&lt;script&gt;</code> tag. This ensures it can handle various attributes or malformed tags.</li>
+<li><code>.*?</code>: Matches any content inside the script tag (non-greedy).</li>
+<li><code>&lt;/script&gt;</code>: Matches the closing <code>&lt;/script&gt;</code> tag.</li>
 </ul>
-<h3 id="options">Options</h3>
+<h3 id="purpose">Purpose:</h3>
+<p>This regex detects the presence of <code>&lt;script&gt;</code> tags, which are often used in XSS attacks to inject malicious JavaScript code.</p>
+<h3 id="2-detecting-iframe-tags">2. Detecting <code>&lt;iframe&gt;</code> Tags</h3>
+<p><strong>Regex Pattern</strong>:
+<div class="highlight"><pre><span></span><code>(?i)&lt;iframe[^&gt;]*?&gt;.*?&lt;/iframe&gt;
+</code></pre></div></p>
+<h3 id="explanation_1">Explanation:</h3>
 <ul>
-<li><strong>-f /path/to/dump.sql</strong>: Specifies the path to the dump file that you want to restore. Replace <code>/path/to/dump.sql</code> with the actual file path to your SQL dump file.</li>
+<li><code>(?i)</code>: Case-insensitive flag to match both uppercase and lowercase tag names, such as <code>&lt;IFRAME&gt;</code> or <code>&lt;iframe&gt;</code>.</li>
+<li><code>&lt;iframe</code>: Matches the opening <code>&lt;iframe</code> tag.</li>
+<li><code>[^&gt;]*?</code>: Matches any characters (except <code>&gt;</code>) within the <code>&lt;iframe&gt;</code> tag, non-greedily, allowing the matching of various attributes like <code>src</code>, <code>width</code>, etc.</li>
+<li><code>.*?</code>: Matches any content inside the <code>&lt;iframe&gt;</code> tag.</li>
+<li><code>&lt;/iframe&gt;</code>: Matches the closing <code>&lt;/iframe&gt;</code> tag.</li>
 </ul>
-<h3 id="example">Example</h3>
-<p>To restore a database from a dump file located at <code>/backups/example_dump.sql</code>, you would run:</p>
-<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>import<span class="w"> </span>-f<span class="w"> </span>/backups/example_dump.sql
-</code></pre></div>
-<h3 id="notes">Notes</h3>
+<h3 id="purpose_1">Purpose:</h3>
+<p>This regex identifies <code>&lt;iframe&gt;</code> tags, which are commonly used to embed external content, including malicious websites or exploitative scripts.</p>
+<h3 id="3-detecting-object-tags">3. Detecting <code>&lt;object&gt;</code> Tags</h3>
+<p><strong>Regex Pattern</strong>:
+<div class="highlight"><pre><span></span><code>(?i)&lt;object[^&gt;]*?&gt;.*?&lt;/object&gt;
+</code></pre></div></p>
+<h3 id="explanation_2">Explanation:</h3>
 <ul>
-<li>Ensure that the dump file exists and that you have the necessary permissions to read it.</li>
-<li>The import process will overwrite existing data in the database, so be cautious when using this command, especially if restoring to a production environment.</li>
-<li>It’s recommended to back up current data before performing an import to avoid accidental data loss.</li>
+<li><code>(?i)</code>: Case-insensitive flag to match both uppercase and lowercase tag names, such as <code>&lt;OBJECT&gt;</code> or <code>&lt;object&gt;</code>.</li>
+<li><code>&lt;object</code>: Matches the opening <code>&lt;object</code> tag.</li>
+<li><code>[^&gt;]*?</code>: Matches any characters except <code>&gt;</code>, non-greedily, inside the <code>&lt;object&gt;</code> tag, handling various attributes.</li>
+<li><code>.*?</code>: Matches any content inside the <code>&lt;object&gt;</code> tag.</li>
+<li><code>&lt;/object&gt;</code>: Matches the closing <code>&lt;/object&gt;</code> tag.</li>
+</ul>
+<h3 id="purpose_2">Purpose:</h3>
+<p>This regex detects the <code>&lt;object&gt;</code> tag, which can be exploited to embed potentially harmful plugins or files, like Flash objects, that may allow malicious scripts to run.</p>
+<hr />
+<h2 id="additional-xss-patterns">Additional XSS Patterns</h2>
+<p>You can create more complex regex patterns to detect other potential XSS vectors by checking for attributes or specific tag behaviors that could indicate an attack.</p>
+<h3 id="4-detecting-javascript-in-href-or-src-attributes">4. Detecting <code>javascript:</code> in <code>href</code> or <code>src</code> Attributes</h3>
+<p><strong>Regex Pattern</strong>:
+<div class="highlight"><pre><span></span><code>(?i)&lt;[a-z]+[^&gt;]*?(href|src)\s*=\s*[&#39;\&quot;]?javascript:[^&#39;\&quot;&gt;]+[&#39;\&quot;]?[^&gt;]*&gt;
+</code></pre></div></p>
+<h3 id="explanation_3">Explanation:</h3>
+<ul>
+<li><code>(?i)</code>: Case-insensitive flag to match both uppercase and lowercase tag names.</li>
+<li><code>&lt;[a-z]+</code>: Matches any HTML tag, such as <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code>, etc.</li>
+<li><code>[^&gt;]*?</code>: Matches any characters inside the tag, non-greedily, including attributes.</li>
+<li><code>(href|src)</code>: Matches the <code>href</code> or <code>src</code> attributes, which can be used to execute malicious JavaScript.</li>
+<li><code>\s*=\s*</code>: Matches the equal sign (<code>=</code>) with optional whitespace on either side.</li>
+<li><code>['\"]?javascript:</code>: Detects the presence of <code>javascript:</code> in the attribute value, which is a common scheme for XSS.</li>
+<li><code>[^'\"&gt;]+</code>: Matches any characters after <code>javascript:</code>, up until a <code>'</code>, <code>"</code>, or <code>&gt;</code>.</li>
+</ul>
+<h3 id="purpose_3">Purpose:</h3>
+<p>This regex detects tags with <code>href</code> or <code>src</code> attributes that use <code>javascript:</code> as a URL scheme, often found in links or images used to execute scripts.</p>
+<h3 id="5-detecting-inline-event-handlers">5. Detecting Inline Event Handlers</h3>
+<p><strong>Regex Pattern</strong>:
+<div class="highlight"><pre><span></span><code>(?i)&lt;[a-z]+[^&gt;]*?(on[a-z]+)\s*=\s*[&#39;\&quot;]?[^&#39;\&quot;&gt;]+[&#39;\&quot;]?[^&gt;]*&gt;
+</code></pre></div></p>
+<h3 id="explanation_4">Explanation:</h3>
+<ul>
+<li><code>(?i)</code>: Case-insensitive flag to match HTML tag names.</li>
+<li><code>&lt;[a-z]+</code>: Matches any HTML tag.</li>
+<li><code>[^&gt;]*?</code>: Matches any characters inside the tag, non-greedily.</li>
+<li><code>(on[a-z]+)</code>: Matches any inline event handler, such as <code>onclick</code>, <code>onload</code>, <code>onmouseover</code>, etc.</li>
+<li><code>\s*=\s*</code>: Matches the equal sign with optional whitespace.</li>
+<li><code>['\"]?</code>: Matches an optional single or double quote.</li>
+<li><code>[^'\"&gt;]+</code>: Matches any characters after the <code>=</code> until a <code>'</code>, <code>"</code>, or <code>&gt;</code>, indicating the event handler's JavaScript code.</li>
+</ul>
+<h3 id="purpose_4">Purpose:</h3>
+<p>This regex identifies HTML tags with inline event handlers, which are often used to execute JavaScript code when triggered, making them a potential target for XSS attacks.</p>
+<h3 id="comments-in-pattern-file">Comments in pattern file</h3>
+<p>Here’s an improved version of the comments section:</p>
+<h4 id="comments">Comments</h4>
+<ul>
+<li>A comment line begins with <code>//</code>.</li>
+<li>Anything written after the <code>//</code> is treated as a comment and can be any text you like.</li>
+<li>Comments are ignored by the interpreter and do not affect the execution of the code.</li>
 </ul>
 
 
@@ -652,7 +1021,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../export/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Export">
+          <a href="../scan/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Scan XSS">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -662,27 +1031,11 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Export
+                Scan XSS
               </div>
             </div>
           </a>
         
-        
-          
-          <a href="../transfer/" class="md-footer__link md-footer__link--next" aria-label="Next: Transfer">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Transfer
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
         
       </nav>
     
