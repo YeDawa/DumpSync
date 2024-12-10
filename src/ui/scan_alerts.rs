@@ -15,7 +15,7 @@ impl ScanAlerts {
 
     pub fn reports_generated(output_path: &str) {
         println!("{}", "-".repeat(50));
-        println!("Reports generated in: {}", output_path.green());
+        println!("Report generated and salved in: {}", output_path.green());
     }
 
 }
