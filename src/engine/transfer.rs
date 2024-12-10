@@ -24,7 +24,7 @@ use std::{
 use crate::{
     consts::regexp::RegExp,
     engine::connection::Connection,
-    helpers::import_handlers::ImportHandlers,
+    handlers::import_handlers::ImportHandlers,
 
     ui::{
         errors_alerts::ErrorsAlerts,

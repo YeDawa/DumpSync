@@ -4,6 +4,7 @@ mod consts;
 mod engine;
 mod plugins;
 mod helpers;
+mod handlers;
 mod args_cli;
 mod dump_sync;
 

@@ -10,7 +10,7 @@ use std::{
 
 use crate::{
     ui::scan_alerts::ScanAlerts,
-    helpers::reports_handlers::ReportsHandlers,
+    handlers::reports_handlers::ReportsHandlers,
 };
 
 #[derive(Serialize)]

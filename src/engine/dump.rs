@@ -16,7 +16,7 @@ use std::{
 
 use crate::{
     plugins::scan_xss::ScanXSS,
-    helpers::dump_handlers::DumpHandlers,
+    handlers::dump_handlers::DumpHandlers,
 
     ui::{
         normal_alerts::NormalAlerts, 

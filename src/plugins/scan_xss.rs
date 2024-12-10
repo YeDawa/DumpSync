@@ -11,17 +11,14 @@ use mysql::{
 use crate::{
     consts::global::Global, 
     engine::connection::Connection,
-    plugins::reports_xss::ReportsXSS,  
+    plugins::reports_xss::ReportsXSS,
+    handlers::scan_handlers::ScanHandlers,
+    helpers::queries_builders::QueriesBuilders, 
     
     ui::{
         scan_alerts::ScanAlerts,
         errors_alerts::ErrorsAlerts,
     },
-    
-    helpers::{
-        scan_handlers::ScanHandlers,
-        queries_builders::QueriesBuilders, 
-    }, 
 };
 
 pub struct ScanXSS {
