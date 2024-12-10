@@ -12,3 +12,4 @@ DumpSync automates the process of creating dumps of a MySQL database at configur
 - **Flexible Configuration**: Customize settings through environment variables or command-line arguments based on your needs.
 - **Simple Restore Process**: Easily restore databases from existing dump files with minimal effort.
 - **Cross-Server Transfers**: Facilitate the migration of databases between different servers seamlessly.
+- **XSS Scanner**: Scan for XSS vulnerabilities in tables to enhance security.
