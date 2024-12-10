@@ -17,7 +17,7 @@ use crate::{
     
     ui::{
         scan_alerts::ScanAlerts,
-        errors_alerts::ErrorsAlerts,
+        report_alerts::ReportAlerts,
     },
 };
 
@@ -128,7 +128,7 @@ impl ScanXSS {
             } else if file.ends_with(".html") || file.ends_with(".htm") {
                 ReportsXSS.html(detections, file)?;
             } else {
-                ErrorsAlerts::report_format();
+                ReportAlerts::invalid_format();
             }
         }
         

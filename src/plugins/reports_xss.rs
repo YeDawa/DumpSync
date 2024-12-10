@@ -9,7 +9,7 @@ use std::{
 };
 
 use crate::{
-    ui::scan_alerts::ScanAlerts,
+    ui::report_alerts::ReportAlerts,
     handlers::reports_handlers::ReportsHandlers,
 };
 
@@ -39,7 +39,7 @@ impl ReportsXSS {
             writeln!(file, "---------------------")?;
         }
 
-        ScanAlerts::reports_generated(output_path);
+        ReportAlerts::generated(output_path);
         Ok(())
     }
 
@@ -58,7 +58,7 @@ impl ReportsXSS {
 
         writer.flush()?;
         
-        ScanAlerts::reports_generated(output_path);
+        ReportAlerts::generated(output_path);
         Ok(())
     }
 
@@ -76,7 +76,7 @@ impl ReportsXSS {
         let file = File::create(output_path)?;
         to_writer_pretty(file, &detections)?;
         
-        ScanAlerts::reports_generated(output_path);
+        ReportAlerts::generated(output_path);
         Ok(())
     }
 
@@ -99,7 +99,7 @@ impl ReportsXSS {
 
         file.write_all(b"</table></body></html>")?;
         
-        ScanAlerts::reports_generated(output_path);
+        ReportAlerts::generated(output_path);
         Ok(())
     }
     
