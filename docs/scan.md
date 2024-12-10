@@ -15,6 +15,8 @@ dumpsync scan -t <table> --payload <path_or_url_to_payload_file>
 
 - **-t `<table>`**: Specifies the name of the table to be scanned. The command will check the fields in the table for any inputs that could be vulnerable to XSS attacks.
 - **-p <path_or_url_to_payload_file>**: Specifies the path or URL to the payload file containing XSS scripts that will be tested on the input fields of the table.
+- **-l <limit>**: Specifies the limit of the number of rows to scan.
+- **-o <offset>**: Specifies the offset from where to start scanning the rows.
 
 ### Example
 
