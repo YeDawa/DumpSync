@@ -10,9 +10,13 @@ use mysql::{
 
 use crate::{
     consts::global::Global, 
-    plugins::reports::Reports, 
-    ui::scan_alerts::ScanAlerts, 
-    engine::connection::Connection, 
+    plugins::reports_xss::ReportsXSS,  
+    engine::connection::Connection,
+    
+    ui::{
+        scan_alerts::ScanAlerts,
+        errors_alerts::ErrorsAlerts,
+    },
     
     helpers::{
         scan_handlers::ScanHandlers,
@@ -118,7 +122,13 @@ impl ScanXSS {
         }
 
         if let Some(file) = &self.file {
-            Reports.xss(detections, file)?;
+            if file.ends_with(".csv") {
+                ReportsXSS.csv(detections, file)?;
+            } else if file.ends_with(".json") {
+                ReportsXSS.json(detections, file)?;
+            } else {
+                ErrorsAlerts::report_format();
+            }
         }
         
         Ok(())
