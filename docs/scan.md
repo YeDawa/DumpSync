@@ -48,6 +48,7 @@ dumpsync scan -t example_table -f path/to/report.csv
 
 Formats supported for the report file are:
 
+- TXT
 - CSV
 - JSON
 - HTML
