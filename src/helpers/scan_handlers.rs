@@ -40,11 +40,11 @@ impl ScanHandlers {
             let line = line?;
             let trimmed = line.trim();
 
-            if trimmed.is_empty() || trimmed.starts_with('#') {
+            if trimmed.is_empty() || trimmed.starts_with("//") {
                 continue;
             }
 
-            let pattern = trimmed.split('#').next().unwrap().trim();
+            let pattern = line.split("//").next().unwrap_or("").trim();
 
             if !pattern.is_empty() {
                 match Regex::new(pattern) {
@@ -71,11 +71,11 @@ impl ScanHandlers {
         for line in body.lines() {
             let trimmed = line.trim();
 
-            if trimmed.is_empty() || trimmed.starts_with('#') {
+            if trimmed.is_empty() || trimmed.starts_with("//") {
                 continue;
             }
 
-            let pattern = trimmed.split('#').next().unwrap().trim();
+            let pattern = trimmed.split("//").next().unwrap().trim();
 
             if !pattern.is_empty() {
                 match Regex::new(pattern) {
