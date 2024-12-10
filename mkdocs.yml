@@ -32,7 +32,8 @@ nav:
   - Export: export.md
   - Import: import.md
   - Transfer: transfer.md
-  - Scan: scan.md
+  - Scan XSS: scan.md
+  - Writing patterns: writing-patterns.md
 
 markdown_extensions:
   - tables
