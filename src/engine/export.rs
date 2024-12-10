@@ -16,6 +16,7 @@ use crate::{
     helpers::{
         configs::Configs,
         export_handlers::ExportHandlers,
+        queries_builders::QueriesBuilders,
     }, 
 };
 
@@ -78,7 +79,7 @@ impl Export {
         export_handlers.comments_header(writer.as_write())?;
         export_handlers.write_create_new_database(writer.as_write())?;
 
-        let tables: Vec<String> = conn.query("SHOW TABLES")?;
+        let tables: Vec<String> = conn.query(QueriesBuilders.show_tables())?;
         let ignore_tables = Configs.list("exports", "ignore_tables").unwrap_or_default();
 
         for table in tables {

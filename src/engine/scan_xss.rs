@@ -12,7 +12,11 @@ use crate::{
     consts::global::Global,
     ui::scan_alerts::ScanAlerts,
     engine::connection::Connection,
-    helpers::scan_handlers::ScanHandlers,
+
+    helpers::{
+        scan_handlers::ScanHandlers,
+        queries_builders::QueriesBuilders,
+    },
 };
 
 pub struct ScanXSS {
@@ -82,7 +86,7 @@ impl ScanXSS {
             }
         };
     
-        let query = ScanHandlers.build_query(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
+        let query = QueriesBuilders.select(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
         let rows: Vec<Row> = conn.query(query)?;
         
         for (row_index, row) in rows.iter().enumerate() {

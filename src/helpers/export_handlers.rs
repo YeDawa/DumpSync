@@ -21,7 +21,11 @@ use mysql::{
 
 use crate::{
     utils::date::Date,
-    helpers::configs::Configs,
+
+    helpers::{
+        configs::Configs,
+        queries_builders::QueriesBuilders,
+    },
 };
 
 pub enum Writer {
@@ -43,6 +47,7 @@ impl Writer {
 pub struct ExportHandlers {
     file: File,
     dbname: String,
+
     dump_data: bool,
     compress_data: bool,
     insert_ignore_into: bool,
@@ -67,10 +72,21 @@ impl ExportHandlers {
 
     pub fn create_writer(&self) -> Result<Writer, std::io::Error> {
         if self.compress_data {
-            let encoder = GzEncoder::new(self.file.try_clone()?, Compression::default());
-            Ok(Writer::Compressed(BufWriter::new(encoder)))
+            let encoder = GzEncoder::new(
+                self.file.try_clone()?, Compression::default()
+            );
+
+            Ok(
+                Writer::Compressed(
+                    BufWriter::new(encoder)
+                )
+            )
         } else {
-            Ok(Writer::Uncompressed(BufWriter::new(self.file.try_clone()?)))
+            Ok(
+                Writer::Uncompressed(
+                    BufWriter::new(self.file.try_clone()?)
+                )
+            )
         }
     }
 
@@ -85,8 +101,10 @@ impl ExportHandlers {
 
     pub fn write_create_new_database(&self, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if self.database_if_not_exists {
-            writeln!(writer, "CREATE DATABASE IF NOT EXISTS `{}`;", self.dbname)?;
-            writeln!(writer, "USE `{}`;", self.dbname)?;
+            let queries = QueriesBuilders.create_database(&self.dbname)?;
+
+            write!(writer, "{}", queries.0)?;
+            writeln!(writer, "{}", queries.1)?;
             writeln!(writer, "-- ---------------------------------------------------\n")?;
         }
 
@@ -95,7 +113,9 @@ impl ExportHandlers {
 
     pub fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if self.dump_data {
-            let rows: Vec<Row> = conn.query(format!("SELECT * FROM `{}`", table))?;
+            let rows: Vec<Row> = conn.query(
+                QueriesBuilders.select(table, None, None)
+            )?;
 
             if rows.is_empty() {
                 writeln!(writer, "-- Table `{}` contains no data.", table)?;
@@ -111,9 +131,9 @@ impl ExportHandlers {
                     }).collect();
 
                     let line = if self.insert_ignore_into {
-                        format!("INSERT IGNORE INTO `{}` VALUES ({});", table, values.join(", "))
+                        QueriesBuilders.insert_into(table, values, true)
                     } else {
-                        format!("INSERT INTO `{}` VALUES ({});", table, values.join(", "))
+                        QueriesBuilders.insert_into(table, values, false)
                     };
 
                     writeln!(writer, "{}", line)?;
@@ -128,10 +148,10 @@ impl ExportHandlers {
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
 
         if self.drop_table_if_exists {
-            writeln!(writer, "DROP TABLE IF EXISTS `{}`;", table)?;
+            writeln!(writer, "{}", QueriesBuilders.drop_table(table))?;
         }
 
-        let row: Row = conn.query_first(format!("SHOW CREATE TABLE `{}`", table))?.unwrap();
+        let row: Row = conn.query_first(QueriesBuilders.show_create_table(table))?.unwrap();
         let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
         writeln!(writer, "{};\n", create_table)?;
 
