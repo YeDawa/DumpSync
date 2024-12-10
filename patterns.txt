@@ -1,43 +1,43 @@
-(?i)<script.*?>.*?</script>  // Detects <script> tags, commonly used to inject and execute harmful JavaScript code.
-(?i)<iframe.*?>.*?</iframe>  // Identifies <iframe> tags, often abused to embed malicious external content.
-(?i)<object.*?>.*?</object>  // Flags <object> tags, which can include potentially dangerous plugins or files.
-(?i)<embed.*?>.*?</embed>  // Targets <embed> tags that may load harmful external resources.
-(?i)<applet.*?>.*?</applet>  // Checks for <applet> tags, historically used for running Java applets, which pose security risks.
-(?i)<form.*?>.*?</form>  // Looks for <form> tags that could be used for phishing or data theft.
-(?i)<link.*?href=["']javascript:.*?>  // Detects <link> tags with JavaScript URLs, a known XSS vector.
-(?i)<meta.*?content=["'].*?url=.*?>  // Scans <meta> tags with redirect URLs, often exploited in phishing attacks.
-(?i)<body.*?onload=.*?>  // Identifies <body> tags with onload attributes, commonly used to trigger malicious scripts.
-(?i)<svg.*?>.*?</svg>  // Flags <svg> tags, which can be abused to inject harmful scripts.
-(?i)<img.*?src=["']javascript:.*?>  // Catches <img> tags with JavaScript URLs, often exploited for XSS attacks.
-(?i)<base.*?href=["']javascript:.*?>  // Detects <base> tags with JavaScript URLs, potentially leading to malicious redirects.
-(?i)<audio.*?src=["']javascript:.*?>  // Checks for <audio> tags with JavaScript URLs, a less common XSS vector.
-(?i)<video.*?src=["']javascript:.*?>  // Looks for <video> tags with JavaScript URLs, which can execute malicious scripts.
-(?i)on\w+\s*=["'].*?["']  // Searches for event handlers (e.g., onclick, onmouseover) that execute JavaScript code.
-(?i)style=["'].*?expression\(.*?\)  // Identifies CSS with `expression()`, an outdated and dangerous feature used for code execution.
-(?i)style=["'].*?url\(javascript:.*?\)  // Detects `url()` in CSS containing JavaScript, a potential attack vector.
-(?i)javascript:  // Flags JavaScript URLs, often exploited to execute malicious code.
-(?i)vbscript:  // Identifies VBScript URLs, another possible source of malicious script execution.
-(?i)data:text/html;base64  // Catches base64-encoded HTML data, which can embed hidden or malicious content.
-(?i)eval\(.*?\)  // Looks for the `eval()` function, frequently used to execute obfuscated JavaScript.
-(?i)alert\(.*?\)  // Detects `alert()` calls, often included in proof-of-concept XSS attacks.
-(?i)document\.cookie  // Scans for access to `document.cookie`, typically used to steal session cookies.
-(?i)document\.write  // Checks for `document.write`, which can inject malicious or untrusted content into the DOM.
-(?i)window\.location  // Flags manipulation of `window.location`, often used for redirects in phishing schemes.
-(?i)setTimeout\(.*?\)  // Looks for `setTimeout()` with scripts, enabling delayed execution of harmful code.
-(?i)setInterval\(.*?\)  // Searches for `setInterval()` with scripts, used for repetitive execution of malicious code.
-(?i)innerHTML  // Flags `innerHTML`, which can insert untrusted HTML or JavaScript into a webpage.
-(?i)(?:&#x?[\da-f]+;?)+  // Detects HTML-encoded characters, which can obfuscate malicious payloads.
-(?i)<svg.*?onload=["'].*?["']  // Targets <svg> tags with onload attributes, often used to trigger harmful scripts.
-(?i)<svg.*?>.*?<script.*?>.*?</script>.*?</svg>  // Identifies <svg> tags containing embedded <script> tags, combining multiple attack vectors.
-(?i)<audio.*?src=["'].*?["']  // Checks <audio> tags with any source, potentially loading harmful files.
-(?i)<video.*?src=["'].*?["']  // Looks at <video> tags with sources that may host malicious content.
-(?i)<source.*?src=["'].*?["']  // Scans <source> tags, often used within multimedia elements, for risky content.
-(?i)<track.*?src=["'].*?["']  // Flags <track> tags with external sources that could be harmful.
-(?i)<bgsound.*?src=["'].*?["']  // Detects <bgsound> tags, historically abused for embedding hidden audio payloads.
-(?i)document\.domain=.*  // Flags assignments to `document.domain`, which can facilitate cross-domain scripting attacks.
-(?i)window\.open\(.*?\)  // Looks for `window.open`, often used for deceptive popups or phishing attempts.
-(?i)function\(.*?\)  // Searches for generic function declarations, which could hide malicious scripts.
-(?i)\+\s*(window|document)  // Identifies concatenation involving `window` or `document`, typically seen in obfuscated scripts.
-(?i)console\.log\(.*?\)  // Detects `console.log`, sometimes used to debug or test malicious code.
-(?i)\.innerHTML  // Flags manipulations of `innerHTML`, commonly used for injecting scripts into a page.
-(?i)\.outerHTML  // Checks for changes to `outerHTML`, another method for injecting untrusted content.
+(?i)<script.*?>.*?</script>  # Detects <script> tags, commonly used to inject and execute harmful JavaScript code.
+(?i)<iframe.*?>.*?</iframe>  # Identifies <iframe> tags, often abused to embed malicious external content.
+(?i)<object.*?>.*?</object>  # Flags <object> tags, which can include potentially dangerous plugins or files.
+(?i)<embed.*?>.*?</embed>  # Targets <embed> tags that may load harmful external resources.
+(?i)<applet.*?>.*?</applet>  # Checks for <applet> tags, historically used for running Java applets, which pose security risks.
+(?i)<form.*?>.*?</form>  # Looks for <form> tags that could be used for phishing or data theft.
+(?i)<link.*?href=["']javascript:.*?>  # Detects <link> tags with JavaScript URLs, a known XSS vector.
+(?i)<meta.*?content=["'].*?url=.*?>  # Scans <meta> tags with redirect URLs, often exploited in phishing attacks.
+(?i)<body.*?onload=.*?>  # Identifies <body> tags with onload attributes, commonly used to trigger malicious scripts.
+(?i)<svg.*?>.*?</svg>  # Flags <svg> tags, which can be abused to inject harmful scripts.
+(?i)<img.*?src=["']javascript:.*?>  # Catches <img> tags with JavaScript URLs, often exploited for XSS attacks.
+(?i)<base.*?href=["']javascript:.*?>  # Detects <base> tags with JavaScript URLs, potentially leading to malicious redirects.
+(?i)<audio.*?src=["']javascript:.*?>  # Checks for <audio> tags with JavaScript URLs, a less common XSS vector.
+(?i)<video.*?src=["']javascript:.*?>  # Looks for <video> tags with JavaScript URLs, which can execute malicious scripts.
+(?i)on\w+\s*=["'].*?["']  # Searches for event handlers (e.g., onclick, onmouseover) that execute JavaScript code.
+(?i)style=["'].*?expression\(.*?\)  # Identifies CSS with `expression()`, an outdated and dangerous feature used for code execution.
+(?i)style=["'].*?url\(javascript:.*?\)  # Detects `url()` in CSS containing JavaScript, a potential attack vector.
+(?i)javascript:  # Flags JavaScript URLs, often exploited to execute malicious code.
+(?i)vbscript:  # Identifies VBScript URLs, another possible source of malicious script execution.
+(?i)data:text/html;base64  # Catches base64-encoded HTML data, which can embed hidden or malicious content.
+(?i)eval\(.*?\)  # Looks for the `eval()` function, frequently used to execute obfuscated JavaScript.
+(?i)alert\(.*?\)  # Detects `alert()` calls, often included in proof-of-concept XSS attacks.
+(?i)document\.cookie  # Scans for access to `document.cookie`, typically used to steal session cookies.
+(?i)document\.write  # Checks for `document.write`, which can inject malicious or untrusted content into the DOM.
+(?i)window\.location  # Flags manipulation of `window.location`, often used for redirects in phishing schemes.
+(?i)setTimeout\(.*?\)  # Looks for `setTimeout()` with scripts, enabling delayed execution of harmful code.
+(?i)setInterval\(.*?\)  # Searches for `setInterval()` with scripts, used for repetitive execution of malicious code.
+(?i)innerHTML  # Flags `innerHTML`, which can insert untrusted HTML or JavaScript into a webpage.
+(?i)(?:&#x?[\da-f]+;?)+  # Detects HTML-encoded characters, which can obfuscate malicious payloads.
+(?i)<svg.*?onload=["'].*?["']  # Targets <svg> tags with onload attributes, often used to trigger harmful scripts.
+(?i)<svg.*?>.*?<script.*?>.*?</script>.*?</svg>  # Identifies <svg> tags containing embedded <script> tags, combining multiple attack vectors.
+(?i)<audio.*?src=["'].*?["']  # Checks <audio> tags with any source, potentially loading harmful files.
+(?i)<video.*?src=["'].*?["']  # Looks at <video> tags with sources that may host malicious content.
+(?i)<source.*?src=["'].*?["']  # Scans <source> tags, often used within multimedia elements, for risky content.
+(?i)<track.*?src=["'].*?["']  # Flags <track> tags with external sources that could be harmful.
+(?i)<bgsound.*?src=["'].*?["']  # Detects <bgsound> tags, historically abused for embedding hidden audio payloads.
+(?i)document\.domain=.*  # Flags assignments to `document.domain`, which can facilitate cross-domain scripting attacks.
+(?i)window\.open\(.*?\)  # Looks for `window.open`, often used for deceptive popups or phishing attempts.
+(?i)function\(.*?\)  # Searches for generic function declarations, which could hide malicious scripts.
+(?i)\+\s*(window|document)  # Identifies concatenation involving `window` or `document`, typically seen in obfuscated scripts.
+(?i)console\.log\(.*?\)  # Detects `console.log`, sometimes used to debug or test malicious code.
+(?i)\.innerHTML  # Flags manipulations of `innerHTML`, commonly used for injecting scripts into a page.
+(?i)\.outerHTML  # Checks for changes to `outerHTML`, another method for injecting untrusted content.
