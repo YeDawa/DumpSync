@@ -24,11 +24,18 @@ impl ScanHandlers {
         let mut patterns = Vec::new();
         for line in reader.lines() {
             let line = line?;
+            let trimmed = line.trim();
 
-            if !line.trim().is_empty() {
-                match Regex::new(&line) {
+            if trimmed.is_empty() || trimmed.starts_with('#') {
+                continue;
+            }
+
+            let pattern = trimmed.split('#').next().unwrap().trim();
+
+            if !pattern.is_empty() {
+                match Regex::new(pattern) {
                     Ok(regex) => patterns.push(regex),
-                    Err(e) => eprintln!("Invalid regex '{}': {}", line, e),
+                    Err(e) => eprintln!("Invalid regex '{}': {}", pattern, e),
                 }
             }
         }
@@ -40,16 +47,26 @@ impl ScanHandlers {
         let response = reqwest::get(url).await?;
 
         if !response.status().is_success() {
-            return Err(format!("Erro ao acessar a URL: {}", url).into());
+            return Err(
+                format!("Error accessing URL: {}", url).into()
+            );
         }
 
         let body = response.text().await?;
         let mut patterns = Vec::new();
         for line in body.lines() {
-            if !line.trim().is_empty() {
-                match Regex::new(line) {
+            let trimmed = line.trim();
+
+            if trimmed.is_empty() || trimmed.starts_with('#') {
+                continue;
+            }
+
+            let pattern = trimmed.split('#').next().unwrap().trim();
+
+            if !pattern.is_empty() {
+                match Regex::new(pattern) {
                     Ok(regex) => patterns.push(regex),
-                    Err(e) => eprintln!("Regex inválida '{}': {}", line, e),
+                    Err(e) => eprintln!("Invalid regex '{}': {}", pattern, e),
                 }
             }
         }
