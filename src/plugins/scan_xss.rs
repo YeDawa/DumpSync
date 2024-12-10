@@ -10,8 +10,8 @@ use mysql::{
 
 use crate::{
     consts::global::Global, 
-    plugins::reports_xss::ReportsXSS,  
     engine::connection::Connection,
+    plugins::reports_xss::ReportsXSS,  
     
     ui::{
         scan_alerts::ScanAlerts,
