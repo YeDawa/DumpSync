@@ -121,6 +121,8 @@ impl ScanXSS {
         if let Some(file) = &self.file {
             if file.ends_with(".csv") {
                 ReportsXSS.csv(detections, file)?;
+            } else if file.ends_with(".txt") {
+                ReportsXSS.txt(detections, file)?;
             } else if file.ends_with(".json") {
                 ReportsXSS.json(detections, file)?;
             } else if file.ends_with(".html") || file.ends_with(".htm") {

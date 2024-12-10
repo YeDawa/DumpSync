@@ -25,6 +25,24 @@ pub struct ReportsXSS;
 
 impl ReportsXSS {
 
+    pub fn txt(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
+        let mut file = File::create(output_path)?;
+
+        writeln!(file, "XSS Detection Report")?;
+        writeln!(file, "====================")?;
+
+        for (table, row_index, column, value) in detections {
+            writeln!(file, "Table   : {}", table)?;
+            writeln!(file, "Row     : {}", row_index)?;
+            writeln!(file, "Column  : {}", column)?;
+            writeln!(file, "Value   : {}", value)?;
+            writeln!(file, "---------------------")?;
+        }
+
+        ScanAlerts::reports_generated(output_path);
+        Ok(())
+    }
+
     pub fn csv(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
         let mut writer = Writer::from_path(output_path)?;
         writer.write_record(&["Table", "Row Index", "Column", "Value"])?;
