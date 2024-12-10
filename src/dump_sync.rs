@@ -63,11 +63,13 @@ impl DumpSync {
             &dbname, 
             &backup_path, 
             None, 
-            &backup_path, 
-            "", 
+            &backup_path,
+
+            None, 
             None,
             None,
             None,
+            None
         ).import();
     }
 
@@ -107,10 +109,12 @@ impl DumpSync {
             &backup_path, 
             Some(interval), 
             &backup_path, 
-            "", 
+
+            None, 
             None,
             None,
             None,
+            None
         ).export();
     }
 
@@ -119,12 +123,11 @@ impl DumpSync {
         UI::header();
 
         let table = options.table;
-        let payload = options.payload.unwrap_or_else(|| {
-            Global::XSS_DETECT_REGEX.to_string()
-        });
+        let payload = options.payload;
 
         let offset = options.offset.unwrap_or(0);
         let limit = options.limit.unwrap_or(99999999999);
+        let file = options.file;
 
         let dbname = options.database.unwrap_or_else(|| {
             std::env::var("DB_NAME").or_else(|_| std::env::var("DS_DB_NAME")).unwrap_or_default()
@@ -152,10 +155,12 @@ impl DumpSync {
             "", 
             None, 
             "", 
-            &table, 
-            Some(&payload),
+
+            Some(table.as_str()), 
+            payload.as_deref(),
             Some(offset),
             Some(limit),
+            file.as_deref(),
         ).scan_xss().await;
         Ok(())
     }
@@ -188,7 +193,9 @@ impl DumpSync {
             &backup_path, 
             None, 
             &backup_path, 
-            "", 
+
+            None, 
+            None,
             None,
             None,
             None,

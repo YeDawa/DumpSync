@@ -15,6 +15,7 @@ use std::{
 };
 
 use crate::{
+    plugins::scan_xss::ScanXSS,
     helpers::dump_handlers::DumpHandlers,
 
     ui::{
@@ -25,7 +26,6 @@ use crate::{
     engine::{
         export::Export,
         import::Import,
-        scan_xss::ScanXSS,
         transfer::Transfer,
     },
 };
@@ -39,11 +39,12 @@ pub struct Dump {
     dbname: String,
     password: String,
     dump_file_path: String,
-    table: String,
 
+    table: Option<String>,
     payload: Option<String>,
     offset: Option<u64>,
     limit: Option<u64>,
+    file: Option<String>,
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -59,11 +60,12 @@ impl Dump {
         backup_path: &str,
         interval: Option<u64>,
         path: &str,
-        table: &str,
 
+        table: Option<&str>,
         payload: Option<&str>,
         offset: Option<u64>,
         limit: Option<u64>,
+        file: Option<&str>,
     ) -> Self {
         Self {
             port,
@@ -75,10 +77,11 @@ impl Dump {
             interval: interval.unwrap_or(3600),
             path: path.to_string(),
 
-            table: table.to_string(),
+            table: table.map(|s| s.to_string()),
             payload: payload.map(|s| s.to_string()),
             offset,
             limit,
+            file: file.map(|s| s.to_string()),
         }
     }
 
@@ -136,10 +139,12 @@ impl Dump {
                 interval: interval_clone,
                 dump_file_path: dump_file_path_clone.clone(),
                 path: path_clone.clone(),
-                table: "".to_string(),
+
+                table: None,
                 payload: None,
                 offset: None,
                 limit: None,
+                file: None,
             };
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
@@ -185,10 +190,11 @@ impl Dump {
             &self.user,
             &self.password,
             &self.dbname,
-            &self.table,
+            self.table.as_deref().unwrap_or(""),
             self.payload.as_deref(),
             self.offset,
             self.limit,
+            self.file.as_deref(),
         ).scan().await.expect("Failed to scan tables for XSS");
     }
 

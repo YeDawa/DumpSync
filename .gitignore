@@ -33,3 +33,9 @@ Cargo.lock
 
 # Obsolete settings file
 dumpsync1.yml
+
+# Reports files
+*.csv
+*.pdf
+*.html
+*.xlsx

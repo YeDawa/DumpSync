@@ -101,4 +101,8 @@ pub struct ScanOptions {
     #[arg(short, long)]
     /// Limit for scan
     pub limit: Option<u64>,
+
+    #[arg(short, long)]
+    /// File path for output
+    pub file: Option<String>,
 }

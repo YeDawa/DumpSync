@@ -2,6 +2,7 @@ mod ui;
 mod utils;
 mod consts;
 mod engine;
+mod plugins;
 mod helpers;
 mod args_cli;
 mod dump_sync;

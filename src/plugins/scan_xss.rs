@@ -9,14 +9,15 @@ use mysql::{
 };
 
 use crate::{
-    consts::global::Global,
-    ui::scan_alerts::ScanAlerts,
-    engine::connection::Connection,
-
+    consts::global::Global, 
+    plugins::reports::Reports, 
+    ui::scan_alerts::ScanAlerts, 
+    engine::connection::Connection, 
+    
     helpers::{
         scan_handlers::ScanHandlers,
-        queries_builders::QueriesBuilders,
-    },
+        queries_builders::QueriesBuilders, 
+    }, 
 };
 
 pub struct ScanXSS {
@@ -25,11 +26,12 @@ pub struct ScanXSS {
     user: String,
     password: String,
     dbname: String,
+
     table: String,
-    
     payload: Option<String>,
     offset: Option<u64>,
     limit: Option<u64>,
+    file: Option<String>,
 }
 
 impl ScanXSS {
@@ -40,11 +42,12 @@ impl ScanXSS {
         user: &str,
         password: &str,
         dbname: &str,
+
         table: &str,
         payload: Option<&str>,
-
         offset: Option<u64>,
         limit: Option<u64>,
+        file: Option<&str>,
     ) -> Self {
         Self {
             host: host.to_string(),
@@ -52,10 +55,12 @@ impl ScanXSS {
             user: user.to_string(),
             password: password.to_string(),
             dbname: dbname.to_string(),
+
             table: table.to_string(),
             payload: payload.map(|s| s.to_string()),
             offset,
             limit,
+            file: file.map(|s| s.to_string()),
         }
     }
 
@@ -85,6 +90,8 @@ impl ScanXSS {
                 ScanHandlers.load_patterns_from_url(Global::XSS_DETECT_REGEX).await?
             }
         };
+
+        let mut detections = Vec::new();
     
         let query = QueriesBuilders.select(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
         let rows: Vec<Row> = conn.query(query)?;
@@ -98,11 +105,22 @@ impl ScanXSS {
                         let row_index = row_index + 1;
                         let column = column.name_str();
                         ScanAlerts::detected(&self.table, row_index, &column, &value_str);
+
+                        detections.push((
+                            self.table.clone(),
+                            row_index,
+                            column.to_string(),
+                            value_str.to_string(),
+                        ));
                     }
                 }
             }
         }
-    
+
+        if let Some(file) = &self.file {
+            Reports.xss(detections, file)?;
+        }
+        
         Ok(())
     }
     
