@@ -101,10 +101,6 @@ This regex identifies HTML tags with inline event handlers, which are often used
 
 ### Comments in pattern file
 
-Here’s an improved version of the comments section:
-
-#### Comments
-
 - A comment line begins with `//`.
 - Anything written after the `//` is treated as a comment and can be any text you like.
 - Comments are ignored by the interpreter and do not affect the execution of the code.
