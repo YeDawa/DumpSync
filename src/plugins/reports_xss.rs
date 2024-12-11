@@ -93,7 +93,7 @@ impl ReportsXSS {
             let encoded_value = ReportsHandlers.html_escape(&value);
 
             file.write_all(format!(
-                "<tr style=''><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>",
+                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>",
                 encoded_table, row_index, encoded_column, encoded_value
             ).as_bytes())?;
         }
