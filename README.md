@@ -33,7 +33,19 @@ cargo install dumpsync
 
 ## Documentation
 
-For detailed usage instructions and configuration options, please refer to the [official documentation](https://docs.dumpsync.com/).
+For more help and document, see our documentation:
+
+- [Overview](https://docs.dumpsync.com)
+- [Install](https://docs.dumpsync.com/install)
+- [Init](https://docs.dumpsync.com/init)
+- [Connection](https://docs.dumpsync.com/connection)
+- [Settings](https://docs.dumpsync.com/settings)
+- [Export](https://docs.dumpsync.com/export)
+- [Import](https://docs.dumpsync.com/import)
+- [Transfer](https://docs.dumpsync.com/transfer)
+- [XSS Scan](https://docs.dumpsync.com/scan)
+- [XSS Report](https://docs.dumpsync.com/scan#report-output-file)
+- [Writing patterns](https://docs.dumpsync.com/writing-patterns)
 
 ## License
 
