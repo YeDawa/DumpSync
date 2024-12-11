@@ -84,8 +84,9 @@ impl ReportsXSS {
     pub fn html(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
         let mut file = File::create(output_path)?;
         file.write_all(b"<html><head><title>XSS Reports</title><link href='https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css' rel='stylesheet'></head>")?;
-        file.write_all(b"<body><table class='table'>")?;
-        file.write_all(b"<tr><th>Table</th><th stryle='padding: 5px !important;'>Row Index</th><th>Column</th><th>Value</th></tr>")?;
+        file.write_all(b"<body>")?;
+        file.write_all(b"<div class='container-fluid gap-3'><table class='table table-striped table-bordered table-hover'>")?;
+        file.write_all(b"<tr><th>Table</th><th>Row Index</th><th>Column</th><th>Value</th></tr>")?;
 
         for (table, row_index, column, value) in detections {
             let encoded_table = ReportsHandlers.html_escape(&table);
@@ -98,7 +99,7 @@ impl ReportsXSS {
             ).as_bytes())?;
         }
 
-        file.write_all(b"</table></body></html>")?;
+        file.write_all(b"</table></div></body></html>")?;
         
         ReportAlerts::generated(output_path);
         Ok(())
