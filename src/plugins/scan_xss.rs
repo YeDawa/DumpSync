@@ -9,8 +9,8 @@ use mysql::{
 };
 
 use crate::{
-    consts::global::Global, 
-    engine::connection::Connection,
+    constants::global::Global, 
+    core::connection::Connection,
     plugins::reports_xss::ReportsXSS,
     handlers::scan_handlers::ScanHandlers,
     helpers::queries_builders::QueriesBuilders, 

@@ -1,6 +1,6 @@
 use regex::Regex;
 
-use crate::consts::regexp::RegExp;
+use crate::constants::regexp::RegExp;
 
 pub struct ImportHandlers {
     dbname: String,

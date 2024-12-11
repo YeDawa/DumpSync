@@ -11,7 +11,7 @@ use std::{
     },
 };
 
-use crate::consts::global::Global;
+use crate::constants::global::Global;
 
 pub struct Configs;
 

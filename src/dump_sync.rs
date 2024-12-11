@@ -13,8 +13,8 @@ use crate::{
 
     ui::ui_base::UI,
     helpers::env::Env,
-    engine::dump::Dump,
-    consts::global::Global,
+    core::dump::Dump,
+    constants::global::Global,
     ui::success_alerts::SuccessAlerts,
 };
 

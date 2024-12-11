@@ -4,7 +4,7 @@ extern crate figlet_rs;
 use colored::*;
 use figlet_rs::FIGfont;
 
-use crate::consts::global::Global;
+use crate::constants::global::Global;
 
 pub struct UI;
 

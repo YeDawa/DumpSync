@@ -22,8 +22,8 @@ use std::{
 };
 
 use crate::{
-    consts::regexp::RegExp,
-    engine::connection::Connection,
+    constants::regexp::RegExp,
+    core::connection::Connection,
     handlers::import_handlers::ImportHandlers,
 
     ui::{
@@ -32,7 +32,7 @@ use crate::{
     },
 };
 
-pub struct Transfer {
+pub struct Import {
     host: String,
     port: u16,
     user: String,
@@ -42,17 +42,9 @@ pub struct Transfer {
     dump_file_path: String,
 }
 
-impl Transfer {
+impl Import {
 
-    pub fn new(
-        host: &str, 
-        port: u16, 
-        user: &str, 
-        password: &str, 
-        dbname: &str, 
-        dump_file_path: &str, 
-        path: &str,
-    ) -> Self {
+    pub fn new(host: &str, port: u16, user: &str, password: &str, dbname: &str, dump_file_path: &str, path: &str) -> Self {
         Self {
             host: host.to_string(),
             port,
