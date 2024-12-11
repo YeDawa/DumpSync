@@ -499,6 +499,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#report-output-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Report output file
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -598,6 +607,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#report-output-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Report output file
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -618,7 +636,7 @@
 
 <h1 id="dumpsync-command-scan">DumpSync Command: Scan</h1>
 <p>The dumpsync scan command is used to scan a database table for Cross-Site Scripting (XSS) vulnerabilities. It allows you to provide a payload file containing scripts that will be tested on the input fields of the specified table.</p>
-<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>&lt;table&gt;<span class="w"> </span>--payload<span class="w"> </span>&lt;path_or_url_to_payload_file&gt;
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>&lt;table&gt;<span class="w"> </span>-p<span class="w"> </span>&lt;path_or_url_to_payload_file&gt;
 </code></pre></div>
 <h3 id="command-breakdown">Command Breakdown</h3>
 <ul>
@@ -628,13 +646,14 @@
 <h3 id="parameters">Parameters</h3>
 <ul>
 <li><strong>-t <code>&lt;table&gt;</code></strong>: Specifies the name of the table to be scanned. The command will check the fields in the table for any inputs that could be vulnerable to XSS attacks.</li>
-<li><strong>-p <path_or_url_to_payload_file></strong>: Specifies the path or URL to the payload file containing XSS scripts that will be tested on the input fields of the table.</li>
-<li><strong>-l <limit></strong>: Specifies the limit of the number of rows to scan.</li>
-<li><strong>-o <offset></strong>: Specifies the offset from where to start scanning the rows.</li>
+<li><strong>-p <path_or_url_to_payload_file></strong> (Optional): Specifies the path or URL to the payload file containing XSS scripts that will be tested on the input fields of the table.</li>
+<li><strong>-l <limit></strong> (Optional): Specifies the limit of the number of rows to scan.</li>
+<li><strong>-o <offset></strong> (Optional): Specifies the offset from where to start scanning the rows.</li>
+<li><strong>-f <path_to_report_file></strong> (Optional): Specifies the path to save the scan results in CSV, JSON or HTML format.</li>
 </ul>
 <h3 id="example">Example</h3>
 <p>Scan a table called example_table using a payload file <code>located at path/to/payload.txt</code>:</p>
-<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>example_table<span class="w"> </span>--payload<span class="w"> </span>path/to/payload.txt
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>example_table<span class="w"> </span>-p<span class="w"> </span>path/to/payload.txt
 </code></pre></div>
 <h3 id="description">Description</h3>
 <ul>
@@ -646,6 +665,17 @@
 <li>Ensure that the dump file exists and that you have the necessary permissions to read it.</li>
 <li>The transfer process will overwrite existing data in the database, so be cautious when using this command, especially if restoring to a production environment.</li>
 <li>It’s recommended to back up current data before performing an import to avoid accidental data loss.</li>
+</ul>
+<h2 id="report-output-file">Report output file</h2>
+<p>It's possible to save the scan results to a file using the <code>-f</code> or <code>--file</code> option. The report will be saved in CSV, JSON or HTML format.</p>
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>example_table<span class="w"> </span>-f<span class="w"> </span>path/to/report.csv
+</code></pre></div>
+<p>Formats supported for the report file are:</p>
+<ul>
+<li>TXT</li>
+<li>CSV</li>
+<li>JSON</li>
+<li>HTML</li>
 </ul>
 
 
