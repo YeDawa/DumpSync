@@ -10,6 +10,7 @@ use std::{
 
 use crate::{
     utils::file::FileUtils,
+    constants::global::Global,
     ui::report_alerts::ReportAlerts,
     handlers::reports_handlers::ReportsHandlers,
 };
@@ -83,9 +84,17 @@ impl ReportsXSS {
 
     pub fn html(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
         let mut file = File::create(output_path)?;
-        file.write_all(b"<html><head><title>XSS Reports</title><link href='https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css' rel='stylesheet'></head>")?;
+        file.write_all(b"<html><head><title>XSS Reports</title><link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'></head>")?;
         file.write_all(b"<body>")?;
-        file.write_all(b"<div class='container-fluid gap-3'><table class='table table-striped table-bordered table-hover'>")?;
+
+        file.write_all(format!(
+            "<nav class='navbar navbar-dark navbar-expand-lg bg-dark'><div class='container-fluid'>
+                <a class='navbar-brand' href='#'>{}: XSS Scan Results</a></div>
+            </nav>",
+            Global::APP_NAME
+        ).as_bytes())?;
+
+        file.write_all(b"<div class='container-fluid pt-3'><table class='table table-striped table-bordered table-hover table-dark'>")?;
         file.write_all(b"<tr><th>Table</th><th>Row Index</th><th>Column</th><th>Value</th></tr>")?;
 
         for (table, row_index, column, value) in detections {
