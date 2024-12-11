@@ -9,6 +9,7 @@ use std::{
 };
 
 use crate::{
+    utils::file::FileUtils,
     ui::report_alerts::ReportAlerts,
     handlers::reports_handlers::ReportsHandlers,
 };
@@ -103,4 +104,22 @@ impl ReportsXSS {
         Ok(())
     }
     
+    pub fn autodetect(&self, detections: Vec<(String, usize, String, String)>, file_path: Option<&str>) -> Result<(), Box<dyn Error>> {
+        if let Some(file_path) = file_path {
+            let extension = FileUtils::extension(file_path);
+
+            let result = match extension.as_str() {
+                "txt" => self.txt(detections, file_path),
+                "csv" => self.csv(detections, file_path),
+                "json" => self.json(detections, file_path),
+                "html" => self.html(detections, file_path),
+                _ => Ok(ReportAlerts::invalid_format()),
+            };
+
+            result?;
+        }
+
+        Ok(())
+    }
+
 }

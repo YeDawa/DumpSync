@@ -13,4 +13,14 @@ impl FileUtils {
         }
     }
 
+    pub fn extension(file_path: &str) -> String {
+        let extension = Path::new(file_path)
+            .extension()
+            .unwrap_or_default()
+            .to_str()
+            .unwrap_or_default();
+
+        extension.to_lowercase()
+    }
+
 }

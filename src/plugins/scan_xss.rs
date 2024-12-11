@@ -10,15 +10,11 @@ use mysql::{
 
 use crate::{
     constants::global::Global, 
+    ui::scan_alerts::ScanAlerts,
     core::connection::Connection,
     plugins::reports_xss::ReportsXSS,
     handlers::scan_handlers::ScanHandlers,
-    helpers::queries_builders::QueriesBuilders, 
-    
-    ui::{
-        scan_alerts::ScanAlerts,
-        report_alerts::ReportAlerts,
-    },
+    helpers::queries_builders::QueriesBuilders,
 };
 
 pub struct ScanXSS {
@@ -118,20 +114,7 @@ impl ScanXSS {
             }
         }
 
-        if let Some(file) = &self.file {
-            if file.ends_with(".csv") {
-                ReportsXSS.csv(detections, file)?;
-            } else if file.ends_with(".txt") {
-                ReportsXSS.txt(detections, file)?;
-            } else if file.ends_with(".json") {
-                ReportsXSS.json(detections, file)?;
-            } else if file.ends_with(".html") || file.ends_with(".htm") {
-                ReportsXSS.html(detections, file)?;
-            } else {
-                ReportAlerts::invalid_format();
-            }
-        }
-        
+        ReportsXSS.autodetect(detections, self.file.as_deref())?;
         Ok(())
     }
     

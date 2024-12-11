@@ -12,7 +12,7 @@ impl ReportAlerts {
     }
 
     pub fn invalid_format() {
-        let message = "Invalid file format, only TXT, CSV, HTM/HTML and JSON are supported.";
+        let message = "Invalid file format, only TXT, CSV, HTML and JSON are supported.";
 
         println!("{}", "-".repeat(50));
         println!(
