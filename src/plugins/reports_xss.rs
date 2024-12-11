@@ -84,14 +84,12 @@ impl ReportsXSS {
 
     pub fn html(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
         let mut file = File::create(output_path)?;
-        file.write_all(b"<html><head><title>XSS Reports</title><link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'></head>")?;
-        file.write_all(b"<body>")?;
+        file.write_all(b"<html><head><title>XSS Reports</title>")?;
+        file.write_all(format!("<link href='{}' rel='stylesheet'></head><body>", Global::CDN_BOOTSTRAP).as_bytes())?;
 
         file.write_all(format!(
-            "<nav class='navbar navbar-dark navbar-expand-lg bg-dark'><div class='container-fluid'>
-                <a class='navbar-brand' href='#'>{}: XSS Scan Results</a></div>
-            </nav>",
-            Global::APP_NAME
+            "<nav class='navbar navbar-dark navbar-expand-lg bg-dark'><div class='container-fluid'><img src='{}' height='36'/><a class='navbar-brand'>XSS Scan Results</a></div></nav>",
+            Global::APP_ICON,
         ).as_bytes())?;
 
         file.write_all(b"<div class='container-fluid pt-3'><table class='table table-striped table-bordered table-hover table-dark'>")?;
