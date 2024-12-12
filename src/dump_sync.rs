@@ -1,10 +1,10 @@
+use reqwest;
 use clap::Parser;
+
 use std::{
     env,
     error::Error,
 };
-
-use reqwest;
 
 use tokio::{
     fs::File,
@@ -21,8 +21,8 @@ use crate::{
     ui::success_alerts::SuccessAlerts,
 
     plugins::{
-        pastebin::Pastebin,
         scan_xss::ScanXSS,
+        pastebin::Pastebin,
     },
 };
 
