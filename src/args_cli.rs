@@ -117,10 +117,6 @@ pub struct ShareOptions {
     pub privacy: Option<String>,
 
     #[arg(short, long)]
-    /// Name for share
-    pub name: Option<u64>,
-
-    #[arg(short, long)]
     /// File path for output
     pub file: Option<String>,
 }
