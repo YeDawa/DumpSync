@@ -205,9 +205,7 @@ impl DumpSync {
     }
 
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
-        let cli = Cli::parse();
-
-        match cli.command {
+        match Cli::parse().command {
             Commands::Init => {
                 self.initialize().await?;
             },
