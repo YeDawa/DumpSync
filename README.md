@@ -24,9 +24,13 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 - **XSS Report**: Generate a detailed report of XSS vulnerabilities found in the database.
 - **Share**: Share your dump or scan results with others.
 
+
 ## Installation
 
 To install DumpSync, use the following command:
+
+> [!note]
+> Make sure you have Rust installed on your system. If not, you can install it from [here](https://www.rust-lang.org/tools/install).
 
 ```bash
 cargo install dumpsync
