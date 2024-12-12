@@ -189,7 +189,7 @@ impl DumpSync {
         ).transfer();
     }
 
-    pub async fn share(&self, options: ShareOptions) -> Result<(), Box<dyn Error>> {
+    async fn share(&self, options: ShareOptions) -> Result<(), Box<dyn Error>> {
         Env::new();
         UI::header();
 
