@@ -28,6 +28,8 @@ DS_DB_NAME="YOUR_DATABASE"
 
 DS_DUMP_INTERVAL="3600"  # Interval for the dump process in seconds
 DS_DUMP_PATH="/path/to/"  # Path where dumps will be saved
+
+PASTEBIN_API_KEY="" # Your Pastebin API key
 ```
 
 ### Configuration Details
@@ -44,5 +46,6 @@ DS_DUMP_PATH="/path/to/"  # Path where dumps will be saved
 - **DS_TRANSFER_USER**: Your transfer database username.
 - **DS_TRANSFER_PASSWORD**: The password associated with the transfer database user.
 - **DS_TRANSFER_DB_NAME**: The name of the transfer database you want to connect to.
+- **PASTEBIN_API_KEY**: Your Pastebin API key.
 
 You can choose to use either the `DB_` prefixed variables or the `DS_` prefixed variables for your configuration. Make sure to adjust the values accordingly to fit your environment.
