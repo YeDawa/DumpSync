@@ -29,7 +29,7 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 
 To install DumpSync, use the following command:
 
-> Make sure you have Rust installed on your system. If not, you can install it from [here](https://www.rust-lang.org/tools/install).
+> Make sure you have Rust installed on your system. If not, you can install it from [here](https://docs.dumpsync.com/install).
 
 ```bash
 cargo install dumpsync
