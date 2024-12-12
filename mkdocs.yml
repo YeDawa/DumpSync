@@ -33,6 +33,7 @@ nav:
   - Import: import.md
   - Transfer: transfer.md
   - Scan XSS: scan.md
+  - Share: share.md
   - Writing patterns: writing-patterns.md
 
 markdown_extensions:
