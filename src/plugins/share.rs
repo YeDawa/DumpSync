@@ -28,6 +28,11 @@ impl Share {
     pub async fn share(&self) -> Result<(), Box<dyn Error>> {
         let ext = FileUtils::extension(&self.file);
 
+        if self.api_key.trim().is_empty() {
+            ShareAlerts::error("API key is missing or empty");
+            return Ok(());
+        }
+
         if ["sql", "txt", "csv", "json", "html"].iter().any(|&e| e == ext) {
             let privacy = "1".to_string();
             let api_option = "paste".to_string();
