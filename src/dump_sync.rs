@@ -194,12 +194,13 @@ impl DumpSync {
         UI::header();
 
         let file = options.file.unwrap();
+        let privacy = options.privacy.unwrap_or("unlisted".to_string());
         let api_key = env::var("PASTEBIN_API_KEY").unwrap_or_default();
 
         let header = format!("Sharing file: '{}'", file);
         UI::section_header(&header, "info");
 
-        Share::new(&file, &api_key).share().await?;
+        Share::new(&file, &api_key, &privacy).share().await?;
         Ok(())
     }
 
@@ -207,16 +208,16 @@ impl DumpSync {
         let cli = Cli::parse();
 
         match cli.command {
+            Commands::Init => {
+                self.initialize().await?;
+            },
+
             Commands::Export(options) => {
                 self.export(options);
             },
 
             Commands::Import(options) => {
                 self.import(options);
-            },
-
-            Commands::Init => {
-                self.initialize().await?;
             },
 
             Commands::Transfer(options) => {

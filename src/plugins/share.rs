@@ -14,14 +14,16 @@ use crate::{
 pub struct Share {
     file: String,
     api_key: String,
+    privacy: String,
 }
 
 impl Share {
 
-    pub fn new(file: &str, api_key: &str) -> Self {
+    pub fn new(file: &str, api_key: &str, privacy: &str) -> Self {
         Self {
             file: file.to_string(),
             api_key: api_key.to_string(),
+            privacy: privacy.to_string(),
         }
     }
 
@@ -34,7 +36,13 @@ impl Share {
         }
 
         if ["sql", "txt", "csv", "json", "html"].iter().any(|&e| e == ext) {
-            let privacy = "1".to_string();
+            let privacy = match self.privacy.as_str() {
+                "public" => "0",
+                "unlisted" => "1",
+                "private" => "2",
+                _ => "1",
+            }.to_string();
+            
             let api_option = "paste".to_string();
             let name = format!("{}: {}", Global::APP_NAME, &self.file);
             let content = FileUtils::content(&self.file);

@@ -112,7 +112,7 @@ pub struct ScanOptions {
 
 #[derive(Parser)]
 pub struct ShareOptions {
-    #[arg(short, long)]
+    #[arg(long)]
     /// Privacy level for share
     pub privacy: Option<String>,
 
