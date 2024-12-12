@@ -21,7 +21,7 @@ use crate::{
     ui::success_alerts::SuccessAlerts,
 
     plugins::{
-        share::Share,
+        pastebin::Pastebin,
         scan_xss::ScanXSS,
     },
 };
@@ -200,7 +200,7 @@ impl DumpSync {
         let header = format!("Sharing file: '{}'", file);
         UI::section_header(&header, "info");
 
-        Share::new(&file, &api_key, &privacy).share().await?;
+        Pastebin::new(&file, &api_key, &privacy).share().await?;
         Ok(())
     }
 

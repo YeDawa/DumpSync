@@ -11,13 +11,13 @@ use crate::{
     ui::share_alerts::ShareAlerts,
 };
 
-pub struct Share {
+pub struct Pastebin {
     file: String,
     api_key: String,
     privacy: String,
 }
 
-impl Share {
+impl Pastebin {
 
     pub fn new(file: &str, api_key: &str, privacy: &str) -> Self {
         Self {

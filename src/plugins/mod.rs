@@ -1,3 +1,3 @@
-pub mod share;
+pub mod pastebin;
 pub mod scan_xss;
 pub mod reports_xss;
