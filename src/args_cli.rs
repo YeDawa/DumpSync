@@ -41,6 +41,9 @@ pub enum Commands {
 
     /// Scan the table for xss prevention
     Scan(ScanOptions),
+
+    /// Share the dump or scan results
+    Share(ShareOptions),
 }
 
 #[derive(Parser)]
@@ -101,6 +104,21 @@ pub struct ScanOptions {
     #[arg(short, long)]
     /// Limit for scan
     pub limit: Option<u64>,
+
+    #[arg(short, long)]
+    /// File path for output
+    pub file: Option<String>,
+}
+
+#[derive(Parser)]
+pub struct ShareOptions {
+    #[arg(short, long)]
+    /// Privacy level for share
+    pub privacy: Option<String>,
+
+    #[arg(short, long)]
+    /// Name for share
+    pub name: Option<u64>,
 
     #[arg(short, long)]
     /// File path for output

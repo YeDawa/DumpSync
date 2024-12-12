@@ -1,5 +1,8 @@
 use clap::Parser;
-use std::error::Error;
+use std::{
+    env,
+    error::Error,
+};
 
 use reqwest;
 
@@ -12,10 +15,15 @@ use crate::{
     args_cli::*,
 
     ui::ui_base::UI,
-    helpers::env::Env,
     core::dump::Dump,
+    helpers::env::Env,
     constants::global::Global,
     ui::success_alerts::SuccessAlerts,
+
+    plugins::{
+        share::Share,
+        scan_xss::ScanXSS,
+    },
 };
 
 pub struct DumpSync;
@@ -38,17 +46,17 @@ impl DumpSync {
         UI::header();
 
         let dbname = options.database.unwrap_or_else(|| {
-            std::env::var("DB_NAME").or_else(|_| std::env::var("DS_DB_NAME")).unwrap_or_default()
+            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
         });
 
         let backup_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
 
-        let host = std::env::var("DB_HOST").or_else(|_| std::env::var("DS_DB_HOST")).unwrap_or_default();
-        let user = std::env::var("DB_USER").or_else(|_| std::env::var("DS_DB_USER")).unwrap_or_default();
-        let password = std::env::var("DB_PASSWORD").or_else(|_| std::env::var("DS_DB_PASSWORD")).unwrap_or_default();
+        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
+        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
+        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
 
-        let port = std::env::var("DB_PORT")
-            .or_else(|_| std::env::var("DS_DB_PORT"))
+        let port = env::var("DB_PORT")
+            .or_else(|_| env::var("DS_DB_PORT"))
             .unwrap_or_default()
             .parse::<u64>()
             .expect("Invalid port");
@@ -64,12 +72,6 @@ impl DumpSync {
             &backup_path, 
             None, 
             &backup_path,
-
-            None, 
-            None,
-            None,
-            None,
-            None
         ).import();
     }
 
@@ -78,7 +80,7 @@ impl DumpSync {
         UI::header();
 
         let dbname = options.database.unwrap_or_else(|| {
-            std::env::var("DB_NAME").or_else(|_| std::env::var("DS_DB_NAME")).unwrap_or_default()
+            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
         });
 
         let interval = options.interval.unwrap_or_else(|| {
@@ -87,12 +89,12 @@ impl DumpSync {
 
         let backup_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
 
-        let host = std::env::var("DB_HOST").or_else(|_| std::env::var("DS_DB_HOST")).unwrap_or_default();
-        let user = std::env::var("DB_USER").or_else(|_| std::env::var("DS_DB_USER")).unwrap_or_default();
-        let password = std::env::var("DB_PASSWORD").or_else(|_| std::env::var("DS_DB_PASSWORD")).unwrap_or_default();
+        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
+        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
+        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
 
-        let port = std::env::var("DB_PORT")
-            .or_else(|_| std::env::var("DS_DB_PORT"))
+        let port = env::var("DB_PORT")
+            .or_else(|_| env::var("DS_DB_PORT"))
             .unwrap_or_default()
             .parse::<u64>()
             .expect("Invalid port");
@@ -108,13 +110,7 @@ impl DumpSync {
             &dbname, 
             &backup_path, 
             Some(interval), 
-            &backup_path, 
-
-            None, 
-            None,
-            None,
-            None,
-            None
+            &backup_path,
         ).export();
     }
 
@@ -130,15 +126,15 @@ impl DumpSync {
         let file = options.file;
 
         let dbname = options.database.unwrap_or_else(|| {
-            std::env::var("DB_NAME").or_else(|_| std::env::var("DS_DB_NAME")).unwrap_or_default()
+            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
         });
 
-        let host = std::env::var("DB_HOST").or_else(|_| std::env::var("DS_DB_HOST")).unwrap_or_default();
-        let user = std::env::var("DB_USER").or_else(|_| std::env::var("DS_DB_USER")).unwrap_or_default();
-        let password = std::env::var("DB_PASSWORD").or_else(|_| std::env::var("DS_DB_PASSWORD")).unwrap_or_default();
+        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
+        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
+        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
 
-        let port = std::env::var("DB_PORT")
-            .or_else(|_| std::env::var("DS_DB_PORT"))
+        let port = env::var("DB_PORT")
+            .or_else(|_| env::var("DS_DB_PORT"))
             .unwrap_or_default()
             .parse::<u64>()
             .expect("Invalid port");
@@ -146,22 +142,19 @@ impl DumpSync {
         let header = format!("Scaning table: '{}'", table);
         UI::section_header(&header, "info");
 
-        Dump::new(
-            &host, 
-            port, 
-            &user, 
-            &password, 
-            &dbname, 
-            "", 
-            None, 
-            "", 
-
-            Some(table.as_str()), 
+        ScanXSS::new(
+            &host,
+            port as u16,
+            &user,
+            &password,
+            &dbname,
+            &table,
             payload.as_deref(),
             Some(offset),
             Some(limit),
             file.as_deref(),
-        ).scan_xss().await;
+        ).scan().await.expect("Failed to scan tables for XSS");
+
         Ok(())
     }
 
@@ -170,14 +163,14 @@ impl DumpSync {
         UI::header();
 
         let backup_path = options.file.unwrap();
-        let dbname = std::env::var("DS_TRANSFER_DB_NAME").or_else(|_| std::env::var("DS_TRANSFER_DB_NAME")).unwrap_or_default();
+        let dbname = env::var("DS_TRANSFER_DB_NAME").or_else(|_| env::var("DS_TRANSFER_DB_NAME")).unwrap_or_default();
 
-        let host = std::env::var("DS_TRANSFER_HOST").or_else(|_| std::env::var("DS_TRANSFER_HOST")).unwrap_or_default();
-        let user = std::env::var("DS_TRANSFER_USER").or_else(|_| std::env::var("DS_TRANSFER_USER")).unwrap_or_default();
-        let password = std::env::var("DS_TRANSFER_PASSWORD").or_else(|_| std::env::var("DS_TRANSFER_PASSWORD")).unwrap_or_default();
+        let host = env::var("DS_TRANSFER_HOST").or_else(|_| env::var("DS_TRANSFER_HOST")).unwrap_or_default();
+        let user = env::var("DS_TRANSFER_USER").or_else(|_| env::var("DS_TRANSFER_USER")).unwrap_or_default();
+        let password = env::var("DS_TRANSFER_PASSWORD").or_else(|_| env::var("DS_TRANSFER_PASSWORD")).unwrap_or_default();
 
-        let port = std::env::var("DS_TRANSFER_PORT")
-            .or_else(|_| std::env::var("DS_TRANSFER_DB_PORT"))
+        let port = env::var("DS_TRANSFER_PORT")
+            .or_else(|_| env::var("DS_TRANSFER_DB_PORT"))
             .unwrap_or_default()
             .parse::<u64>()
             .expect("Invalid port");
@@ -193,13 +186,21 @@ impl DumpSync {
             &backup_path, 
             None, 
             &backup_path, 
-
-            None, 
-            None,
-            None,
-            None,
-            None,
         ).transfer();
+    }
+
+    pub async fn share(&self, options: ShareOptions) -> Result<(), Box<dyn Error>> {
+        Env::new();
+        UI::header();
+
+        let file = options.file.unwrap();
+        let api_key = env::var("PASTEBIN_API_KEY").unwrap_or_default();
+
+        let header = format!("Sharing file: '{}'", file);
+        UI::section_header(&header, "info");
+
+        Share::new(&file, &api_key).share().await?;
+        Ok(())
     }
 
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
@@ -224,6 +225,10 @@ impl DumpSync {
 
             Commands::Scan(options) => {
                 self.scan_xss(options).await?;            
+            },
+
+            Commands::Share(options) => {
+                self.share(options).await?;
             },
         }
 
