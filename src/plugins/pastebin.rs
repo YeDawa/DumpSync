@@ -27,22 +27,41 @@ impl Pastebin {
         }
     }
 
-    pub async fn share(&self) -> Result<(), Box<dyn Error>> {
-        let ext = FileUtils::extension(&self.file);
+    fn privacy(&self) -> String {
+        match self.privacy.as_str() {
+            "public" => "0",
+            "unlisted" => "1",
+            "private" => "2",
+            _ => "1",
+        }.to_string()
+    }
 
+    fn file_exists(&self) -> Result<(), Box<dyn Error>> {
+        if !FileUtils::exists(&self.file) {
+            ShareAlerts::error("File does not exist");
+            return Ok(());
+        }
+
+        Ok(())
+    }
+
+    fn api_key_exists(&self) -> Result<(), Box<dyn Error>> {
         if self.api_key.trim().is_empty() {
             ShareAlerts::error("API key is missing or empty");
             return Ok(());
         }
 
+        Ok(())
+    }
+
+    pub async fn share(&self) -> Result<(), Box<dyn Error>> {
+        let ext = FileUtils::extension(&self.file);
+
+        self.file_exists()?;
+        self.api_key_exists()?;
+
         if ["sql", "txt", "csv", "json", "html"].iter().any(|&e| e == ext) {
-            let privacy = match self.privacy.as_str() {
-                "public" => "0",
-                "unlisted" => "1",
-                "private" => "2",
-                _ => "1",
-            }.to_string();
-            
+            let privacy = &self.privacy();
             let api_option = "paste".to_string();
             let name = format!("{}: {}", Global::APP_NAME, &self.file);
             let content = FileUtils::content(&self.file);

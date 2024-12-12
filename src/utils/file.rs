@@ -28,4 +28,8 @@ impl FileUtils {
             .unwrap_or_default()
     }
 
+    pub fn exists(file_path: &str) -> bool {
+        fs::metadata(file_path).is_ok()
+    }
+
 }
