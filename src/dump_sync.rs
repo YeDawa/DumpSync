@@ -31,6 +31,21 @@ pub struct DumpSync;
 
 impl DumpSync {
 
+    fn load_db_config(&self) -> (String, String, String, String, u16) {
+        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
+        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
+        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
+        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
+        
+        let port = env::var("DB_PORT")
+            .or_else(|_| env::var("DS_DB_PORT"))
+            .unwrap_or_default()
+            .parse::<u16>()
+            .expect("Invalid port");
+    
+        (dbname, host, user, password, port)
+    }    
+
     async fn initialize(&self) -> Result<(), Box<dyn Error>> {
         let response = reqwest::get(Global::APP_CONFIGS).await?;
         let content = response.bytes().await?;
@@ -47,20 +62,9 @@ impl DumpSync {
         UI::header();
 
         let backup_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
-        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
-
-        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
-        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
-        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
-
-        let port = env::var("DB_PORT")
-            .or_else(|_| env::var("DS_DB_PORT"))
-            .unwrap_or_default()
-            .parse::<u64>()
-            .expect("Invalid port");
+        let (dbname, host, user, password, port) = self.load_db_config();
 
         UI::section_header("Importing dump to server", "info");
-
         Dump::new(
             &host, 
             port, 
@@ -77,23 +81,12 @@ impl DumpSync {
         Env::new();
         UI::header();
 
-        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
-
         let interval = options.interval.unwrap_or_else(|| {
             Env::get_var_u64("DS_DUMP_INTERVAL")
         });
 
         let backup_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
-
-        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
-        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
-        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
-
-        let port = env::var("DB_PORT")
-            .or_else(|_| env::var("DS_DB_PORT"))
-            .unwrap_or_default()
-            .parse::<u64>()
-            .expect("Invalid port");
+        let (dbname, host, user, password, port) = self.load_db_config();
 
         UI::label("Press CTRL+C to exit the tool", "normal");
         UI::section_header("Dumping the database", "info");
@@ -120,17 +113,8 @@ impl DumpSync {
         let offset = options.offset.unwrap_or(0);
         let limit = options.limit.unwrap_or(99999999999);
         let file = options.file;
-
-        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
-        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
-        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
-        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
-
-        let port = env::var("DB_PORT")
-            .or_else(|_| env::var("DS_DB_PORT"))
-            .unwrap_or_default()
-            .parse::<u64>()
-            .expect("Invalid port");
+        
+        let (dbname, host, user, password, port) = self.load_db_config();
 
         let header = format!("Scaning table: '{}'", table);
         UI::section_header(&header, "info");
@@ -156,17 +140,7 @@ impl DumpSync {
         UI::header();
 
         let file = options.file;
-
-        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
-        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
-        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
-        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
-
-        let port = env::var("DB_PORT")
-            .or_else(|_| env::var("DS_DB_PORT"))
-            .unwrap_or_default()
-            .parse::<u64>()
-            .expect("Invalid port");
+        let (dbname, host, user, password, port) = self.load_db_config();
 
         let header = format!("Generateing schema file");
         UI::section_header(&header, "info");
@@ -188,17 +162,8 @@ impl DumpSync {
         UI::header();
 
         let backup_path = options.file.unwrap();
+        let (_, host, user, password, port) = self.load_db_config();
         let dbname = env::var("DS_TRANSFER_DB_NAME").or_else(|_| env::var("DS_TRANSFER_DB_NAME")).unwrap_or_default();
-
-        let host = env::var("DS_TRANSFER_HOST").or_else(|_| env::var("DS_TRANSFER_HOST")).unwrap_or_default();
-        let user = env::var("DS_TRANSFER_USER").or_else(|_| env::var("DS_TRANSFER_USER")).unwrap_or_default();
-        let password = env::var("DS_TRANSFER_PASSWORD").or_else(|_| env::var("DS_TRANSFER_PASSWORD")).unwrap_or_default();
-
-        let port = env::var("DS_TRANSFER_PORT")
-            .or_else(|_| env::var("DS_TRANSFER_DB_PORT"))
-            .unwrap_or_default()
-            .parse::<u64>()
-            .expect("Invalid port");
 
         UI::section_header("Importing dump to server", "info");
 

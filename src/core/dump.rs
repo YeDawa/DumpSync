@@ -30,7 +30,7 @@ use crate::{
 };
 
 pub struct Dump {
-    port: u64,
+    port: u16,
     path: String,
     host: String,
     user: String,
@@ -46,7 +46,7 @@ impl Dump {
 
     pub fn new(
         host: &str,
-        port: u64,
+        port: u16,
         user: &str,
         password: &str,
         dbname: &str,
@@ -55,7 +55,7 @@ impl Dump {
         path: &str,
     ) -> Self {
         Self {
-            port,
+            port: port,
             host: host.to_string(),
             user: user.to_string(),
             dbname: dbname.to_string(),
