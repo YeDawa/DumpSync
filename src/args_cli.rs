@@ -56,10 +56,6 @@ pub struct ExportOptions {
     pub interval: Option<u64>,
 
     #[arg(short, long)]
-    /// Database name
-    pub database: Option<String>,
-
-    #[arg(short, long)]
     /// Backup path
     pub folder: Option<String>,
 }
@@ -67,20 +63,12 @@ pub struct ExportOptions {
 #[derive(Parser)]
 pub struct ImportOptions {
     #[arg(short, long)]
-    /// Database name
-    pub database: Option<String>,
-
-    #[arg(short, long)]
     /// Dump file path
     pub file: Option<String>,
 }
 
 #[derive(Parser)]
 pub struct TransferOptions {
-    #[arg(short, long)]
-    /// Database name
-    pub database: Option<String>,
-
     #[arg(short, long)]
     /// Dump file path
     pub file: Option<String>,
@@ -91,10 +79,6 @@ pub struct ScanOptions {
     #[arg(short, long)]
     /// Table name for scan
     pub table: String,
-    
-    #[arg(short, long)]
-    /// Database name
-    pub database: Option<String>,
 
     #[arg(short, long)]
     /// Payload file path
@@ -120,17 +104,13 @@ pub struct ShareOptions {
     pub privacy: Option<String>,
 
     #[arg(short, long)]
-    /// File path for output
-    pub file: Option<String>,
+    /// File path for share
+    pub file: String,
 }
 
 #[derive(Parser)]
 pub struct SchemaOptions {
     #[arg(short, long)]
-    /// Database name
-    pub database: Option<String>,
-
-    #[arg(short, long)]
     /// Output file path
-    pub file: Option<String>,
+    pub file: String,
 }

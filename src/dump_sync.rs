@@ -46,11 +46,8 @@ impl DumpSync {
         Env::new();
         UI::header();
 
-        let dbname = options.database.unwrap_or_else(|| {
-            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
-        });
-
         let backup_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
+        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
 
         let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
         let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
@@ -80,9 +77,7 @@ impl DumpSync {
         Env::new();
         UI::header();
 
-        let dbname = options.database.unwrap_or_else(|| {
-            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
-        });
+        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
 
         let interval = options.interval.unwrap_or_else(|| {
             Env::get_var_u64("DS_DUMP_INTERVAL")
@@ -126,10 +121,7 @@ impl DumpSync {
         let limit = options.limit.unwrap_or(99999999999);
         let file = options.file;
 
-        let dbname = options.database.unwrap_or_else(|| {
-            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
-        });
-
+        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
         let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
         let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
         let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
@@ -163,12 +155,9 @@ impl DumpSync {
         Env::new();
         UI::header();
 
-        let file = options.file.unwrap();
+        let file = options.file;
 
-        let dbname = options.database.unwrap_or_else(|| {
-            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
-        });
-
+        let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
         let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
         let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
         let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
@@ -229,7 +218,7 @@ impl DumpSync {
         Env::new();
         UI::header();
 
-        let file = options.file.unwrap();
+        let file = options.file;
         let privacy = options.privacy.unwrap_or("unlisted".to_string());
         let api_key = env::var("PASTEBIN_API_KEY").unwrap_or_default();
 
@@ -242,33 +231,13 @@ impl DumpSync {
 
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
         match Cli::parse().command {
-            Commands::Init => {
-                self.initialize().await?;
-            },
-
-            Commands::Export(options) => {
-                self.export(options);
-            },
-
-            Commands::Import(options) => {
-                self.import(options);
-            },
-
-            Commands::Transfer(options) => {
-                self.transfer(options);
-            },
-
-            Commands::Scan(options) => {
-                self.scan_xss(options).await?;            
-            },
-
-            Commands::Share(options) => {
-                self.share(options).await?;
-            },
-
-            Commands::Schema(options) => {
-                self.schema(options)?;
-            },
+            Commands::Init => self.initialize().await?,
+            Commands::Export(options) => self.export(options),
+            Commands::Import(options) => self.import(options),
+            Commands::Scan(options) => self.scan_xss(options).await?,
+            Commands::Share(options) => self.share(options).await?,
+            Commands::Schema(options) => self.schema(options)?,
+            Commands::Transfer(options) => self.transfer(options),
         }
 
         Ok(())
