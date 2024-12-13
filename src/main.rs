@@ -14,10 +14,6 @@ use crate::dump_sync::DumpSync;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    if let Err(e) = DumpSync.init().await {
-        eprintln!("Error initializing app: {}", e);
-        return Err(e);
-    }
-
+    DumpSync.init().await?;
     Ok(())
 }
