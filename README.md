@@ -47,7 +47,6 @@ For more help and document, see our documentation:
 - [Import](https://docs.dumpsync.com/import)
 - [Transfer](https://docs.dumpsync.com/transfer)
 - [XSS Scan](https://docs.dumpsync.com/scan)
-- [XSS Report](https://docs.dumpsync.com/scan#report-output-file)
 - [Writing patterns](https://docs.dumpsync.com/writing-patterns)
 
 ## License

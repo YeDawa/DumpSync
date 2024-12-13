@@ -36,7 +36,7 @@ To share files, you need to get an API key from PasteBin. You can get the API ke
 
 ### Shareable Files
 
-Formats supported for the report file are:
+Formats supported for the share file are:
 
 - SQL
 - TXT
