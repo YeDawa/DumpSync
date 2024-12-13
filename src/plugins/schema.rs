@@ -86,8 +86,7 @@ impl Schema {
         let mut schema = Vec::new();
 
         for table in tables {
-            let columns: Vec<(String, String, String, String)> =
-                conn.query(QueriesBuilders.table_info(&table))?;
+            let columns: Vec<(String, String, String, String)> = conn.query(QueriesBuilders.table_info(&table))?;
 
             let column_data: Vec<Column> = columns
                 .iter()
@@ -99,8 +98,7 @@ impl Schema {
                 })
                 .collect();
 
-            let foreign_keys: Vec<(String, String, String)> =
-                conn.query(QueriesBuilders::foreign_key_info(&table))?;
+            let foreign_keys: Vec<(String, String, String)> = conn.query(QueriesBuilders::foreign_key_info(&table))?;
 
             let foreign_key_data: Vec<ForeignKey> = foreign_keys
                 .iter()
