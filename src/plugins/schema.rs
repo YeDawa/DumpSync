@@ -1,4 +1,5 @@
 use serde::Serialize;
+use serde_json::to_string_pretty;
 
 use std::{
     fs,
@@ -117,11 +118,10 @@ impl Schema {
             });
         }
 
-        let json_schema = serde_json::to_string_pretty(&schema)?;
-
+        let json_schema = to_string_pretty(&schema)?;
         fs::write(&self.file, json_schema)?;
-        SchemaAlerts::success(&self.file);
 
+        SchemaAlerts::success(&self.file);
         Ok(())
     }
 
