@@ -34,6 +34,7 @@ nav:
   - Transfer: transfer.md
   - Scan XSS: scan.md
   - Share: share.md
+  - Schema: schema.md
   - Writing patterns: writing-patterns.md
 
 markdown_extensions:
