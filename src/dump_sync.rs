@@ -110,10 +110,9 @@ impl DumpSync {
         let table = options.table;
         let payload = options.payload;
 
+        let file = options.file;
         let offset = options.offset.unwrap_or(0);
         let limit = options.limit.unwrap_or(99999999999);
-        let file = options.file;
-        
         let (dbname, host, user, password, port) = self.load_db_config();
 
         let header = format!("Scaning table: '{}'", table);
