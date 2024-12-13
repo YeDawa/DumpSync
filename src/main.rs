@@ -9,7 +9,6 @@ mod dump_sync;
 mod constants;
 
 use std::error::Error;
-
 use crate::dump_sync::DumpSync;
 
 #[tokio::main]
