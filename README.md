@@ -46,7 +46,8 @@ For more help and document, see our documentation:
 - [Export](https://docs.dumpsync.com/export)
 - [Import](https://docs.dumpsync.com/import)
 - [Transfer](https://docs.dumpsync.com/transfer)
-- [XSS Scan](https://docs.dumpsync.com/scan)
+- [Scan XSS](https://docs.dumpsync.com/scan)
+- [Share](https://docs.dumpsync.com/share)
 - [Writing patterns](https://docs.dumpsync.com/writing-patterns)
 
 ## License
