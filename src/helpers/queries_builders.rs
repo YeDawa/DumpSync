@@ -42,5 +42,31 @@ impl QueriesBuilders {
 
         query
     }
+
+    pub fn get_table_names(&self) -> String {
+        "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE();".to_string()
+    }
+
+    pub fn table_info(&self, table_name: &str) -> String {
+        format!(
+            r#"
+            SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_KEY
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{}';
+            "#,
+            table_name
+        )
+    }
+
+    pub fn foreign_key_info(table_name: &str) -> String {
+        format!(
+            r#"
+            SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{}' AND REFERENCED_TABLE_NAME IS NOT NULL;
+            "#,
+            table_name
+        )
+    }
     
 }

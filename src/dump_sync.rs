@@ -3,7 +3,7 @@ use clap::Parser;
 
 use std::{
     env,
-    error::Error,
+    error::Error, 
 };
 
 use tokio::{
@@ -21,6 +21,7 @@ use crate::{
     ui::success_alerts::SuccessAlerts,
 
     plugins::{
+        schema::Schema,
         scan_xss::ScanXSS,
         pastebin::Pastebin,
     },
@@ -158,6 +159,41 @@ impl DumpSync {
         Ok(())
     }
 
+    fn schema(&self, options: SchemaOptions) -> Result<(), Box<dyn Error>> {
+        Env::new();
+        UI::header();
+
+        let file = options.file.unwrap();
+
+        let dbname = options.database.unwrap_or_else(|| {
+            env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default()
+        });
+
+        let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
+        let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
+        let password = env::var("DB_PASSWORD").or_else(|_| env::var("DS_DB_PASSWORD")).unwrap_or_default();
+
+        let port = env::var("DB_PORT")
+            .or_else(|_| env::var("DS_DB_PORT"))
+            .unwrap_or_default()
+            .parse::<u64>()
+            .expect("Invalid port");
+
+        let header = format!("Generateing schema file");
+        UI::section_header(&header, "info");
+
+        Schema::new(
+            &host,
+            port as u16,
+            &user,
+            &password,
+            &dbname,
+            &file,
+        ).create()?;
+
+        Ok(())
+    }
+
     fn transfer(&self, options: TransferOptions) {
         Env::new();
         UI::header();
@@ -228,6 +264,10 @@ impl DumpSync {
 
             Commands::Share(options) => {
                 self.share(options).await?;
+            },
+
+            Commands::Schema(options) => {
+                self.schema(options)?;
             },
         }
 

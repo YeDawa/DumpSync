@@ -44,6 +44,9 @@ pub enum Commands {
 
     /// Share the dump or scan results
     Share(ShareOptions),
+
+    /// Generate shcema from the database
+    Schema(SchemaOptions),
 }
 
 #[derive(Parser)]
@@ -118,5 +121,16 @@ pub struct ShareOptions {
 
     #[arg(short, long)]
     /// File path for output
+    pub file: Option<String>,
+}
+
+#[derive(Parser)]
+pub struct SchemaOptions {
+    #[arg(short, long)]
+    /// Database name
+    pub database: Option<String>,
+
+    #[arg(short, long)]
+    /// Output file path
     pub file: Option<String>,
 }
