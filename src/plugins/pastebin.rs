@@ -36,29 +36,18 @@ impl Pastebin {
         }.to_string()
     }
 
-    fn file_exists(&self) -> Result<(), Box<dyn Error>> {
+    pub async fn share(&self) -> Result<(), Box<dyn Error>> {
+        let ext = FileUtils::extension(&self.file);
+
         if !FileUtils::exists(&self.file) {
             ShareAlerts::error("File does not exist");
             return Ok(());
         }
 
-        Ok(())
-    }
-
-    fn api_key_exists(&self) -> Result<(), Box<dyn Error>> {
         if self.api_key.trim().is_empty() {
-            ShareAlerts::error("API key is missing or empty");
+            ShareAlerts::api_key_missing();
             return Ok(());
         }
-
-        Ok(())
-    }
-
-    pub async fn share(&self) -> Result<(), Box<dyn Error>> {
-        let ext = FileUtils::extension(&self.file);
-
-        self.file_exists()?;
-        self.api_key_exists()?;
 
         if ["sql", "txt", "csv", "json", "html"].iter().any(|&e| e == ext) {
             let privacy = &self.privacy();
