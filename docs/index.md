@@ -15,3 +15,4 @@ DumpSync automates the process of creating dumps of a MySQL database at configur
 - **XSS Scanner**: Scan for XSS vulnerabilities in tables to enhance security.
 - **XSS Report**: Generate a detailed report of XSS vulnerabilities found in the database.
 - **Share**: Share your dump or scan results with others.
+- **Schema**: Generate a schema file for the database.

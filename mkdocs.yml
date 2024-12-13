@@ -27,15 +27,18 @@ nav:
   - Overview: index.md
   - Install: install.md
   - Init: init.md
-  - Connection: connection.md
-  - Settings: settings.md
-  - Export: export.md
-  - Import: import.md
-  - Transfer: transfer.md
-  - Scan XSS: scan.md
-  - Share: share.md
-  - Schema: schema.md
-  - Writing patterns: writing-patterns.md
+  - Basics:
+    - Connection: connection.md
+    - Settings: settings.md
+    - Export: export.md
+    - Import: import.md
+    - Transfer: transfer.md
+  - Plugins:
+    - Scan XSS: scan.md
+    - Share: share.md
+    - Schema: schema.md
+  - Resources:
+    - Writing patterns: writing-patterns.md
 
 markdown_extensions:
   - tables

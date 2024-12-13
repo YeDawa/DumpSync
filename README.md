@@ -49,6 +49,7 @@ For more help and document, see our documentation:
 - [Transfer](https://docs.dumpsync.com/transfer)
 - [Scan XSS](https://docs.dumpsync.com/scan)
 - [Share](https://docs.dumpsync.com/share)
+- [Schema](https://docs.dumpsync.com/schema)
 - [Writing patterns](https://docs.dumpsync.com/writing-patterns)
 
 ## License
