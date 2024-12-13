@@ -38,8 +38,6 @@ impl UI {
                 Global::APP_LICENSE.bold().blue(),
                 Global::APP_HOMEPAGE.bold().yellow()
             );
-
-            println!("{}", "-".repeat(80));
         }
     }
     
