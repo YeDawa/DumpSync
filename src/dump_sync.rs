@@ -120,7 +120,7 @@ impl DumpSync {
 
         ScanXSS::new(
             &host,
-            port as u16,
+            port,
             &user,
             &password,
             &dbname,
