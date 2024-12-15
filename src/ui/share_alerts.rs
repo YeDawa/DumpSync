@@ -2,7 +2,7 @@ extern crate colored;
 
 use colored::*;
 
-use crate::constants::global::Global;
+use crate::constants::urls::Urls;
 
 pub struct ShareAlerts;
 
@@ -22,7 +22,7 @@ impl ShareAlerts {
     }
 
     pub fn api_key_missing() {
-        let api_link = Global::PASTEBIN_API_URI;
+        let api_link = Urls::PASTEBIN_API_URI;
         let message = "Please provide a valid API key. Click this link to get one";
 
         Self::error("API key is missing or empty");

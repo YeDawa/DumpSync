@@ -9,7 +9,7 @@ use mysql::{
 };
 
 use crate::{
-    constants::global::Global, 
+    constants::urls::Urls, 
     ui::scan_alerts::ScanAlerts,
     core::connection::Connection,
     plugins::reports_xss::ReportsXSS,
@@ -84,7 +84,7 @@ impl ScanXSS {
             }
 
             None => {
-                ScanHandlers.load_patterns_from_url(Global::XSS_DETECT_REGEX).await?
+                ScanHandlers.load_patterns_from_url(Urls::XSS_DETECT_REGEX).await?
             }
         };
 

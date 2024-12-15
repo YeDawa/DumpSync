@@ -17,8 +17,12 @@ use crate::{
     ui::ui_base::UI,
     core::dump::Dump,
     helpers::env::Env,
-    constants::global::Global,
     ui::success_alerts::SuccessAlerts,
+
+    constants::{
+        urls::Urls,
+        global::Global,
+    },
 
     plugins::{
         schema::Schema,
@@ -47,7 +51,7 @@ impl DumpSync {
     }    
 
     async fn initialize(&self) -> Result<(), Box<dyn Error>> {
-        let response = reqwest::get(Global::APP_CONFIGS).await?;
+        let response = reqwest::get(Urls::APP_CONFIGS).await?;
         let content = response.bytes().await?;
         
         let mut file = File::create(Global::app_config()).await?;

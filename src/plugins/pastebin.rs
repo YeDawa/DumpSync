@@ -7,8 +7,12 @@ use std::{
 
 use crate::{
     utils::file::FileUtils,
-    constants::global::Global,
     ui::share_alerts::ShareAlerts,
+
+    constants::{
+        urls::Urls,
+        global::Global,
+    },
 };
 
 pub struct Pastebin {
@@ -64,7 +68,7 @@ impl Pastebin {
             params.insert("api_paste_format", &ext);
             
             let response = Client::new()
-            .post(Global::PASTEBIN_API_URI)
+            .post(Urls::PASTEBIN_API_URI)
             .form(&params)
             .send()
             .await?;
