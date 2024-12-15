@@ -137,7 +137,7 @@ impl Dump {
     pub fn import(&self) {
         Import::new(
             &self.host,
-            self.port as u16,
+            self.port,
             &self.user,
             &self.password,
             &self.dbname,
@@ -149,7 +149,7 @@ impl Dump {
     pub fn transfer(&self) {
         Transfer::new(
             &self.host,
-            self.port as u16,
+            self.port,
             &self.user,
             &self.password,
             &self.dbname,
