@@ -103,6 +103,7 @@ impl Dump {
         let dump_file_path_clone = self.dump_file_path.clone();
         let host_clone = self.host.clone();
         let user_clone = self.user.clone();
+        let port_clone = self.port.clone();
         let password_clone = self.password.clone();
         let dbname_clone = self.dbname.clone();
         let interval_clone = self.interval;
@@ -113,7 +114,7 @@ impl Dump {
             
             let _dump = Dump {
                 host: host_clone.clone(),
-                port: 0,
+                port: port_clone.clone(),
                 user: user_clone.clone(),
                 password: password_clone.clone(),
                 dbname: dbname_clone.clone(),
