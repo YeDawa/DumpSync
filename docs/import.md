@@ -23,6 +23,14 @@ To restore a database from a dump file located at `/backups/example_dump.sql`, y
 dumpsync import -f /backups/example_dump.sql
 ```
 
+### Encrypted Dumps
+
+```bash
+dumpsync import -f /backups/example_dump.sql.aes
+```
+
+DumpSync detects encrypted dump files and automatically decrypts them during the import process. If your dump file is encrypted, you can still use the `import` command as shown above.
+
 ### Notes
 
 - Ensure that the dump file exists and that you have the necessary permissions to read it.
