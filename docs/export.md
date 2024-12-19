@@ -3,13 +3,14 @@
 To create a database dump, you can use the following command:
 
 ```bash
-dumpsync export -d my_database -i 3600 -f /path/to/
+dumpsync export
 ```
+
+For connectting to a server, read the [Connecting to a Server](../connection) guide.
 
 ### Command Breakdown
 
 - **dumpsync**: This is the main command to invoke the DumpSync tool.
-
 - **export**: This subcommand initiates the export process to create a dump of the specified database.
 
 ### Options

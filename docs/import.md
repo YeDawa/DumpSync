@@ -6,6 +6,8 @@ To restore a database dump, you can use the following command:
 dumpsync import -f /path/to/dump.sql
 ```
 
+For connectting to a server, read the [Connecting to a Server](../connection) guide.
+
 ### Command Breakdown
 
 - **dumpsync**: This is the main command to invoke the DumpSync tool.
