@@ -61,7 +61,7 @@ pub struct ExportOptions {
 
     #[arg(short, long)]
     /// Encryption file path
-    pub encrypt: Option<bool>,
+    pub encrypt: bool,
 }
 
 #[derive(Parser)]

@@ -106,7 +106,7 @@ impl DumpSync {
             &backup_path, 
             Some(interval), 
             &backup_path,
-            encrypt
+            Some(encrypt)
         ).export();
     }
 
