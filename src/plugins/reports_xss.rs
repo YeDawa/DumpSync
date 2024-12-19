@@ -11,7 +11,7 @@ use std::{
 use crate::{
     utils::file::FileUtils,
     ui::report_alerts::ReportAlerts,
-    handlers::reports_handlers::ReportsHandlers,
+    handlers::html_handlers::HTMLHandlers,
 
     constants::{
         urls::Urls,
@@ -100,9 +100,9 @@ impl ReportsXSS {
         file.write_all(b"<tr><th>Table</th><th>Row Index</th><th>Column</th><th>Value</th></tr>")?;
 
         for (table, row_index, column, value) in detections {
-            let encoded_table = ReportsHandlers.html_escape(&table);
-            let encoded_column = ReportsHandlers.html_escape(&column);
-            let encoded_value = ReportsHandlers.html_escape(&value);
+            let encoded_table = HTMLHandlers.html_escape(&table);
+            let encoded_column = HTMLHandlers.html_escape(&column);
+            let encoded_value = HTMLHandlers.html_escape(&value);
 
             file.write_all(format!(
                 "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>",

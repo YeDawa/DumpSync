@@ -21,6 +21,7 @@ use mysql::{
 
 use crate::{
     utils::date::Date,
+    handlers::html_handlers::HTMLHandlers,
 
     helpers::{
         configs::Configs,
@@ -116,31 +117,34 @@ impl ExportHandlers {
             let rows: Vec<Row> = conn.query(
                 QueriesBuilders.select(table, None, None)
             )?;
-
+    
             if rows.is_empty() {
                 writeln!(writer, "-- Table `{}` contains no data.", table)?;
             } else {
                 for row in rows {
                     let values: Vec<String> = row.clone().unwrap().into_iter().map(|value| match value {
                         Value::NULL => "NULL".to_string(),
-                        Value::Bytes(bytes) => format!("'{}'", String::from_utf8_lossy(&bytes)),
+                        Value::Bytes(bytes) => {
+                            let escaped = String::from_utf8_lossy(&bytes);
+                            format!("'{}'", HTMLHandlers.escape_single_quotes(&escaped))
+                        },
                         Value::Int(int) => int.to_string(),
                         Value::UInt(uint) => uint.to_string(),
                         Value::Float(float) => float.to_string(),
                         _ => "NULL".to_string(),
                     }).collect();
-
+    
                     let line = if self.insert_ignore_into {
                         QueriesBuilders.insert_into(table, values, true)
                     } else {
                         QueriesBuilders.insert_into(table, values, false)
                     };
-
+    
                     writeln!(writer, "{}", line)?;
                 }
             }
         }
-
+    
         Ok(())
     }
 

@@ -1,6 +1,6 @@
-pub struct ReportsHandlers;
+pub struct HTMLHandlers;
 
-impl ReportsHandlers {
+impl HTMLHandlers {
 
     pub fn html_escape(&self, input: &str) -> String {
         input
@@ -9,6 +9,10 @@ impl ReportsHandlers {
             .replace('>', "&gt;")
             .replace('"', "&quot;")
             .replace('\'', "&#39;")
+    }
+
+    pub fn escape_single_quotes(&self, input: &str) -> String {
+        input.replace('\'', "''")
     }
 
 }

@@ -23,8 +23,12 @@ use std::{
 
 use crate::{
     constants::regexp::RegExp,
-    core::connection::Connection,
     handlers::import_handlers::ImportHandlers,
+
+    core::{
+        encrypt::Encrypt,
+        connection::Connection,
+    },
 
     ui::{
         errors_alerts::ErrorsAlerts,
@@ -44,7 +48,15 @@ pub struct Import {
 
 impl Import {
 
-    pub fn new(host: &str, port: u16, user: &str, password: &str, dbname: &str, dump_file_path: &str, path: &str) -> Self {
+    pub fn new(
+        host: &str, 
+        port: u16, 
+        user: &str, 
+        password: &str, 
+        dbname: &str, 
+        dump_file_path: &str, 
+        path: &str,
+    ) -> Self {
         Self {
             host: host.to_string(),
             port,
@@ -67,7 +79,46 @@ impl Import {
         }
     }
 
-    pub fn dump(&self) -> Result<(), Box<dyn Error>> {
+    pub fn dump_encrypted(&self) -> Result<(), Box<dyn Error>> {
+        let pool = Connection {
+            host: self.host.clone(),
+            port: self.port,
+            user: self.user.clone(),
+            password: self.password.clone(),
+            dbname: Some(self.dbname.clone()),
+        }.create_pool()?;
+
+        let mut conn = pool.get_conn()?;
+
+        let decrypt = Encrypt::new(&self.dump_file_path);
+        let dump_content = String::from_utf8(decrypt.decrypt_and_read()?)?;
+
+        let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
+
+        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
+
+        for statement in dump_content.split(';') {
+            let trimmed = statement.trim();
+
+            if !trimmed.is_empty() {
+                match conn.query_drop(trimmed) {
+                    Ok(_) => {
+                        if let Some(captures) = create_table_regex.captures(trimmed) {
+                            if let Some(table_name) = captures.get(1) {
+                                SuccessAlerts::table(table_name.as_str());
+                            }
+                        }
+                    }
+                    Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
+                }
+            }
+        }
+
+        SuccessAlerts::import(&self.dbname);
+        Ok(())
+    }
+
+    pub fn dump_plain(&self) -> Result<(), Box<dyn Error>> {
         let pool = Connection {
             host: self.host.clone(),
             port: self.port,
@@ -113,12 +164,23 @@ impl Import {
                             }
                         }
                     }
+
                     Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
                 }
             }
         }
 
         SuccessAlerts::import(&self.dbname);
+        Ok(())
+    }
+
+    pub fn dump(&self) -> Result<(), Box<dyn Error>> {
+        if self.dump_file_path.ends_with(".aes") {
+            let _ = self.dump_encrypted();
+        } else {
+            let _ =  self.dump_plain();
+        }
+
         Ok(())
     }
 

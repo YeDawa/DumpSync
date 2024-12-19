@@ -10,9 +10,13 @@ use mysql::{
 
 use crate::{
     utils::file::FileUtils,
-    core::connection::Connection,
     ui::success_alerts::SuccessAlerts, 
     handlers::export_handlers::ExportHandlers,
+    
+    core::{
+        encrypt::Encrypt,
+        connection::Connection,
+    },
 
     helpers::{
         configs::Configs,
@@ -27,6 +31,7 @@ pub struct Export {
     pub password: String,
     pub dbname: String,
     pub dump_file_path: String,
+    pub encrypt: Option<bool>
 }
 
 impl Export {
@@ -37,7 +42,8 @@ impl Export {
         user: &str, 
         password: &str, 
         dbname: &str, 
-        dump_file_path: &str
+        dump_file_path: &str,
+        encrypt: Option<bool>
     ) -> Self {
         Self {
             host: host.to_string(),
@@ -46,6 +52,7 @@ impl Export {
             password: password.to_string(),
             dbname: dbname.to_string(),
             dump_file_path: dump_file_path.to_string(),
+            encrypt
         }
     }
 
@@ -93,7 +100,12 @@ impl Export {
             writeln!(writer.as_write(), "-- End of table `{}`", table)?;
         }
 
-        SuccessAlerts::dump(&dump_file_path);
+        if self.encrypt.unwrap_or(false) {
+            let _ = Encrypt::new(&dump_file_path).encrypt();
+        } else {
+            SuccessAlerts::dump(&dump_file_path);
+        }
+
         Ok(())
     }
 

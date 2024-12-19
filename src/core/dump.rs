@@ -38,6 +38,7 @@ pub struct Dump {
     dbname: String,
     password: String,
     dump_file_path: String,
+    encrypt: Option<bool>,
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -53,6 +54,7 @@ impl Dump {
         backup_path: &str,
         interval: Option<u64>,
         path: &str,
+        encrypt: Option<bool>
     ) -> Self {
         Self {
             port: port,
@@ -63,6 +65,7 @@ impl Dump {
             dump_file_path: backup_path.to_string(),
             interval: interval.unwrap_or(3600),
             path: path.to_string(),
+            encrypt
         }
     }
 
@@ -77,6 +80,7 @@ impl Dump {
             password,
             &self.dbname,
             &dump_file_path,
+            self.encrypt
         ).dump().map_err(|_| "Failed to generate dump file")?;
 
         DUMP_COUNT.fetch_add(1, Ordering::SeqCst);
@@ -108,6 +112,7 @@ impl Dump {
         let dbname_clone = self.dbname.clone();
         let interval_clone = self.interval;
         let path_clone = self.path.clone();
+        let encrypt_clone = self.encrypt.clone();
 
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
@@ -121,6 +126,7 @@ impl Dump {
                 interval: interval_clone,
                 dump_file_path: dump_file_path_clone.clone(),
                 path: path_clone.clone(),
+                encrypt: encrypt_clone
             };
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
