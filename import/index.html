@@ -487,6 +487,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#encrypted-dumps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Encrypted Dumps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
       Notes
@@ -764,6 +773,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#encrypted-dumps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Encrypted Dumps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
       Notes
@@ -807,6 +825,10 @@
 <p>To restore a database from a dump file located at <code>/backups/example_dump.sql</code>, you would run:</p>
 <div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>import<span class="w"> </span>-f<span class="w"> </span>/backups/example_dump.sql
 </code></pre></div>
+<h3 id="encrypted-dumps">Encrypted Dumps</h3>
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>import<span class="w"> </span>-f<span class="w"> </span>/backups/example_dump.sql.aes
+</code></pre></div>
+<p>DumpSync detects encrypted dump files and automatically decrypts them during the import process. If your dump file is encrypted, you can still use the <code>import</code> command as shown above.</p>
 <h3 id="notes">Notes</h3>
 <ul>
 <li>Ensure that the dump file exists and that you have the necessary permissions to read it.</li>
