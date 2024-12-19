@@ -22,8 +22,6 @@ For connectting to a server, read the [Connecting to a Server](../connection) gu
 
 ### Example
 
-To create a dump of a database named `example_db` with an interval of 2 hours and save it to the `/backups/` directory, you would run:
-
 ```bash
 dumpsync export
 ```
