@@ -14,10 +14,13 @@ use tokio::{
 use crate::{
     args_cli::*,
 
-    ui::ui_base::UI,
     core::dump::Dump,
     helpers::env::Env,
-    ui::success_alerts::SuccessAlerts,
+
+    ui::{
+        ui_base::UI,
+        success_alerts::SuccessAlerts,
+    },
 
     constants::{
         urls::Urls,
