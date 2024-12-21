@@ -22,15 +22,15 @@ use crate::{
         success_alerts::SuccessAlerts,
     },
 
-    constants::{
-        urls::Urls,
-        global::Global,
-    },
-
     plugins::{
         schema::Schema,
         scan_xss::ScanXSS,
         pastebin::Pastebin,
+    },
+
+    constants::{
+        urls::Urls,
+        global::Global,
     },
 };
 
