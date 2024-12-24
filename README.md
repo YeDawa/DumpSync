@@ -25,6 +25,8 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 - **Share**: Share your dump or scan results with others.
 - **Schema**: Generate a schema file for the database.
 - **Encryption**: Encrypt your dump files for added security.
+- **Compression**: Compress your dump files to save disk space.
+- **Checksums**: Verify the integrity of your dump files using checksums.
 
 ## Installation
 
