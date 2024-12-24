@@ -1,7 +1,13 @@
 use std::{
-    io::Result,
+    collections::HashMap,
+
+    io::{
+        Read,
+        Result, 
+    },
 
     fs::{
+        File,
         read, 
         write, 
         remove_file
@@ -38,7 +44,28 @@ pub struct Encrypt<'a> {
 impl<'a> Encrypt<'a> {
 
     pub fn new(file_path: &'a str) -> Self {
-        Self { file_path }
+        Self {
+            file_path
+        }
+    }
+
+    pub fn calculate_entropy_from_file(&self) -> Result<f64> {
+        let mut file = File::open(self.file_path)?;
+        let mut buffer = Vec::new();
+        file.read_to_end(&mut buffer)?;
+    
+        let mut freq = HashMap::new();
+        for &byte in &buffer {
+            *freq.entry(byte).or_insert(0) += 1;
+        }
+    
+        let len = buffer.len() as f64;
+        Ok(freq.values()
+            .map(|&count| {
+                let prob = count as f64 / len;
+                -prob * prob.log2()
+            })
+            .sum())
     }
 
     pub fn encrypt(&self) -> Result<()> {
@@ -49,7 +76,6 @@ impl<'a> Encrypt<'a> {
         let key = Key::<Aes256Gcm>::from_slice(&key_hash);
 
         let cipher = Aes256Gcm::new(key);
-
         let data = read(&self.file_path)?;
 
         let nonce_bytes = rand::random::<[u8; 12]>();
@@ -69,7 +95,6 @@ impl<'a> Encrypt<'a> {
         write(&encrypted_file_path, output)?;
         
         remove_file(&self.file_path)?;
-
         SuccessAlerts::dump(&encrypted_file_path);
         Ok(())
     }

@@ -10,15 +10,15 @@ use std::{
     fs::File, 
     error::Error,
 
-    path::{
-        Path, 
-        PathBuf
-    },
-
     io::{
         Read,
         BufReader, 
     }, 
+
+    path::{
+        Path, 
+        PathBuf
+    },
 };
 
 use crate::{
@@ -109,6 +109,7 @@ impl Import {
                             }
                         }
                     }
+
                     Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
                 }
             }
@@ -175,7 +176,9 @@ impl Import {
     }
 
     pub fn dump(&self) -> Result<(), Box<dyn Error>> {
-        if self.dump_file_path.ends_with(".aes") {
+        let entropy = Encrypt::new(&self.dump_file_path).calculate_entropy_from_file()?;
+
+        if entropy > 7.5 {
             let _ = self.dump_encrypted();
         } else {
             let _ =  self.dump_plain();
