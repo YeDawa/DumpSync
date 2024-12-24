@@ -58,4 +58,14 @@ impl SuccessAlerts {
         );
     }
 
+    pub fn checksum(file: &str) {
+        let current_datetime = Date::date_time();
+    
+        println!(
+            "\r{} The checksum was successfully generated and saved in: {}", 
+            current_datetime.green().bold(),
+            file.blue()
+        );
+    }
+
 }

@@ -47,6 +47,9 @@ pub enum Commands {
 
     /// Generate shcema from the database
     Schema(SchemaOptions),
+
+    /// Generate checksum for the file
+    Checksum(ChecksumOptions),
 }
 
 #[derive(Parser)]
@@ -117,4 +120,15 @@ pub struct SchemaOptions {
     #[arg(short, long)]
     /// Output file path
     pub file: String,
+}
+
+#[derive(Parser)]
+pub struct ChecksumOptions {
+    #[arg(short, long)]
+    /// Input file path to calculate checksum
+    pub file: String,
+
+    #[arg(short, long)]
+    /// Output file path to save checksum
+    pub output: String,
 }

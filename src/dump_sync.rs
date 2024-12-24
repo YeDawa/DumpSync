@@ -26,6 +26,7 @@ use crate::{
         schema::Schema,
         scan_xss::ScanXSS,
         pastebin::Pastebin,
+        checksum::Checksum,
     },
 
     constants::{
@@ -204,6 +205,21 @@ impl DumpSync {
         Ok(())
     }
 
+    fn checksum(&self, options: ChecksumOptions) {
+        Env::new();
+        UI::header();
+
+        let file = options.file;
+        let output = options.output;
+
+        UI::section_header("Generating checksum", "info");
+
+        let _ = Checksum::new(
+            &file,
+            &output,
+        ).generated();
+    }
+
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
         match Cli::parse().command {
             Commands::Init => self.initialize().await?,
@@ -213,6 +229,7 @@ impl DumpSync {
             Commands::Share(options) => self.share(options).await?,
             Commands::Schema(options) => self.schema(options)?,
             Commands::Transfer(options) => self.transfer(options),
+            Commands::Checksum(options) => self.checksum(options),
         }
 
         Ok(())
