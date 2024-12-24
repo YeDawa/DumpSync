@@ -25,14 +25,14 @@ use crate::{
     constants::regexp::RegExp,
     handlers::import_handlers::ImportHandlers,
 
-    core::{
-        encrypt::Encrypt,
-        connection::Connection,
-    },
-
     ui::{
         errors_alerts::ErrorsAlerts,
         success_alerts::SuccessAlerts,
+    },
+
+    core::{
+        encrypt::Encrypt,
+        connection::Connection,
     },
 };
 
