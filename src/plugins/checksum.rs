@@ -37,10 +37,16 @@ impl Checksum {
         }
     }
 
-    pub fn calculate_hashes(&self) -> Result<(u32, String, String, String)> {
+    fn read_file(&self) -> Result<Vec<u8>> {
         let mut file = File::open(&self.file_path)?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
+
+        Ok(buffer)
+    }
+
+    pub fn calculate_hashes(&self) -> Result<(u32, String, String, String)> {
+        let buffer = self.read_file()?;
     
         let mut crc32_hasher = Crc32Hasher::new();
         crc32_hasher.update(&buffer);
