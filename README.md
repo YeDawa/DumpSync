@@ -53,6 +53,7 @@ For more help and document, see our documentation:
 - [Scan XSS](https://docs.dumpsync.com/scan)
 - [Share](https://docs.dumpsync.com/share)
 - [Schema](https://docs.dumpsync.com/schema)
+- [Checksum](https://docs.dumpsync.com/checksum)
 - [Writing patterns](https://docs.dumpsync.com/writing-patterns)
 
 ## License

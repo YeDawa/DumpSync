@@ -37,6 +37,7 @@ nav:
     - Scan XSS: scan.md
     - Share: share.md
     - Schema: schema.md
+    - Checksum: checksum.md
   - Resources:
     - Writing patterns: writing-patterns.md
 
