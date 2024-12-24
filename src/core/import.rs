@@ -176,9 +176,7 @@ impl Import {
     }
 
     pub fn dump(&self) -> Result<(), Box<dyn Error>> {
-        let entropy = Encrypt::new(&self.dump_file_path).calculate_entropy_from_file()?;
-
-        if entropy > 7.5 {
+        if Encrypt::new(&self.dump_file_path).calculate_entropy()? > 7.5 {
             let _ = self.dump_encrypted();
         } else {
             let _ =  self.dump_plain();

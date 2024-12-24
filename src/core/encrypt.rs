@@ -49,7 +49,7 @@ impl<'a> Encrypt<'a> {
         }
     }
 
-    pub fn calculate_entropy_from_file(&self) -> Result<f64> {
+    pub fn calculate_entropy(&self) -> Result<f64> {
         let mut file = File::open(self.file_path)?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
