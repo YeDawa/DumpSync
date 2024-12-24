@@ -130,5 +130,5 @@ pub struct ChecksumOptions {
 
     #[arg(short, long)]
     /// Output file path to save checksum
-    pub output: String,
+    pub output: Option<String>,
 }

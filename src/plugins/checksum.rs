@@ -15,29 +15,29 @@ use std::{
     },
 
     io::{
-        self, 
         Read, 
-        Write
+        Write,
+        Result,
     },
 };
 
-use crate::ui::success_alerts::SuccessAlerts;
+use crate::ui::checksum_alerts::ChecksumAlerts;
 
 pub struct Checksum {
     file_path: String,
-    output_path: String,
+    output_path: Option<String>,
 }
 
 impl Checksum {
 
-    pub fn new(file_path: &str, output_path: &str) -> Self {
+    pub fn new(file_path: &str, output_path: Option<&str>) -> Self {
         Self {
             file_path: file_path.to_string(),
-            output_path: output_path.to_string(),
+            output_path: output_path.map(|s| s.to_string()),
         }
     }
 
-    pub fn calculate_hashes(&self) -> io::Result<(u32, String, String, String)> {
+    pub fn calculate_hashes(&self) -> Result<(u32, String, String, String)> {
         let mut file = File::open(&self.file_path)?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
@@ -61,21 +61,37 @@ impl Checksum {
         Ok((crc32, md5, sha1, sha256))
     }
 
-    pub fn generated(&self) -> io::Result<()> {
+    pub fn generated(&self) -> Result<()> {
         let (crc32, md5, sha1, sha256) = &self.calculate_hashes()?;
+        let _ = &self.printable()?;
 
-        let mut output_file = OpenOptions::new()
+        if let Some(output_path) = &self.output_path {
+            let mut output_file = OpenOptions::new()
             .write(true)
             .create(true)
             .truncate(true)
-            .open(&self.output_path)?;
+            .open(output_path)?;
     
-        writeln!(output_file, "CRC32: {:08x}", crc32)?;
-        writeln!(output_file, "MD5: {}", md5)?;
-        writeln!(output_file, "SHA1: {}", sha1)?;
-        writeln!(output_file, "SHA256: {}", sha256)?;
-    
-        SuccessAlerts::checksum(&self.output_path);
+            writeln!(output_file, "CRC32: {:08x}", crc32)?;
+            writeln!(output_file, "MD5: {}", md5)?;
+            writeln!(output_file, "SHA1: {}", sha1)?;
+            writeln!(output_file, "SHA256: {}", sha256)?;
+
+            ChecksumAlerts::checksum(output_path);
+        }
+
+        Ok(())
+    }
+
+    pub fn printable(&self) -> Result<()> {
+        let (crc32, md5, sha1, sha256) = &self.calculate_hashes()?;
+
+        ChecksumAlerts::file(&self.file_path);
+        ChecksumAlerts::printable("crc32", &format!("{:08x}", crc32));
+        ChecksumAlerts::printable("md5", &md5);
+        ChecksumAlerts::printable("sha1", &sha1);
+        ChecksumAlerts::printable("sha256", &sha256);
+
         Ok(())
     }
 

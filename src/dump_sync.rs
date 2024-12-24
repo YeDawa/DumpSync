@@ -216,7 +216,7 @@ impl DumpSync {
 
         let _ = Checksum::new(
             &file,
-            &output,
+            output.as_deref(),
         ).generated();
     }
 
