@@ -14,7 +14,7 @@ dumpsync checksum -f <path_to_dump_file> -o <path_to_output_file>
 ### Parameters
 
 - **-f <path_to_dump_file>**: Specifies the path to the dump file for which the checksum needs to be calculated and verified.
-- **-o <path_to_output_file>**: Specifies the path to save the checksum output.
+- **-o <path_to_output_file>** (Optional): Specifies the path to save the checksum output.
 
 ### Example
 
