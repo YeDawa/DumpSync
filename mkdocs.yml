@@ -61,6 +61,10 @@ markdown_extensions:
           class: mermaid
 
 extra:
+    analytics:
+      provider: google
+      property: G-YEYVLZVLPX
+      
     social:
       - icon: fontawesome/solid/blog
         link: https://kremilly.com
