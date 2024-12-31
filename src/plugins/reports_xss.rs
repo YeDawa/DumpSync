@@ -3,7 +3,11 @@ use serde::Serialize;
 use serde_json::to_writer_pretty;
 
 use quick_xml::events::{
-    BytesDecl, BytesEnd, BytesStart, BytesText, Event
+    Event,
+    BytesEnd, 
+    BytesDecl, 
+    BytesStart, 
+    BytesText, 
 };
 
 use quick_xml::Writer as XMLWriter;
