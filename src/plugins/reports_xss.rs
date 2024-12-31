@@ -2,6 +2,12 @@ use csv::Writer;
 use serde::Serialize;
 use serde_json::to_writer_pretty;
 
+use quick_xml::events::{
+    BytesDecl, BytesEnd, BytesStart, BytesText, Event
+};
+
+use quick_xml::Writer as XMLWriter;
+
 use std::{
     fs::File, 
     io::Write,
@@ -30,6 +36,41 @@ struct Detection {
 pub struct ReportsXSS;
 
 impl ReportsXSS {
+
+    pub fn xml(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
+        let mut writer = XMLWriter::new(File::create(output_path)?);
+        writer.write_event(Event::Decl(BytesDecl::new("1.0", Some("UTF-8"), None)))?;
+    
+        let root = BytesStart::new("XSSDetectionReport");
+        writer.write_event(Event::Start(root.clone()))?;
+    
+        for (table, row_index, column, value) in detections {
+            let detection = BytesStart::new("Detection");
+            writer.write_event(Event::Start(detection.clone()))?;
+    
+            writer.write_event(Event::Start(BytesStart::new("Table")))?;
+            writer.write_event(Event::Text(BytesText::new(&table)))?;
+            writer.write_event(Event::End(BytesEnd::new("Table")))?;
+            
+            writer.write_event(Event::Start(BytesStart::new("RowIndex")))?;
+            writer.write_event(Event::Text(BytesText::new(&row_index.to_string())))?;
+            writer.write_event(Event::End(BytesEnd::new("RowIndex")))?;
+            
+            writer.write_event(Event::Start(BytesStart::new("Column")))?;
+            writer.write_event(Event::Text(BytesText::new(&column)))?;
+            writer.write_event(Event::End(BytesEnd::new("Column")))?;
+            
+            writer.write_event(Event::Start(BytesStart::new("Value")))?;
+            writer.write_event(Event::Text(BytesText::new(&value)))?;
+            writer.write_event(Event::End(BytesEnd::new("Value")))?;
+
+            writer.write_event(Event::End(BytesEnd::new("Detection")))?;
+        }
+    
+        writer.write_event(Event::End(BytesEnd::new("XSSDetectionReport")))?;
+        ReportAlerts::generated(output_path);
+        Ok(())
+    }
 
     pub fn txt(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
         let mut file = File::create(output_path)?;
@@ -123,6 +164,7 @@ impl ReportsXSS {
             let result = match extension.as_str() {
                 "txt" => self.txt(detections, file_path),
                 "csv" => self.csv(detections, file_path),
+                "xml" => self.xml(detections, file_path),
                 "json" => self.json(detections, file_path),
                 "html" => self.html(detections, file_path),
                 _ => Ok(ReportAlerts::invalid_format()),

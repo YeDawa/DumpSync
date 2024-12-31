@@ -36,6 +36,7 @@ dumpsync1.yml
 
 # Reports files
 *.csv
+*.xml
 *.pdf
 *.json
 *.html
