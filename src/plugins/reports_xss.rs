@@ -2,16 +2,6 @@ use csv::Writer;
 use serde::Serialize;
 use serde_json::to_writer_pretty;
 
-use quick_xml::events::{
-    Event,
-    BytesEnd, 
-    BytesDecl, 
-    BytesStart, 
-    BytesText, 
-};
-
-use quick_xml::Writer as XMLWriter;
-
 use std::{
     fs::File, 
     io::Write,
@@ -42,36 +32,24 @@ pub struct ReportsXSS;
 impl ReportsXSS {
 
     pub fn xml(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
-        let mut writer = XMLWriter::new(File::create(output_path)?);
-        writer.write_event(Event::Decl(BytesDecl::new("1.0", Some("UTF-8"), None)))?;
-    
-        let root = BytesStart::new("XSSDetectionReport");
-        writer.write_event(Event::Start(root.clone()))?;
+        let mut file = File::create(output_path)?;
+
+        file.write_all(b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")?;
+        file.write_all(b"<XSSDetectionReport>\n")?;
     
         for (table, row_index, column, value) in detections {
-            let detection = BytesStart::new("Detection");
-            writer.write_event(Event::Start(detection.clone()))?;
+            file.write_all(b"  <Detection>\n")?;
     
-            writer.write_event(Event::Start(BytesStart::new("Table")))?;
-            writer.write_event(Event::Text(BytesText::new(&table)))?;
-            writer.write_event(Event::End(BytesEnd::new("Table")))?;
-            
-            writer.write_event(Event::Start(BytesStart::new("RowIndex")))?;
-            writer.write_event(Event::Text(BytesText::new(&row_index.to_string())))?;
-            writer.write_event(Event::End(BytesEnd::new("RowIndex")))?;
-            
-            writer.write_event(Event::Start(BytesStart::new("Column")))?;
-            writer.write_event(Event::Text(BytesText::new(&column)))?;
-            writer.write_event(Event::End(BytesEnd::new("Column")))?;
-            
-            writer.write_event(Event::Start(BytesStart::new("Value")))?;
-            writer.write_event(Event::Text(BytesText::new(&value)))?;
-            writer.write_event(Event::End(BytesEnd::new("Value")))?;
-
-            writer.write_event(Event::End(BytesEnd::new("Detection")))?;
+            file.write_all(format!("    <Table>{}</Table>\n", HTMLHandlers.html_escape(&table)).as_bytes())?;
+            file.write_all(format!("    <RowIndex>{}</RowIndex>\n", row_index).as_bytes())?;
+            file.write_all(format!("    <Column>{}</Column>\n", HTMLHandlers.html_escape(&column)).as_bytes())?;
+            file.write_all(format!("    <Value>{}</Value>\n", HTMLHandlers.html_escape(&value)).as_bytes())?;
+    
+            file.write_all(b"  </Detection>\n")?;
         }
     
-        writer.write_event(Event::End(BytesEnd::new("XSSDetectionReport")))?;
+        file.write_all(b"</XSSDetectionReport>\n")?;
+    
         ReportAlerts::generated(output_path);
         Ok(())
     }
