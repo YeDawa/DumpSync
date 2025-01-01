@@ -14,7 +14,7 @@ use crate::{
     core::connection::Connection,
     plugins::reports_xss::ReportsXSS,
     handlers::scan_handlers::ScanHandlers,
-    helpers::queries_builders::QueriesBuilders,
+    sql_queries::mysql_queries_builders::MySqlQueriesBuilders,
 };
 
 pub struct ScanXSS {
@@ -90,7 +90,7 @@ impl ScanXSS {
 
         let mut detections = Vec::new();
     
-        let query = QueriesBuilders.select(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
+        let query = MySqlQueriesBuilders.select(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
         let rows: Vec<Row> = conn.query(query)?;
         
         for (row_index, row) in rows.iter().enumerate() {

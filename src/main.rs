@@ -7,6 +7,7 @@ mod handlers;
 mod args_cli;
 mod dump_sync;
 mod constants;
+mod sql_queries;
 
 use std::error::Error;
 use crate::dump_sync::DumpSync;

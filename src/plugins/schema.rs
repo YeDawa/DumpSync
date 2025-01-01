@@ -14,7 +14,7 @@ use mysql::{
 use crate::{
     core::connection::Connection,
     ui::schema_alerts::SchemaAlerts,
-    helpers::queries_builders::QueriesBuilders,
+    sql_queries::mysql_queries_builders::MySqlQueriesBuilders,
 };
 
 #[derive(Serialize, Debug)]
@@ -81,12 +81,12 @@ impl Schema {
         }.create_pool()?;
     
         let mut conn = pool.get_conn()?;
-        let tables: Vec<String> = conn.query(QueriesBuilders.get_table_names())?;
+        let tables: Vec<String> = conn.query(MySqlQueriesBuilders.get_table_names())?;
 
         let mut schema = Vec::new();
 
         for table in tables {
-            let columns: Vec<(String, String, String, String)> = conn.query(QueriesBuilders.table_info(&table))?;
+            let columns: Vec<(String, String, String, String)> = conn.query(MySqlQueriesBuilders.table_info(&table))?;
 
             let column_data: Vec<Column> = columns
                 .iter()
@@ -98,7 +98,7 @@ impl Schema {
                 })
                 .collect();
 
-            let foreign_keys: Vec<(String, String, String)> = conn.query(QueriesBuilders::foreign_key_info(&table))?;
+            let foreign_keys: Vec<(String, String, String)> = conn.query(MySqlQueriesBuilders::foreign_key_info(&table))?;
 
             let foreign_key_data: Vec<ForeignKey> = foreign_keys
                 .iter()

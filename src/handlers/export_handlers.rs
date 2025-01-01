@@ -21,12 +21,9 @@ use mysql::{
 
 use crate::{
     utils::date::Date,
+    helpers::configs::Configs,
     handlers::html_handlers::HTMLHandlers,
-
-    helpers::{
-        configs::Configs,
-        queries_builders::QueriesBuilders,
-    },
+    sql_queries::mysql_queries_builders::MySqlQueriesBuilders,
 };
 
 pub enum Writer {
@@ -102,7 +99,7 @@ impl ExportHandlers {
 
     pub fn write_create_new_database(&self, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if self.database_if_not_exists {
-            let queries = QueriesBuilders.create_database(&self.dbname)?;
+            let queries = MySqlQueriesBuilders.create_database(&self.dbname)?;
 
             write!(writer, "{}", queries.0)?;
             writeln!(writer, "{}", queries.1)?;
@@ -115,7 +112,7 @@ impl ExportHandlers {
     pub fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if self.dump_data {
             let rows: Vec<Row> = conn.query(
-                QueriesBuilders.select(table, None, None)
+                MySqlQueriesBuilders.select(table, None, None)
             )?;
     
             if rows.is_empty() {
@@ -135,9 +132,9 @@ impl ExportHandlers {
                     }).collect();
     
                     let line = if self.insert_ignore_into {
-                        QueriesBuilders.insert_into(table, values, true)
+                        MySqlQueriesBuilders.insert_into(table, values, true)
                     } else {
-                        QueriesBuilders.insert_into(table, values, false)
+                        MySqlQueriesBuilders.insert_into(table, values, false)
                     };
     
                     writeln!(writer, "{}", line)?;
@@ -152,10 +149,10 @@ impl ExportHandlers {
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
 
         if self.drop_table_if_exists {
-            writeln!(writer, "{}", QueriesBuilders.drop_table(table))?;
+            writeln!(writer, "{}", MySqlQueriesBuilders.drop_table(table))?;
         }
 
-        let row: Row = conn.query_first(QueriesBuilders.show_create_table(table))?.unwrap();
+        let row: Row = conn.query_first(MySqlQueriesBuilders.show_create_table(table))?.unwrap();
         let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
         writeln!(writer, "{};\n", create_table)?;
 

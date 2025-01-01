@@ -1,6 +1,6 @@
-pub struct QueriesBuilders;
+pub struct MySqlQueriesBuilders;
 
-impl QueriesBuilders {    
+impl MySqlQueriesBuilders {    
 
     pub fn show_tables(&self) -> String {
         "SHOW TABLES".to_string()
