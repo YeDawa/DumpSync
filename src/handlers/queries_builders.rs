@@ -22,11 +22,14 @@ impl MySqlQueriesBuilders {
     }
 
     pub fn insert_into(&self, table: &str, values: Vec<String>, ignore: bool) -> String {
-        if ignore {
-            format!("INSERT IGNORE INTO `{}` VALUES ({});", table, values.join(", "))
-        } else {
-            format!("INSERT INTO `{}` VALUES ({});", table, values.join(", "))
-        }
+        let insert_ignore = if ignore { "INSERT IGNORE INTO" } else { "INSERT INTO" };
+
+        format!(
+            "{} `{}` VALUES\n{};",
+            insert_ignore,
+            table,
+            values.join(",\n")
+        )
     }
 
     pub fn select(&self, table: &str, offset: Option<usize>, limit: Option<usize>) -> String {
