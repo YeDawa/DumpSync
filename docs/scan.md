@@ -15,8 +15,8 @@ dumpsync scan -t <table> -p <path_or_url_to_payload_file>
 
 - **-t `<table>`**: Specifies the name of the table to be scanned. The command will check the fields in the table for any inputs that could be vulnerable to XSS attacks.
 - **-p <path_or_url_to_payload_file>** (Optional): Specifies the path or URL to the payload file containing XSS scripts that will be tested on the input fields of the table.
-- **-l <limit>** (Optional): Specifies the limit of the number of rows to scan.
-- **-o <offset>** (Optional): Specifies the offset from where to start scanning the rows.
+- **-l `<limit>`** (Optional): Specifies the limit of the number of rows to scan.
+- **-o `<offset>`** (Optional): Specifies the offset from where to start scanning the rows.
 - **-f <path_to_report_file>** (Optional): Specifies the path to save the scan results in CSV, JSON or HTML format.
 
 ### Example
@@ -50,5 +50,6 @@ Formats supported for the report file are:
 
 - TXT
 - CSV
+- XML
 - JSON
 - HTML
