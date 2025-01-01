@@ -40,10 +40,10 @@ impl ReportsXSS {
         for (table, row_index, column, value) in detections {
             file.write_all(b"  <Detection>\n")?;
     
-            file.write_all(format!("    <Table>{}</Table>\n", HTMLHandlers.html_escape(&table)).as_bytes())?;
+            file.write_all(format!("    <Table>{}</Table>\n", &table).as_bytes())?;
             file.write_all(format!("    <RowIndex>{}</RowIndex>\n", row_index).as_bytes())?;
-            file.write_all(format!("    <Column>{}</Column>\n", HTMLHandlers.html_escape(&column)).as_bytes())?;
-            file.write_all(format!("    <Value>{}</Value>\n", HTMLHandlers.html_escape(&value)).as_bytes())?;
+            file.write_all(format!("    <Column>{}</Column>\n", &column).as_bytes())?;
+            file.write_all(format!("    <Value>{}</Value>\n", &value).as_bytes())?;
     
             file.write_all(b"  </Detection>\n")?;
         }
