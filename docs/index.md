@@ -8,11 +8,14 @@ DumpSync automates the process of creating dumps of a MySQL database at configur
 
 ### Key Features
 
-- **Automated Dumps**: Schedule regular backups of your MySQL database to ensure data safety.
-- **Flexible Configuration**: Customize settings through environment variables or command-line arguments based on your needs.
-- **Simple Restore Process**: Easily restore databases from existing dump files with minimal effort.
-- **Cross-Server Transfers**: Facilitate the migration of databases between different servers seamlessly.
+- **Automated Backups**: Schedule regular database dumps at configurable intervals.
+- **Flexible Configuration**: Easily configure settings using environment variables or command-line arguments.
+- **Simple Restoration**: Quickly restore your database from previously created dump files.
+- **Cross-Server Transfers**: Seamlessly transfer databases between different MySQL servers.
 - **XSS Scanner**: Scan for XSS vulnerabilities in tables to enhance security.
 - **XSS Report**: Generate a detailed report of XSS vulnerabilities found in the database.
 - **Share**: Share your dump or scan results with others.
 - **Schema**: Generate a schema file for the database.
+- **Encryption**: Encrypt your dump files for added security.
+- **Compression**: Compress your dump files to save disk space.
+- **Checksums**: Verify the integrity of your dump files using checksums.
