@@ -4,9 +4,9 @@ use colored::*;
 
 use crate::utils::date::Date;
 
-pub struct NormalAlerts;
+pub struct ReconnectAlerts;
 
-impl NormalAlerts {
+impl ReconnectAlerts {
 
     pub fn reconnect(attempt: u64, max_retries: u64) {
         let current_datetime = Date::date_time();

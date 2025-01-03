@@ -6,7 +6,7 @@ pub mod schema_alerts;
 pub mod checksum_alerts;
 pub mod report_xss_alerts;
 
-pub mod normal_alerts;
+pub mod reconnect_alerts;
 pub mod report_alerts;
 pub mod errors_alerts;
 pub mod success_alerts;

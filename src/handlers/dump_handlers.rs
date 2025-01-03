@@ -14,7 +14,7 @@ use crate::{
 
     ui::{
         errors_alerts::ErrorsAlerts, 
-        normal_alerts::NormalAlerts,
+        reconnect_alerts::ReconnectAlerts,
     },
 };
 
@@ -61,7 +61,7 @@ impl DumpHandlers {
             ErrorsAlerts::max_attempts();
             process::exit(1);
         } else {
-            NormalAlerts::reconnect(*attempt as u64, max_retries);
+            ReconnectAlerts::reconnect(*attempt as u64, max_retries);
             thread::sleep(Duration::from_secs(retry_interval));
         }
     }
