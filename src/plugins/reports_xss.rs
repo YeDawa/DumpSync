@@ -10,8 +10,8 @@ use std::{
 
 use crate::{
     utils::file::FileUtils,
-    ui::report_alerts::ReportAlerts,
     handlers::html_handlers::HTMLHandlers,
+    ui::report_xss_alerts::ReportXSSAlerts,
 
     constants::{
         urls::Urls,
@@ -50,7 +50,7 @@ impl ReportsXSS {
     
         file.write_all(b"</XSSDetectionReport>\n")?;
     
-        ReportAlerts::generated(output_path);
+        ReportXSSAlerts::generated(output_path);
         Ok(())
     }
 
@@ -68,7 +68,7 @@ impl ReportsXSS {
             writeln!(file, "---------------------")?;
         }
 
-        ReportAlerts::generated(output_path);
+        ReportXSSAlerts::generated(output_path);
         Ok(())
     }
 
@@ -87,7 +87,7 @@ impl ReportsXSS {
 
         writer.flush()?;
         
-        ReportAlerts::generated(output_path);
+        ReportXSSAlerts::generated(output_path);
         Ok(())
     }
 
@@ -105,7 +105,7 @@ impl ReportsXSS {
         let file = File::create(output_path)?;
         to_writer_pretty(file, &detections)?;
         
-        ReportAlerts::generated(output_path);
+        ReportXSSAlerts::generated(output_path);
         Ok(())
     }
 
@@ -135,7 +135,7 @@ impl ReportsXSS {
 
         file.write_all(b"</table></div></body></html>")?;
         
-        ReportAlerts::generated(output_path);
+        ReportXSSAlerts::generated(output_path);
         Ok(())
     }
     
@@ -149,7 +149,7 @@ impl ReportsXSS {
                 "xml" => self.xml(detections, file_path),
                 "json" => self.json(detections, file_path),
                 "html" => self.html(detections, file_path),
-                _ => Ok(ReportAlerts::invalid_format()),
+                _ => Ok(ReportXSSAlerts::invalid_format()),
             };
 
             result?;

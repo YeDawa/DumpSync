@@ -6,18 +6,12 @@ pub struct ReportAlerts;
 
 impl ReportAlerts {
 
-    pub fn generated(output_path: &str) {
-        println!("{}", "-".repeat(50));
-        println!("Report generated and salved in: {}", output_path.green());
-    }
+    pub fn report(dump_file_path: &str, dump_count: usize, last_dump: &str) {
+        println!("\nFinal Report:\n");
 
-    pub fn invalid_format() {
-        let message = "Invalid file format, only TXT, CSV, HTML and JSON are supported.";
-
-        println!("{}", "-".repeat(50));
-        println!(
-            "{}", message.red().bold(), 
-        );
+        println!("Directory: {}", dump_file_path.bold().blue());
+        println!("Total number of dumps: {}", dump_count.to_string().bold().blue());
+        println!("Last dump: {}", last_dump.bold().cyan());
     }
 
 }

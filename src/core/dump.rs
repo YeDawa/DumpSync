@@ -18,7 +18,7 @@ use crate::{
     handlers::dump_handlers::DumpHandlers,
     
     ui::{
-        normal_alerts::NormalAlerts, 
+        report_alerts::ReportAlerts, 
         success_alerts::SuccessAlerts
     },
 
@@ -132,7 +132,7 @@ impl Dump {
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
 
             if let Some(last_dump) = DumpHandlers.get_most_recent_sql_file(&dump_file_path_clone) {
-                NormalAlerts::report(&dump_file_path_clone, dump_count, &last_dump);
+                ReportAlerts::report(&dump_file_path_clone, dump_count, &last_dump);
             }
 
             SuccessAlerts::terminate();
