@@ -20,8 +20,7 @@ impl NormalAlerts {
     }
 
     pub fn report(dump_file_path: &str, dump_count: usize, last_dump: &str) {
-        println!("\n{}", "-".repeat(50));
-        println!("Final Report:\n");
+        println!("\nFinal Report:\n");
 
         println!("Directory: {}", dump_file_path.bold().blue());
         println!("Total number of dumps: {}", dump_count.to_string().bold().blue());

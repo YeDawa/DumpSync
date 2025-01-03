@@ -9,7 +9,7 @@ pub struct ChecksumAlerts;
 impl ChecksumAlerts {
 
     pub fn file(file: &str) {
-        println!("File: {}", file.blue());
+        println!("{}\n", file.blue());
     }
 
     pub fn checksum(file: &str) {
