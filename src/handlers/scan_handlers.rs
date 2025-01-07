@@ -12,6 +12,8 @@ use std::{
     },
 };
 
+use crate::constants::urls::Urls;
+
 pub struct ScanHandlers;
 
 impl ScanHandlers {
@@ -82,6 +84,26 @@ impl ScanHandlers {
         }
 
         false
+    }
+
+    pub async fn read_patterns(&self, payload: Option<String>) -> Result<Vec<Regex>, Box<dyn Error>> {
+        let patterns = match payload {
+            Some(value) => {
+                if value.starts_with("http://") || value.starts_with("https://") {
+                    ScanHandlers.load_patterns_from_url(&value).await?
+                } else if Path::new(&value).exists() {
+                    ScanHandlers.load_patterns_from_file(&value)?
+                } else {
+                    return Err("Invalid payload source, not a valid file or URL.".into());
+                }
+            }
+
+            None => {
+                ScanHandlers.load_patterns_from_url(Urls::XSS_DETECT_REGEX).await?
+            }
+        };
+
+        Ok(patterns)
     }
     
 }

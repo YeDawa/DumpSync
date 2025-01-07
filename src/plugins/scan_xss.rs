@@ -1,7 +1,4 @@
-use std::{
-    path::Path,
-    error::Error,
-};
+use std::error::Error;
 
 use mysql::{
     *,
@@ -9,7 +6,6 @@ use mysql::{
 };
 
 use crate::{
-    constants::urls::Urls, 
     ui::scan_alerts::ScanAlerts,
     core::connection::Connection,
     plugins::reports_xss::ReportsXSS,
@@ -75,21 +71,7 @@ impl ScanXSS {
     
         let mut conn = pool.get_conn()?;
 
-        let patterns = match &self.payload {
-            Some(value) => {
-                if value.starts_with("http://") || value.starts_with("https://") {
-                    ScanHandlers.load_patterns_from_url(value).await?
-                } else if Path::new(value).exists() {
-                    ScanHandlers.load_patterns_from_file(value)?
-                } else {
-                    return Err("Invalid payload source, not a valid file or URL.".into());
-                }
-            }
-
-            None => {
-                ScanHandlers.load_patterns_from_url(Urls::XSS_DETECT_REGEX).await?
-            }
-        };
+        let patterns = ScanHandlers.read_patterns(self.payload.clone()).await?;
 
         let mut detections = Vec::new();
     
