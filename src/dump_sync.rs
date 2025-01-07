@@ -126,7 +126,7 @@ impl DumpSync {
         let limit = options.limit.unwrap_or(99999999999);
         let (dbname, host, user, password, port) = self.load_db_config();
 
-        let header = format!("Scaning table: '{}'", table);
+        let header = format!("Scanning table: '{}'", table);
         UI::section_header(&header, "info");
 
         ScanXSS::new(
@@ -152,12 +152,12 @@ impl DumpSync {
         let file = options.file;
         let (dbname, host, user, password, port) = self.load_db_config();
 
-        let header = format!("Generateing schema file");
+        let header = "Generating schema file".to_string();
         UI::section_header(&header, "info");
 
         Schema::new(
             &host,
-            port as u16,
+            port,
             &user,
             &password,
             &dbname,
