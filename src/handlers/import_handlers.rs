@@ -1,6 +1,9 @@
 use regex::Regex;
 
-use crate::constants::regexp::RegExp;
+use crate::{
+    constants::regexp::RegExp,
+    handlers::queries_builders::MySqlQueriesBuilders,
+};
 
 pub struct ImportHandlers {
     dbname: String,
@@ -27,7 +30,7 @@ impl ImportHandlers {
                 caps[2].to_string()
             };
     
-            format!("CREATE DATABASE IF NOT EXISTS `{}`;", db_name)
+            MySqlQueriesBuilders.create_database_not_exists(&db_name)
         });
 
         let dump_content = use_db_regex.replace_all(&content, |caps: &regex::Captures| {

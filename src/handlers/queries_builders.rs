@@ -14,6 +14,10 @@ impl MySqlQueriesBuilders {
         format!("DROP TABLE IF EXISTS `{}`;", table)
     }
 
+    pub fn create_database_not_exists(&self, dbname: &str) -> String {
+        format!("CREATE DATABASE IF NOT EXISTS `{}`;", dbname)
+    }
+
     pub fn create_database(&self, dbname: &str) -> Result<(String, String), String> {
         let create_db = format!("CREATE DATABASE IF NOT EXISTS `{}`;\n", dbname);
         let use_db = format!("USE `{}`;", dbname);
