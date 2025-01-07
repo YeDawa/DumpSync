@@ -70,9 +70,7 @@ impl ScanXSS {
         }.create_pool()?;
     
         let mut conn = pool.get_conn()?;
-
         let patterns = ScanHandlers.read_patterns(self.payload.clone()).await?;
-
         let mut detections = Vec::new();
     
         let query = MySqlQueriesBuilders.select(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
@@ -99,7 +97,8 @@ impl ScanXSS {
             }
         }
 
-        ReportsXSS.autodetect(detections, self.file.as_deref())?;
+        let file_path = self.file.as_deref();
+        ReportsXSS.autodetect(detections, file_path)?;
         Ok(())
     }
     
