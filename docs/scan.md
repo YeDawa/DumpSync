@@ -27,6 +27,12 @@ Scan a table called example_table using a payload file `located at path/to/paylo
 dumpsync scan -t example_table -p path/to/payload.txt
 ```
 
+Scan multiple tables (example_table1, example_table2) using a payload file located at path/to/payload.txt:
+
+```bash
+dumpsync scan -t "example_table1, example_table2" -p path/to/payload.txt
+```
+
 ### Description
 
 - The command will access the input fields of the specified table and attempt to inject each payload from the provided file.
