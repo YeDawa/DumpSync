@@ -85,8 +85,10 @@ impl ScanXSS {
         for table in &tables {
             let mut xss_count = 0;
 
-            let text = format!("Table: '{}'", table);
-            UI::label(&text, "info");
+            if tables.len() > 1 {
+                let text = format!("Table: '{}'", table);
+                UI::label(&text, "info");
+            }
 
             let query = MySqlQueriesBuilders.select(table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
             let rows: Vec<Row> = conn.query(query)?;
