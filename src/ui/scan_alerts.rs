@@ -13,4 +13,11 @@ impl ScanAlerts {
         );
     }
 
+    pub fn not_detected(table: &str) {
+        println!(
+            "No XSS detected in table '{}'",
+            table.blue()
+        );
+    }
+
 }

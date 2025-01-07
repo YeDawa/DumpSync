@@ -6,9 +6,13 @@ use mysql::{
 };
 
 use crate::{
-    ui::scan_alerts::ScanAlerts,
     core::connection::Connection,
     plugins::reports_xss::ReportsXSS,
+    
+    ui::{
+        ui_base::UI,
+        scan_alerts::ScanAlerts,
+    },
 
     handlers::{
         scan_handlers::ScanHandlers,
@@ -73,33 +77,53 @@ impl ScanXSS {
         let patterns = ScanHandlers.read_patterns(self.payload.clone()).await?;
         let mut detections = Vec::new();
     
-        let query = MySqlQueriesBuilders.select(&self.table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
-        let rows: Vec<Row> = conn.query(query)?;
-        
-        for (row_index, row) in rows.iter().enumerate() {
-            for (col_index, column) in row.columns_ref().iter().enumerate() {
-                let value: Option<String> = row.get(col_index);
+        let tables: Vec<&str> = self.table.split(',')
+            .map(|t| t.trim())
+            .filter(|t| !t.is_empty())
+            .collect();
     
-                if let Some(value_str) = value.as_ref() {
-                    if ScanHandlers.is_potential_xss(value_str, &patterns) {
-                        let row_index = row_index + 1;
-                        let column = column.name_str();
-                        ScanAlerts::detected(&self.table, row_index, &column, &value_str);
+        for table in tables {
+            let mut xss_count = 0;
 
-                        detections.push((
-                            self.table.clone(),
-                            row_index,
-                            column.to_string(),
-                            value_str.to_string(),
-                        ));
+            let text = format!("Table: '{}'", table);
+            UI::label(&text, "info");
+
+            let query = MySqlQueriesBuilders.select(table, self.offset.map(|o| o as usize), self.limit.map(|l| l as usize));
+            let rows: Vec<Row> = conn.query(query)?;
+    
+            for (row_index, row) in rows.iter().enumerate() {
+                for (col_index, column) in row.columns_ref().iter().enumerate() {
+                    let value: Option<String> = row.get(col_index);
+    
+                    if let Some(value_str) = value.as_ref() {
+                        if ScanHandlers.is_potential_xss(value_str, &patterns) {
+                            let row_index = row_index + 1;
+                            let column = column.name_str();
+                            ScanAlerts::detected(table, row_index, &column, &value_str);
+    
+                            detections.push((
+                                table.to_string(),
+                                row_index,
+                                column.to_string(),
+                                value_str.to_string(),
+                            ));
+
+                            xss_count += 1;
+                        }
                     }
                 }
             }
-        }
 
+            if xss_count == 0 {
+                ScanAlerts::not_detected(table);
+            }
+
+            print!("\n");
+        }
+    
         let file_path = self.file.as_deref();
         ReportsXSS.autodetect(detections, file_path)?;
         Ok(())
-    }
+    }    
     
 }
