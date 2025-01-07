@@ -878,6 +878,9 @@
 <p>Scan a table called example_table using a payload file <code>located at path/to/payload.txt</code>:</p>
 <div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span>example_table<span class="w"> </span>-p<span class="w"> </span>path/to/payload.txt
 </code></pre></div>
+<p>Scan multiple tables (example_table1, example_table2) using a payload file located at path/to/payload.txt:</p>
+<div class="highlight"><pre><span></span><code>dumpsync<span class="w"> </span>scan<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;example_table1, example_table2&quot;</span><span class="w"> </span>-p<span class="w"> </span>path/to/payload.txt
+</code></pre></div>
 <h3 id="description">Description</h3>
 <ul>
 <li>The command will access the input fields of the specified table and attempt to inject each payload from the provided file.</li>
