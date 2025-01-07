@@ -86,7 +86,6 @@ impl<'a> Encrypt<'a> {
             .expect("Encryption error");
 
         let encrypted_file_path = format!("{}.aes", &self.file_path);
-
         FileUtils::create_path(&encrypted_file_path);
 
         let mut output = vec![];
@@ -96,11 +95,12 @@ impl<'a> Encrypt<'a> {
         
         remove_file(&self.file_path)?;
         SuccessAlerts::dump(&encrypted_file_path);
+
         Ok(())
     }
 
     pub fn decrypt_and_read(&self) -> Result<Vec<u8>> { 
-        let user_key = prompt_password("Enter the key (password): ")
+        let user_key = prompt_password("Enter the password: ")
             .expect("Error reading the password");
     
         let key_hash = Sha256::digest(user_key.as_bytes());
