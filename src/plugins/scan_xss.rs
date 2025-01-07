@@ -82,7 +82,7 @@ impl ScanXSS {
             .filter(|t| !t.is_empty())
             .collect();
     
-        for table in tables {
+        for table in &tables {
             let mut xss_count = 0;
 
             let text = format!("Table: '{}'", table);
@@ -118,7 +118,9 @@ impl ScanXSS {
                 ScanAlerts::not_detected(table);
             }
 
-            print!("\n");
+            if tables.len() > 1 {
+                print!("\n");
+            }
         }
     
         let file_path = self.file.as_deref();
