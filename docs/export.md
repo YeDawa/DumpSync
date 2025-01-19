@@ -19,12 +19,23 @@ For connectting to a server, read the [Connecting to a Server](../connection) gu
 - **-i 3600**: Sets the interval (in seconds) for the dump process. In this example, the interval is set to 3600 seconds (1 hour). You can adjust this value based on your requirements.
 - **-f /path/to/**: Indicates the file path where the dump will be saved. Replace `/path/to/` with the desired directory path on your system.
 - **--encrypt**: (Optional) Encrypts the dump file using AES-256 encryption. This option requires a password to encrypt and decrypt the dump file.
+- **--once**: (Optional) Exports the database dump only once without creating a recurring schedule.
 
 ### Example
 
 ```bash
 dumpsync export
 ```
+
+### Exporting only once time
+
+To export a database dump only once without creating a recurring schedule, you can use the `--once` option:
+
+```bash
+dumpsync export --once
+```
+
+This command will create a dump of the specified database and then exit without creating a recurring schedule.
 
 ### Encrypt Dumps
 
