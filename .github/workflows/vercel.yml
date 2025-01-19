@@ -3,29 +3,21 @@ name: Deploy to Vercel
 on:
   push:
     branches:
-      - gh-deploy
+      - gh-deploy  # O deploy será feito apenas para essa branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout do repositório
+    # Fazer o checkout do repositório
     - name: Checkout repository
       uses: actions/checkout@v3
-
-    # Instalar dependências do projeto (Node.js exemplo)
-    - name: Install dependencies
-      run: npm install
-
-    # Build do projeto
-    - name: Build project
-      run: npm run build
 
     # Deploy na Vercel
     - name: Deploy to Vercel
       uses: amondnet/vercel-action@v20
       with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}  # Token da Vercel
         vercel-args: '--prod'
-        working-directory: ./
+        working-directory: ./  # Ajuste se o diretório do projeto estiver em um subdiretório
