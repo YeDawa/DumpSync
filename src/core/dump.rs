@@ -39,6 +39,7 @@ pub struct Dump {
     password: String,
     dump_file_path: String,
     encrypt: Option<bool>,
+    once: Option<bool>,
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -54,7 +55,8 @@ impl Dump {
         backup_path: &str,
         interval: Option<u64>,
         path: &str,
-        encrypt: Option<bool>
+        encrypt: Option<bool>,
+        once: Option<bool>,
     ) -> Self {
         Self {
             port: port,
@@ -65,7 +67,8 @@ impl Dump {
             dump_file_path: backup_path.to_string(),
             interval: interval.unwrap_or(3600),
             path: path.to_string(),
-            encrypt
+            encrypt,
+            once
         }
     }
 
@@ -93,6 +96,14 @@ impl Dump {
         self.setup_ctrlc_handler(running.clone());
         let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
 
+        if self.once.unwrap_or(false) {
+            if let Err(e) = self.exec() {
+                DumpHandlers.handle_retry(&mut attempt, e, max_retries, retry_interval);
+            }
+            
+            process::exit(0);
+        }
+        
         while running.load(Ordering::SeqCst) {
             if let Err(e) = self.exec() {
                 DumpHandlers.handle_retry(&mut attempt, e, max_retries, retry_interval);
@@ -105,29 +116,9 @@ impl Dump {
 
     fn setup_ctrlc_handler(&self, running: Arc<AtomicBool>) {
         let dump_file_path_clone = self.dump_file_path.clone();
-        let host_clone = self.host.clone();
-        let user_clone = self.user.clone();
-        let port_clone = self.port.clone();
-        let password_clone = self.password.clone();
-        let dbname_clone = self.dbname.clone();
-        let interval_clone = self.interval;
-        let path_clone = self.path.clone();
-        let encrypt_clone = self.encrypt.clone();
 
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
-            
-            let _dump = Dump {
-                host: host_clone.clone(),
-                port: port_clone.clone(),
-                user: user_clone.clone(),
-                password: password_clone.clone(),
-                dbname: dbname_clone.clone(),
-                interval: interval_clone,
-                dump_file_path: dump_file_path_clone.clone(),
-                path: path_clone.clone(),
-                encrypt: encrypt_clone
-            };
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
 

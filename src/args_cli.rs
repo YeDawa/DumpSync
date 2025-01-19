@@ -65,6 +65,10 @@ pub struct ExportOptions {
     #[arg(short, long)]
     /// Encryption file path
     pub encrypt: bool,
+
+    #[arg(long)]
+    /// Export the dump once then exit
+    pub once: bool,
 }
 
 #[derive(Parser)]
