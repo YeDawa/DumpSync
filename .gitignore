@@ -41,3 +41,4 @@ dumpsync1.yml
 *.json
 *.html
 *.xlsx
+.vercel
