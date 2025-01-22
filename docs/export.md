@@ -15,8 +15,8 @@ For connectting to a server, read the [Connecting to a Server](../connection) gu
 
 ### Options
 
-- **-i 3600**: Sets the interval (in seconds) for the dump process. In this example, the interval is set to 3600 seconds (1 hour). You can adjust this value based on your requirements.
-- **-f /path/to/**: Indicates the file path where the dump will be saved. Replace `/path/to/` with the desired directory path on your system.
+- **-i**: (Optional) Sets the interval (in seconds) for the dump process. In this example, the interval is set to 3600 seconds (1 hour). You can adjust this value based on your requirements.
+- **-f**: (Optional) Indicates the file path where the dump will be saved. Replace `/path/to/` with the desired directory path on your system.
 - **--encrypt**: (Optional) Encrypts the dump file using AES-256 encryption. This option requires a password to encrypt and decrypt the dump file.
 - **--once**: (Optional) Exports the database dump only once without creating a recurring schedule.
 - **--retain**: (Optional) The retainimum number of backups to retain for the dump. If the number of dumps exceeds this limit, the scheduler will be terminated.
