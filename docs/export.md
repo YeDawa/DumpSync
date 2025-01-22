@@ -15,7 +15,6 @@ For connectting to a server, read the [Connecting to a Server](../connection) gu
 
 ### Options
 
-- **-d my_database**: Specifies the name of the database you want to export. Replace `my_database` with the actual name of your database.
 - **-i 3600**: Sets the interval (in seconds) for the dump process. In this example, the interval is set to 3600 seconds (1 hour). You can adjust this value based on your requirements.
 - **-f /path/to/**: Indicates the file path where the dump will be saved. Replace `/path/to/` with the desired directory path on your system.
 - **--encrypt**: (Optional) Encrypts the dump file using AES-256 encryption. This option requires a password to encrypt and decrypt the dump file.
