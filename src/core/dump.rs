@@ -39,7 +39,9 @@ pub struct Dump {
     password: String,
     dump_file_path: String,
     encrypt: Option<bool>,
+
     once: Option<bool>,
+    max: Option<u64>,
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -56,7 +58,9 @@ impl Dump {
         interval: Option<u64>,
         path: &str,
         encrypt: Option<bool>,
+
         once: Option<bool>,
+        max: Option<u64>,
     ) -> Self {
         Self {
             port: port,
@@ -68,7 +72,9 @@ impl Dump {
             interval: interval.unwrap_or(3600),
             path: path.to_string(),
             encrypt,
-            once
+
+            once,
+            max,
         }
     }
 
@@ -91,10 +97,25 @@ impl Dump {
     }
 
     pub fn export(&self) {
+        let mut num_dump = 0;
         let running = Arc::new(AtomicBool::new(true));
         
         self.setup_ctrlc_handler(running.clone());
         let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
+
+        if let Some(max) = self.max {
+            loop {
+                if let Err(e) = self.exec() {
+                    DumpHandlers.handle_retry(&mut attempt, e, max_retries, retry_interval);
+                } else {
+                    num_dump += 1;
+                }
+        
+                if num_dump >= max {
+                    process::exit(0);
+                }
+            }
+        }        
 
         if self.once.unwrap_or(false) {
             if let Err(e) = self.exec() {

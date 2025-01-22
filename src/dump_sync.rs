@@ -83,6 +83,7 @@ impl DumpSync {
             None, 
             &backup_path,
             None,
+            None,
             None
         ).import();
     }
@@ -96,6 +97,7 @@ impl DumpSync {
         });
 
         let once = options.once;
+        let max = options.max;
         let encrypt = options.encrypt;
         let backup_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
         let (dbname, host, user, password, port) = self.load_db_config();
@@ -113,7 +115,8 @@ impl DumpSync {
             Some(interval), 
             &backup_path,
             Some(encrypt),
-            Some(once)
+            Some(once),
+            max
         ).export();
     }
 
@@ -190,7 +193,8 @@ impl DumpSync {
             None, 
             &backup_path, 
             None,
-            None
+            None,
+            None,
         ).transfer();
     }
 
