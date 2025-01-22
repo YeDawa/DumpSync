@@ -20,7 +20,7 @@ For connectting to a server, read the [Connecting to a Server](../connection) gu
 - **-f /path/to/**: Indicates the file path where the dump will be saved. Replace `/path/to/` with the desired directory path on your system.
 - **--encrypt**: (Optional) Encrypts the dump file using AES-256 encryption. This option requires a password to encrypt and decrypt the dump file.
 - **--once**: (Optional) Exports the database dump only once without creating a recurring schedule.
-- **--max**: (Optional) The maximum number of backups to retain for the dump. If the number of dumps exceeds this limit, the scheduler will be terminated.
+- **--retain**: (Optional) The retainimum number of backups to retain for the dump. If the number of dumps exceeds this limit, the scheduler will be terminated.
 
 ### Example
 
@@ -38,15 +38,15 @@ dumpsync export --once
 
 This command will create a dump of the specified database and then exit without creating a recurring schedule.
 
-### Setting the Maximum Number of Backups
+### Setting the Retainimum Number of Backups
 
-To set the maximum number of backups to retain for the dump, you can use the `--max` option:
+To set the retainimum number of backups to retain for the dump, you can use the `--retain` option:
 
 ```bash
-dumpsync export --max 5
+dumpsync export --retain 5
 ```
 
-This command will create a dump of the specified database and retain a maximum of 5 backups. If the number of backups exceeds this limit, the scheduler will be terminated.
+This command will create a dump of the specified database and retain a retainimum of 5 backups. If the number of backups exceeds this limit, the scheduler will be terminated.
 
 ### Encrypt Dumps
 
