@@ -1,6 +1,6 @@
 [package]
 name = "dumpsync"
-version = "0.1.25"
+version = "0.1.26"
 edition = "2021"
 license = "MIT"
 authors = ["kremilly"]
@@ -24,7 +24,7 @@ dotenvy = "0.15.7"
 figlet-rs = "0.1.5"
 flate2 = "1.0.35"
 md-5 = "0.10.6"
-mysql = "25.0.1"
+mysql = "26.0.0"
 rand = "0.8.5"
 regex = "1.11.1"
 reqwest = { version = "0.12.12", features = ["blocking"] }
