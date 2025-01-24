@@ -96,17 +96,13 @@ impl Dump {
         Ok(())
     }
 
-    pub fn export(&self) {
-        let mut num_dump = 0;
-        let running = Arc::new(AtomicBool::new(true));
-        
-        self.setup_ctrlc_handler(running.clone());
-        let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
-
+    pub fn once_and_retain(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
         if let Some(max) = self.max {
+            let mut num_dump = 0;
+
             loop {
                 if let Err(e) = self.exec() {
-                    DumpHandlers.handle_retry(&mut attempt, e, max_retries, retry_interval);
+                    DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
                 } else {
                     num_dump += 1;
                 }
@@ -115,15 +111,24 @@ impl Dump {
                     process::exit(0);
                 }
             }
-        }        
+        }
 
         if self.once.unwrap_or(false) {
             if let Err(e) = self.exec() {
-                DumpHandlers.handle_retry(&mut attempt, e, max_retries, retry_interval);
+                DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
             }
             
             process::exit(0);
         }
+    }
+
+    pub fn export(&self) {
+        let running = Arc::new(AtomicBool::new(true));
+        
+        self.setup_ctrlc_handler(running.clone());
+        let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
+
+        self.once_and_retain(&mut attempt, max_retries, retry_interval);
         
         while running.load(Ordering::SeqCst) {
             if let Err(e) = self.exec() {
