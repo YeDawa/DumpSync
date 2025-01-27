@@ -96,7 +96,25 @@ impl Dump {
         Ok(())
     }
 
-    pub fn once_and_retain(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
+    fn setup_ctrlc_handler(&self, running: Arc<AtomicBool>) {
+        let dump_file_path_clone = self.dump_file_path.clone();
+
+        ctrlc::set_handler(move || {
+            running.store(false, Ordering::SeqCst);
+
+            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
+
+            if let Some(last_dump) = DumpHandlers.get_most_recent_sql_file(&dump_file_path_clone) {
+                ReportAlerts::report(&dump_file_path_clone, dump_count, &last_dump);
+            }
+
+            SuccessAlerts::terminate();
+            process::exit(0);
+
+        }).expect("Error setting Ctrl-C handler");
+    }
+
+    fn once_and_retain(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
         if let Some(max) = self.max {
             let mut num_dump = 0;
 
@@ -138,24 +156,6 @@ impl Dump {
                 thread::sleep(Duration::from_secs(self.interval));
             }
         }
-    }
-
-    fn setup_ctrlc_handler(&self, running: Arc<AtomicBool>) {
-        let dump_file_path_clone = self.dump_file_path.clone();
-
-        ctrlc::set_handler(move || {
-            running.store(false, Ordering::SeqCst);
-
-            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-
-            if let Some(last_dump) = DumpHandlers.get_most_recent_sql_file(&dump_file_path_clone) {
-                ReportAlerts::report(&dump_file_path_clone, dump_count, &last_dump);
-            }
-
-            SuccessAlerts::terminate();
-            process::exit(0);
-
-        }).expect("Error setting Ctrl-C handler");
     }
 
     pub fn import(&self) {
