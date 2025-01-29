@@ -124,12 +124,12 @@ impl Dump {
                 } else {
                     num_dump += 1;
                 }
-
-                thread::sleep(Duration::from_secs(self.interval));
         
                 if num_dump >= max {
                     process::exit(0);
                 }
+
+                thread::sleep(Duration::from_secs(self.interval));
             }
         }
 
