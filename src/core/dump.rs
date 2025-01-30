@@ -98,8 +98,8 @@ impl Dump {
     
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
-            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
 
+            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
             DumpHandlers.final_report(&dump_file_path_clone, interval as usize, dump_count);
     
             SuccessAlerts::terminate();
