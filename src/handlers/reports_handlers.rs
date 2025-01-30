@@ -1,16 +1,37 @@
+use regex::Regex;
+use colored::Colorize;
+
 use std::{
     fs,
     time::SystemTime,
+    collections::HashSet,
 };
 
 use crate::{
     utils::file::FileUtils,
+    constants::regexp::RegExp,
     ui::report_alerts::ReportAlerts,
 };
 
 pub struct ReportsHandlers;
 
 impl ReportsHandlers {
+
+    fn extract_table_names(&self, sql_file_path: &str) -> Option<HashSet<String>> {
+        let sql_content = fs::read_to_string(sql_file_path).ok()?;
+        let re = Regex::new(RegExp::CREATE_TABLE_INSERTS).ok()?;
+        
+        let tables: HashSet<String> = re.captures_iter(&sql_content)
+            .filter_map(|cap| cap.get(1))
+            .map(|m| m.as_str().to_string())
+            .collect();
+        
+        if tables.is_empty() {
+            None
+        } else {
+            Some(tables)
+        }
+    }
 
     fn get_most_recent_sql_file(&self, dump_file_path: &str) -> Option<(String, String)> {
         fs::read_dir(&dump_file_path)
@@ -28,6 +49,13 @@ impl ReportsHandlers {
     pub fn report(&self, path: &str, interval: usize, counter: usize) {
         if let Some((last_dump, size)) = self.get_most_recent_sql_file(&path) {
             ReportAlerts::report(&path, counter, &last_dump, &size, interval as usize);
+
+            if let Some(tables) = &self.extract_table_names(&last_dump) {
+                ReportAlerts::tables(tables);
+            } else {
+                let message = "No tables found in the dump.";
+                println!("{}", message.bold().red());
+            }
         }
     }
 
