@@ -7,21 +7,25 @@ use std::{
         Arc,
 
         atomic::{
+            Ordering,
             AtomicBool, 
             AtomicUsize, 
-            Ordering 
         }
     }, 
 };
 
 use crate::{
     ui::success_alerts::SuccessAlerts,
-    handlers::dump_handlers::DumpHandlers,
 
     core::{
         export::Export,
         import::Import,
         transfer::Transfer,
+    },
+
+    handlers::{
+        dump_handlers::DumpHandlers,
+        reports_handlers::ReportsHandlers,
     },
 };
 
@@ -100,7 +104,7 @@ impl Dump {
             running.store(false, Ordering::SeqCst);
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-            DumpHandlers.final_report(&dump_file_path_clone, interval as usize, dump_count);
+            ReportsHandlers.report(&dump_file_path_clone, interval as usize, dump_count);
     
             SuccessAlerts::terminate();
             process::exit(0);
@@ -124,7 +128,7 @@ impl Dump {
         
                 if num_dump >= max {
                     let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-                    DumpHandlers.final_report(&dump_file_path_clone, interval as usize, dump_count);
+                    ReportsHandlers.report(&dump_file_path_clone, interval as usize, dump_count);
                     process::exit(0);
                 }
 

@@ -32,4 +32,17 @@ impl FileUtils {
         fs::metadata(file_path).is_ok()
     }
 
+    pub fn size(size: u64) -> String {
+        let sizes = ["B", "KB", "MB", "GB", "TB"];
+        let mut size_f = size as f64;
+        let mut index = 0;
+    
+        while size_f >= 1024.0 && index < sizes.len() - 1 {
+            size_f /= 1024.0;
+            index += 1;
+        }
+    
+        format!("{:.2} {}", size_f, sizes[index])
+    }
+
 }

@@ -1,7 +1,6 @@
 use chrono::Local;
 
 use std::{
-    fs, 
     thread, 
     process, 
     path::Path, 
@@ -13,7 +12,6 @@ use crate::{
     utils::generate::Generate,
 
     ui::{
-        report_alerts::ReportAlerts,
         errors_alerts::ErrorsAlerts, 
         reconnect_alerts::ReconnectAlerts,
     },
@@ -22,12 +20,6 @@ use crate::{
 pub struct DumpHandlers;
 
 impl DumpHandlers {
-
-    pub fn final_report(&self, path: &str, interval: usize, counter: usize) {
-        if let Some(last_dump) = self.get_most_recent_sql_file(&path) {
-            ReportAlerts::report(&path, counter, &last_dump, interval as usize);
-        }
-    }
 
     pub fn generate_dump_file_path(&self, dbname: &str, dump_file_path: &str) -> String {
         Path::new(&dump_file_path)
@@ -40,15 +32,6 @@ impl DumpHandlers {
             .to_str()
             .expect("Failed to convert PathBuf to str")
             .to_string()
-    }
-
-    pub fn get_most_recent_sql_file(&self, dump_file_path: &str) -> Option<String> {
-        fs::read_dir(&dump_file_path)
-            .ok()?
-            .filter_map(|entry| entry.ok())
-            .filter(|entry| entry.path().extension().map(|ext| ext == "sql").unwrap_or(false))
-            .max_by_key(|entry| entry.metadata().ok().and_then(|meta| meta.modified().ok()))
-            .map(|entry| entry.path().display().to_string())
     }
 
     pub fn setup_retry_config(&self) -> (usize, u64, u64) {
