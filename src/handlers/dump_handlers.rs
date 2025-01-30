@@ -13,6 +13,7 @@ use crate::{
     utils::generate::Generate,
 
     ui::{
+        report_alerts::ReportAlerts,
         errors_alerts::ErrorsAlerts, 
         reconnect_alerts::ReconnectAlerts,
     },
@@ -21,6 +22,12 @@ use crate::{
 pub struct DumpHandlers;
 
 impl DumpHandlers {
+
+    pub fn final_report(&self, path: &str, interval: usize, counter: usize) {
+        if let Some(last_dump) = self.get_most_recent_sql_file(&path) {
+            ReportAlerts::report(&path, counter, &last_dump, interval as usize);
+        }
+    }
 
     pub fn generate_dump_file_path(&self, dbname: &str, dump_file_path: &str) -> String {
         Path::new(&dump_file_path)

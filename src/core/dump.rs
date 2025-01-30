@@ -15,12 +15,8 @@ use std::{
 };
 
 use crate::{
+    ui::success_alerts::SuccessAlerts,
     handlers::dump_handlers::DumpHandlers,
-    
-    ui::{
-        report_alerts::ReportAlerts, 
-        success_alerts::SuccessAlerts
-    },
 
     core::{
         export::Export,
@@ -78,17 +74,6 @@ impl Dump {
         }
     }
 
-    fn final_report(&self) {
-        let dump_file_path_clone = self.dump_file_path.clone();
-        let interval = self.interval;
-
-        let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-                    
-        if let Some(last_dump) = DumpHandlers.get_most_recent_sql_file(&dump_file_path_clone) {
-            ReportAlerts::report(&dump_file_path_clone, dump_count, &last_dump, interval as usize);
-        }
-    }
-
     fn exec(&self) -> Result<(), &'static str> {
         let dump_file_path = DumpHandlers.generate_dump_file_path(&self.dbname, &self.dump_file_path);
         let password = if self.password.is_empty() { "" } else { &self.password };
@@ -113,12 +98,9 @@ impl Dump {
     
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
-    
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-    
-            if let Some(last_dump) = DumpHandlers.get_most_recent_sql_file(&dump_file_path_clone) {
-                ReportAlerts::report(&dump_file_path_clone, dump_count, &last_dump, interval as usize);
-            }
+
+            DumpHandlers.final_report(&dump_file_path_clone, interval as usize, dump_count);
     
             SuccessAlerts::terminate();
             process::exit(0);
@@ -130,6 +112,10 @@ impl Dump {
         if let Some(max) = self.max {
             let mut num_dump = 0;
 
+            let interval = self.interval;
+            let dump_file_path_clone = self.dump_file_path.clone();
+            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
+
             loop {
                 if let Err(e) = self.exec() {
                     DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
@@ -138,7 +124,7 @@ impl Dump {
                 }
         
                 if num_dump >= max {
-                    self.final_report();
+                    DumpHandlers.final_report(&dump_file_path_clone, interval as usize, dump_count);
                     process::exit(0);
                 }
 
