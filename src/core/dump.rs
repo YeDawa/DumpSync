@@ -108,13 +108,12 @@ impl Dump {
         }).expect("Error setting Ctrl-C handler");
     }
 
-    fn once_and_retain(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
+    fn retain(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
         if let Some(max) = self.max {
             let mut num_dump = 0;
 
             let interval = self.interval;
             let dump_file_path_clone = self.dump_file_path.clone();
-            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
 
             loop {
                 if let Err(e) = self.exec() {
@@ -124,6 +123,7 @@ impl Dump {
                 }
         
                 if num_dump >= max {
+                    let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
                     DumpHandlers.final_report(&dump_file_path_clone, interval as usize, dump_count);
                     process::exit(0);
                 }
@@ -131,7 +131,9 @@ impl Dump {
                 thread::sleep(Duration::from_secs(self.interval));
             }
         }
+    }
 
+    fn once(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
         if self.once.unwrap_or(false) {
             if let Err(e) = self.exec() {
                 DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
@@ -147,7 +149,8 @@ impl Dump {
         self.setup_ctrlc_handler(running.clone());
         let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
 
-        self.once_and_retain(&mut attempt, max_retries, retry_interval);
+        self.once(&mut attempt, max_retries, retry_interval);
+        self.retain(&mut attempt, max_retries, retry_interval);
         
         while running.load(Ordering::SeqCst) {
             if let Err(e) = self.exec() {
