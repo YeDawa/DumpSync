@@ -6,6 +6,7 @@ use std::{
 };
 
 use crate::{
+    constants::global::Global,
     ui::report_alerts::ReportAlerts,
     handlers::reports_handlers::ReportsHandlers,
 };
@@ -45,6 +46,22 @@ impl ReportsPdfs {
         let margin_top = Mm(280.0);
         let margin_left = Mm(10.0);
         let mut y_position = margin_top;
+
+        let x_pos = Mm(10.0);
+        let y_pos = Mm(20.0);
+
+        let link_text = format!("Generated using {}", Global::APP_NAME);
+        current_layer.use_text(link_text, 16.0, x_pos, y_pos, &font);
+
+        let link_annotation = LinkAnnotation::new(
+            printpdf::Rect::new(x_pos, y_pos - Mm(2.0), x_pos + Mm(100.0), y_pos + Mm(8.0)), // Define a área clicável
+            Some(printpdf::BorderArray::default()),
+            Some(printpdf::ColorArray::default()),
+            printpdf::Actions::uri(Global::APP_HOMEPAGE.to_string()),
+            Some(printpdf::HighlightingMode::Invert),
+        );
+    
+        current_layer.add_link_annotation(link_annotation);
 
         self.add_text(&current_layer, "Final report", &mut y_position, &margin_left, &font_header, &line_height, 12.0);
 
