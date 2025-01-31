@@ -20,6 +20,7 @@ For connectting to a server, read the [Connecting to a Server](../connection) gu
 - **--encrypt**: (Optional) Encrypts the dump file using AES-256 encryption. This option requires a password to encrypt and decrypt the dump file.
 - **--once**: (Optional) Exports the database dump only once without creating a recurring schedule.
 - **--retain**: (Optional) The retainimum number of backups to retain for the dump. If the number of dumps exceeds this limit, the scheduler will be terminated.
+- **--pdf**: (Optional) Generates a PDF report of the dump process with your settings and tables dumped.
 
 ### Example
 
@@ -56,6 +57,16 @@ dumpsync export --encrypt
 ```
 
 The encryption process use AES-256 encryption and will prompt you to enter a password for the encryption and decryption of the dump file.
+
+### Generate a PDF Report
+
+To generate a PDF report of the dump process, you can use the `--pdf` option:
+
+```bash
+dumpsync export --pdf
+```
+
+This command will create a PDF report of the dump process with your settings and tables dumped.
 
 ### Notes
 
