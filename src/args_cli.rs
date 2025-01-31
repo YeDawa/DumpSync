@@ -73,6 +73,10 @@ pub struct ExportOptions {
     #[arg(short, long)]
     /// Maximum number of backups to retain for the dump
     pub retain: Option<u64>,
+
+    #[arg(short, long)]
+    /// Confirm any queries as needed
+    pub yes: bool
 }
 
 #[derive(Parser)]

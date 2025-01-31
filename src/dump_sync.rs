@@ -84,7 +84,8 @@ impl DumpSync {
             &backup_path,
             None,
             None,
-            None
+            None,
+            None,
         ).import();
     }
 
@@ -96,6 +97,7 @@ impl DumpSync {
             Env::get_var_u64("DS_DUMP_INTERVAL")
         });
 
+        let yes = options.yes;
         let once = options.once;
         let encrypt = options.encrypt;
         let retain = options.retain;
@@ -116,7 +118,8 @@ impl DumpSync {
             &backup_path,
             Some(encrypt),
             Some(once),
-            retain
+            retain,
+            Some(yes),
         ).export();
     }
 
@@ -192,6 +195,7 @@ impl DumpSync {
             &backup_path, 
             None, 
             &backup_path, 
+            None,
             None,
             None,
             None,

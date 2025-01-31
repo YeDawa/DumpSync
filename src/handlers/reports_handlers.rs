@@ -22,22 +22,42 @@ use crate::{
     }
 };
 
-pub struct ReportsHandlers;
+pub struct ReportsHandlers {
+    path: String,
+    interval: usize,
+    counter: usize,
+    yes: Option<bool>,
+}
 
 impl ReportsHandlers {
 
-    fn make_question(&self, path: &str, interval: usize, counter: usize) {
-        let mut answer = String::new();
-        ReportAlerts::make_question();
+    pub fn new(path: &str, interval: usize, counter: usize, yes: Option<bool>) -> Self {
+        Self {
+            path: path.to_string(),
+            interval,
+            counter,
+            yes
+        }
+    }
 
-        io::stdout().flush().expect("Error flushing buffer");
-        io::stdin().read_line(&mut answer).expect("Error reading input");
+    fn make_question(&self) {
+        let file = Generate.random_string(16) + ".pdf";
 
-        if answer.to_lowercase().trim() == "y" || answer.to_lowercase().trim() == "yes" {
-            let file = Generate.random_string(16) + ".pdf";
+        if !self.yes.unwrap_or(false) {
+            ReportAlerts::make_question();
+            let mut answer = String::new();
 
+            io::stdout().flush().expect("Error flushing buffer");
+            io::stdin().read_line(&mut answer).expect("Error reading input");
+
+            if answer.to_lowercase().trim() == "y" || answer.to_lowercase().trim() == "yes" {
+                let _ = ReportsPdfs::new(
+                    &file, &self.path, self.interval,  self.counter, self.yes
+                ).dump();
+            }
+        } else {
             let _ = ReportsPdfs::new(
-                &file, &path, interval,  counter
+                &file, &self.path, self.interval,  self.counter, self.yes
             ).dump();
         }
     }
@@ -71,9 +91,9 @@ impl ReportsHandlers {
             })
     }
 
-    pub fn report(&self, path: &str, interval: usize, counter: usize) {
-        if let Some((last_dump, size)) = self.get_most_recent_sql_file(&path) {
-            ReportAlerts::report(&path, counter, &last_dump, &size, interval as usize);
+    pub fn report(&self) {
+        if let Some((last_dump, size)) = self.get_most_recent_sql_file(&self.path) {
+            ReportAlerts::report(&self.path, self.counter, &last_dump, &size, self.interval as usize);
 
             if let Some(tables) = &self.extract_table_names(&last_dump) {
                 ReportAlerts::tables(tables);
@@ -81,7 +101,7 @@ impl ReportsHandlers {
                 ReportAlerts::no_tables();
             }
 
-            self.make_question(&path, interval, counter);
+            self.make_question();
         }
     }
 

@@ -42,6 +42,7 @@ pub struct Dump {
 
     once: Option<bool>,
     max: Option<u64>,
+    yes: Option<bool>
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -61,6 +62,7 @@ impl Dump {
 
         once: Option<bool>,
         max: Option<u64>,
+        yes: Option<bool>
     ) -> Self {
         Self {
             port: port,
@@ -75,6 +77,7 @@ impl Dump {
 
             once,
             max,
+            yes,
         }
     }
 
@@ -99,12 +102,18 @@ impl Dump {
     fn setup_ctrlc_handler(&self, running: Arc<AtomicBool>) {
         let dump_file_path_clone = self.dump_file_path.clone();
         let interval = self.interval;
+        let yes = self.yes.clone();
     
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
-
+    
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-            ReportsHandlers.report(&dump_file_path_clone, interval as usize, dump_count);
+            ReportsHandlers::new(
+                &dump_file_path_clone, 
+                interval as usize, 
+                dump_count,
+                yes,
+            ).report();
     
             SuccessAlerts::terminate();
             process::exit(0);
@@ -128,7 +137,13 @@ impl Dump {
         
                 if num_dump >= max {
                     let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-                    ReportsHandlers.report(&dump_file_path_clone, interval as usize, dump_count);
+                    ReportsHandlers::new(
+                        &dump_file_path_clone, 
+                        interval as usize, 
+                        dump_count,
+                        self.yes,
+                    ).report();
+                    
                     process::exit(0);
                 }
 
@@ -147,7 +162,13 @@ impl Dump {
             }
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-            ReportsHandlers.report(&dump_file_path_clone, interval as usize, dump_count);
+
+            ReportsHandlers::new(
+                &dump_file_path_clone, 
+                interval as usize, 
+                dump_count,
+                self.yes
+            ).report();
             
             process::exit(0);
         }

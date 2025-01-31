@@ -16,17 +16,19 @@ pub struct ReportsPdfs {
     path: String,
     interval: usize,
     counter: usize,
+    yes: Option<bool>,
 }
 
 impl ReportsPdfs {
 
-    pub fn new(file: &str, path: &str, interval: usize, counter: usize) -> Self {
+    pub fn new(file: &str, path: &str, interval: usize, counter: usize, yes: Option<bool>) -> Self {
         Self {
             file: file.to_string(),
             path: path.to_string(),
 
             interval,
             counter,
+            yes,
         }
     }
 
@@ -36,6 +38,13 @@ impl ReportsPdfs {
     }
 
     pub fn dump(&self) {
+        let reports = ReportsHandlers::new(
+            &self.path,
+            self.interval,
+            self.counter,
+            self.yes,
+        );
+
         let (doc, page1, layer1) = PdfDocument::new("Report dumps", Mm(210.0), Mm(297.0), "Camada 1");
         let current_layer = doc.get_page(page1).get_layer(layer1);
 
@@ -69,10 +78,10 @@ impl ReportsPdfs {
         self.add_text(&current_layer, &format!("Interval: {} seconds", &self.interval), &mut y_position, &margin_left, &font, &line_height, 8.0);
         self.add_text(&current_layer, &format!("Total number of dumps: {}", &self.counter), &mut y_position, &margin_left, &font, &line_height, 8.0);
 
-        if let Some((last_dump, size)) = ReportsHandlers.get_most_recent_sql_file(&self.path) {
+        if let Some((last_dump, size)) = reports.get_most_recent_sql_file(&self.path) {
             self.add_text(&current_layer, &format!("Last dump: {} ({})", last_dump, size), &mut y_position, &margin_left, &font, &line_height, 8.0);
 
-            if let Some(tables) = ReportsHandlers.extract_table_names(&last_dump) {
+            if let Some(tables) = reports.extract_table_names(&last_dump) {
                 self.add_text(&current_layer, "Tables dumped:", &mut y_position, &margin_left, &font_header, &line_height, 12.0);
 
                 for table in tables {
