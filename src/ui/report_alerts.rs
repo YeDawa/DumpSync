@@ -1,5 +1,4 @@
 extern crate colored;
-
 use std::collections::HashSet;
 
 use colored::*;
@@ -23,6 +22,16 @@ impl ReportAlerts {
         for table in tables {
             println!(" - {}", table.bold().blue());
         }
+    }
+
+    pub fn no_tables() {
+        let message = "No tables found in the dump.";
+        println!("{}", message.bold().red());
+    }
+
+    pub fn success_pdf(file: &str) {
+        let message = "Report generated successfully. Saved in: ".to_string();
+        println!("\n{}{}", message.bold().green(), file.bold().cyan());
     }
 
 }

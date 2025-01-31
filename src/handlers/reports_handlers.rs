@@ -1,23 +1,28 @@
 use regex::Regex;
-use colored::Colorize;
 
 use std::{
     fs,
     time::SystemTime,
     collections::HashSet,
+
 };
 
 use crate::{
-    utils::file::FileUtils,
-    constants::regexp::RegExp,
-    ui::report_alerts::ReportAlerts,
+    constants::regexp::RegExp, 
+    ui::report_alerts::ReportAlerts, 
+    plugins::reports_pdf::ReportsPdfs, 
+    
+    utils::{
+        file::FileUtils, 
+        generate::Generate,
+    }
 };
 
 pub struct ReportsHandlers;
 
 impl ReportsHandlers {
 
-    fn extract_table_names(&self, sql_file_path: &str) -> Option<HashSet<String>> {
+    pub fn extract_table_names(&self, sql_file_path: &str) -> Option<HashSet<String>> {
         let sql_content = fs::read_to_string(sql_file_path).ok()?;
         let re = Regex::new(RegExp::CREATE_TABLE_INSERTS).ok()?;
         
@@ -33,7 +38,7 @@ impl ReportsHandlers {
         }
     }
 
-    fn get_most_recent_sql_file(&self, dump_file_path: &str) -> Option<(String, String)> {
+    pub fn get_most_recent_sql_file(&self, dump_file_path: &str) -> Option<(String, String)> {
         fs::read_dir(&dump_file_path)
             .ok()?
             .filter_map(|entry| entry.ok())
@@ -53,9 +58,14 @@ impl ReportsHandlers {
             if let Some(tables) = &self.extract_table_names(&last_dump) {
                 ReportAlerts::tables(tables);
             } else {
-                let message = "No tables found in the dump.";
-                println!("{}", message.bold().red());
+                ReportAlerts::no_tables();
             }
+
+            let name = Generate.random_string(16) + ".pdf";
+
+            let _ = ReportsPdfs::new(
+                &name, &path, interval,  counter
+            ).dump();
         }
     }
 
