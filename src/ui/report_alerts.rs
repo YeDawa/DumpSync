@@ -3,12 +3,14 @@ use std::collections::HashSet;
 
 use colored::*;
 
+use crate::ui::ui_base::UI;
+
 pub struct ReportAlerts;
 
 impl ReportAlerts {
 
     pub fn report(dump_file_path: &str, dump_count: usize, last_dump: &str, size: &str, interval: usize) {
-        println!("\nFinal Report:\n");
+        UI::section_header("Final Report", "info");
 
         println!("Directory: {}", dump_file_path.bold().blue());
         println!("Interval: {} seconds", interval.to_string().bold().blue());
