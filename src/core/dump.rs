@@ -139,9 +139,15 @@ impl Dump {
 
     fn once(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
         if self.once.unwrap_or(false) {
+            let interval = self.interval;
+            let dump_file_path_clone = self.dump_file_path.clone();
+            
             if let Err(e) = self.exec() {
                 DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
             }
+
+            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
+            ReportsHandlers.report(&dump_file_path_clone, interval as usize, dump_count);
             
             process::exit(0);
         }
