@@ -4,7 +4,11 @@ use std::{
     fs,
     time::SystemTime,
     collections::HashSet,
-
+    
+    io::{
+        self, 
+        Write,
+    },
 };
 
 use crate::{
@@ -21,6 +25,22 @@ use crate::{
 pub struct ReportsHandlers;
 
 impl ReportsHandlers {
+
+    fn make_question(&self, path: &str, interval: usize, counter: usize) {
+        let mut answer = String::new();
+        ReportAlerts::make_question();
+
+        io::stdout().flush().expect("Error flushing buffer");
+        io::stdin().read_line(&mut answer).expect("Error reading input");
+
+        if answer.to_lowercase().trim() == "y" || answer.to_lowercase().trim() == "yes" {
+            let file = Generate.random_string(16) + ".pdf";
+
+            let _ = ReportsPdfs::new(
+                &file, &path, interval,  counter
+            ).dump();
+        }
+    }
 
     pub fn extract_table_names(&self, sql_file_path: &str) -> Option<HashSet<String>> {
         let sql_content = fs::read_to_string(sql_file_path).ok()?;
@@ -61,11 +81,7 @@ impl ReportsHandlers {
                 ReportAlerts::no_tables();
             }
 
-            let name = Generate.random_string(16) + ".pdf";
-
-            let _ = ReportsPdfs::new(
-                &name, &path, interval,  counter
-            ).dump();
+            self.make_question(&path, interval, counter);
         }
     }
 
