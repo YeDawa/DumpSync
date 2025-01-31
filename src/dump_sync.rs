@@ -97,7 +97,7 @@ impl DumpSync {
             Env::get_var_u64("DS_DUMP_INTERVAL")
         });
 
-        let yes = options.yes;
+        let pdf = options.pdf;
         let once = options.once;
         let encrypt = options.encrypt;
         let retain = options.retain;
@@ -119,7 +119,7 @@ impl DumpSync {
             Some(encrypt),
             Some(once),
             retain,
-            Some(yes),
+            Some(pdf),
         ).export();
     }
 

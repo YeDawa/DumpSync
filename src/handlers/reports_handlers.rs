@@ -4,11 +4,6 @@ use std::{
     fs,
     time::SystemTime,
     collections::HashSet,
-    
-    io::{
-        self, 
-        Write,
-    },
 };
 
 use crate::{
@@ -26,39 +21,17 @@ pub struct ReportsHandlers {
     path: String,
     interval: usize,
     counter: usize,
-    yes: Option<bool>,
+    pdf: Option<bool>,
 }
 
 impl ReportsHandlers {
 
-    pub fn new(path: &str, interval: usize, counter: usize, yes: Option<bool>) -> Self {
+    pub fn new(path: &str, interval: usize, counter: usize, pdf: Option<bool>) -> Self {
         Self {
             path: path.to_string(),
             interval,
             counter,
-            yes
-        }
-    }
-
-    fn make_question(&self) {
-        let file = Generate.random_string(16) + ".pdf";
-
-        if !self.yes.unwrap_or(false) {
-            ReportAlerts::make_question();
-            let mut answer = String::new();
-
-            io::stdout().flush().expect("Error flushing buffer");
-            io::stdin().read_line(&mut answer).expect("Error reading input");
-
-            if answer.to_lowercase().trim() == "y" || answer.to_lowercase().trim() == "yes" {
-                let _ = ReportsPdfs::new(
-                    &file, &self.path, self.interval,  self.counter, self.yes
-                ).dump();
-            }
-        } else {
-            let _ = ReportsPdfs::new(
-                &file, &self.path, self.interval,  self.counter, self.yes
-            ).dump();
+            pdf
         }
     }
 
@@ -101,7 +74,13 @@ impl ReportsHandlers {
                 ReportAlerts::no_tables();
             }
 
-            self.make_question();
+            if self.pdf.unwrap_or(false) {
+                let file = Generate.random_string(16) + ".pdf";
+    
+                let _ = ReportsPdfs::new(
+                    &file, &self.path, self.interval,  self.counter
+                ).dump();
+            }
         }
     }
 

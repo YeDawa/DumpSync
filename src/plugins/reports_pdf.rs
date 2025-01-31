@@ -16,19 +16,17 @@ pub struct ReportsPdfs {
     path: String,
     interval: usize,
     counter: usize,
-    yes: Option<bool>,
 }
 
 impl ReportsPdfs {
 
-    pub fn new(file: &str, path: &str, interval: usize, counter: usize, yes: Option<bool>) -> Self {
+    pub fn new(file: &str, path: &str, interval: usize, counter: usize) -> Self {
         Self {
             file: file.to_string(),
             path: path.to_string(),
 
             interval,
             counter,
-            yes,
         }
     }
 
@@ -42,7 +40,7 @@ impl ReportsPdfs {
             &self.path,
             self.interval,
             self.counter,
-            self.yes,
+            None
         );
 
         let (doc, page1, layer1) = PdfDocument::new("Report dumps", Mm(210.0), Mm(297.0), "Camada 1");

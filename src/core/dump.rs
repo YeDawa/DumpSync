@@ -42,7 +42,7 @@ pub struct Dump {
 
     once: Option<bool>,
     max: Option<u64>,
-    yes: Option<bool>
+    pdf: Option<bool>
 }
 
 static DUMP_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -62,7 +62,7 @@ impl Dump {
 
         once: Option<bool>,
         max: Option<u64>,
-        yes: Option<bool>
+        pdf: Option<bool>
     ) -> Self {
         Self {
             port: port,
@@ -77,7 +77,7 @@ impl Dump {
 
             once,
             max,
-            yes,
+            pdf,
         }
     }
 
@@ -102,7 +102,7 @@ impl Dump {
     fn setup_ctrlc_handler(&self, running: Arc<AtomicBool>) {
         let dump_file_path_clone = self.dump_file_path.clone();
         let interval = self.interval;
-        let yes = self.yes.clone();
+        let pdf = self.pdf.clone();
     
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
@@ -112,7 +112,7 @@ impl Dump {
                 &dump_file_path_clone, 
                 interval as usize, 
                 dump_count,
-                yes,
+                pdf,
             ).report();
     
             SuccessAlerts::terminate();
@@ -141,9 +141,9 @@ impl Dump {
                         &dump_file_path_clone, 
                         interval as usize, 
                         dump_count,
-                        self.yes,
+                        self.pdf,
                     ).report();
-                    
+
                     process::exit(0);
                 }
 
@@ -167,7 +167,7 @@ impl Dump {
                 &dump_file_path_clone, 
                 interval as usize, 
                 dump_count,
-                self.yes
+                self.pdf
             ).report();
             
             process::exit(0);

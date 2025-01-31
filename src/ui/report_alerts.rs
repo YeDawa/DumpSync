@@ -34,9 +34,4 @@ impl ReportAlerts {
         println!("\n{}{}", message.bold().green(), file.bold().cyan());
     }
 
-    pub fn make_question() {
-        let message = "Do you want to generate a PDF report with the dump information?".to_string();
-        print!("\n{} (y/n) ", message.bold().yellow());
-    }
-
 }
