@@ -32,7 +32,7 @@ impl ReportAlerts {
     }
 
     pub fn success_pdf(file: &str) {
-        let message = "Report generated successfully. Saved in: ".to_string();
+        let message = "Report generated successfully. Saved as ".to_string();
         println!("\n{}{}", message.bold().green(), file.bold().cyan());
     }
 
