@@ -1,16 +1,12 @@
 use printpdf::*;
 
 use std::{
+    fs::File,
     io::BufWriter,
-
-    fs::{
-        self, 
-        File
-    },
 };
 
 use crate::{
-    constants::global::Global,
+    helpers::configs::Configs,
     ui::report_alerts::ReportAlerts,
     handlers::reports_handlers::ReportsHandlers,
 };
@@ -31,10 +27,6 @@ impl ReportsPdfs {
             interval,
             counter,
         }
-    }
-
-    fn read_yaml_as_text(&self) -> String {
-        fs::read_to_string(Global::app_config()).expect("Error reading the YAML file")
     }
 
     fn add_text(
@@ -97,7 +89,7 @@ impl ReportsPdfs {
 
         self.add_text(&mut doc, &mut current_page, &mut current_layer, "Settings:", &mut y_position, &mg_left, &font_header, &line_height, 12.0);
         
-        for line in self.read_yaml_as_text().lines() {
+        for line in Configs.read_yaml_as_text().lines() {
             if line.is_empty() { continue }
             self.add_text(&mut doc, &mut current_page, &mut current_layer, line, &mut y_position, &mg_left, &font, &line_height, 8.0);
         }

@@ -6,6 +6,7 @@ use std::{
     io::BufReader,
 
     fs::{
+        self,
         File, 
         metadata
     },
@@ -73,6 +74,10 @@ impl Configs {
             .and_then(|exports| exports.get(option))
             .and_then(|ignore_tables| ignore_tables.as_sequence())
             .cloned()
+    }
+
+    pub fn read_yaml_as_text(&self) -> String {
+        fs::read_to_string(Global::app_config()).expect("Error reading the YAML file")
     }
 
 }
