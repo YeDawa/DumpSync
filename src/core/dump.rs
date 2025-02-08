@@ -137,6 +137,7 @@ impl Dump {
         
                 if num_dump >= max {
                     let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
+                    
                     ReportsHandlers::new(
                         &dump_file_path_clone, 
                         interval as usize, 
@@ -152,13 +153,21 @@ impl Dump {
         }
     }
 
-    fn once(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
+    fn once(&self) {
         if self.once.unwrap_or(false) {
             let interval = self.interval;
             let dump_file_path_clone = self.dump_file_path.clone();
+
+            let running = Arc::new(AtomicBool::new(true));
+            let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
             
-            if let Err(e) = self.exec() {
-                DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
+            while running.load(Ordering::SeqCst) {
+                if let Err(e) = self.exec() {
+                    DumpHandlers.handle_retry(&mut attempt, e, max_retries, retry_interval);
+                } else {
+                    attempt = 0;
+                    thread::sleep(Duration::from_secs(self.interval));
+                }
             }
 
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
@@ -180,7 +189,7 @@ impl Dump {
         self.setup_ctrlc_handler(running.clone());
         let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
 
-        self.once(&mut attempt, max_retries, retry_interval);
+        self.once();
         self.retain(&mut attempt, max_retries, retry_interval);
         
         while running.load(Ordering::SeqCst) {
