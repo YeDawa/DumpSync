@@ -192,7 +192,6 @@ impl Dump {
         }
     }
     
-
     pub fn export(&self) {
         let running = Arc::new(AtomicBool::new(true));
         
