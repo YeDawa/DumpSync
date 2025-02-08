@@ -137,7 +137,6 @@ impl Dump {
         
                 if num_dump >= max {
                     let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-                    
                     ReportsHandlers::new(
                         &dump_file_path_clone, 
                         interval as usize, 
@@ -153,35 +152,41 @@ impl Dump {
         }
     }
 
-    fn once(&self) {
+    fn once(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
         if self.once.unwrap_or(false) {
             let interval = self.interval;
             let dump_file_path_clone = self.dump_file_path.clone();
-
-            let running = Arc::new(AtomicBool::new(true));
-            let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
-            
-            while running.load(Ordering::SeqCst) {
-                if let Err(e) = self.exec() {
-                    DumpHandlers.handle_retry(&mut attempt, e, max_retries, retry_interval);
+    
+            let mut success = false;
+    
+            for _ in 0..max_retries {
+                if self.exec().is_ok() {
+                    success = true;
+                    break;
                 } else {
-                    attempt = 0;
-                    thread::sleep(Duration::from_secs(self.interval));
+                    *attempt += 1;
+                    println!("Tentativa {}/{} falhou. Tentando novamente...", *attempt, max_retries);
+                    thread::sleep(Duration::from_secs(retry_interval));
                 }
             }
-
+    
+            if !success {
+                process::exit(1);
+            }
+    
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-
+    
             ReportsHandlers::new(
                 &dump_file_path_clone, 
                 interval as usize, 
                 dump_count,
                 self.pdf
             ).report();
-            
+    
             process::exit(0);
         }
     }
+    
 
     pub fn export(&self) {
         let running = Arc::new(AtomicBool::new(true));
@@ -189,7 +194,7 @@ impl Dump {
         self.setup_ctrlc_handler(running.clone());
         let (mut attempt, max_retries, retry_interval) = DumpHandlers.setup_retry_config();
 
-        self.once();
+        self.once(&mut attempt, max_retries, retry_interval);
         self.retain(&mut attempt, max_retries, retry_interval);
         
         while running.load(Ordering::SeqCst) {
