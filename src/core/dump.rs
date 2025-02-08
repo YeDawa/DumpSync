@@ -15,7 +15,11 @@ use std::{
 };
 
 use crate::{
-    ui::success_alerts::SuccessAlerts,
+    ui::{
+        errors_alerts::ErrorsAlerts,
+        success_alerts::SuccessAlerts,
+        reconnect_alerts::ReconnectAlerts,
+    },
 
     core::{
         export::Export,
@@ -165,12 +169,13 @@ impl Dump {
                     break;
                 } else {
                     *attempt += 1;
-                    println!("Tentativa {}/{} falhou. Tentando novamente...", *attempt, max_retries);
+                    ReconnectAlerts::reconnect(*attempt as u64, max_retries);
                     thread::sleep(Duration::from_secs(retry_interval));
                 }
             }
     
             if !success {
+                ErrorsAlerts::max_attempts();
                 process::exit(1);
             }
     
