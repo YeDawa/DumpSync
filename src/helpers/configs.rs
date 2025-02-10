@@ -6,9 +6,9 @@ use std::{
     io::BufReader,
 
     fs::{
-        self,
         File, 
-        metadata
+        metadata,
+        read_to_string,
     },
 };
 
@@ -77,7 +77,7 @@ impl Configs {
     }
 
     pub fn read_yaml_as_text(&self) -> String {
-        fs::read_to_string(Global::app_config()).expect("Error reading the YAML file")
+        read_to_string(Global::app_config()).expect("Error reading the YAML file")
     }
 
 }
