@@ -10,15 +10,15 @@ use std::{
     fs::File, 
     error::Error,
 
-    path::{
-        Path, 
-        PathBuf
-    },
-
     io::{
         Read,
         BufReader, 
     }, 
+
+    path::{
+        Path, 
+        PathBuf
+    },
 };
 
 use crate::{
