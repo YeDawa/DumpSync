@@ -1,10 +1,4 @@
 use regex::Regex;
-use flate2::read::GzDecoder;
-
-use mysql::{
-    *,
-    prelude::*
-};
 
 use std::{
     fs::File, 
@@ -19,6 +13,12 @@ use std::{
         Path, 
         PathBuf
     },
+};
+use flate2::read::GzDecoder;
+
+use mysql::{
+    *,
+    prelude::*
 };
 
 use crate::{
@@ -64,7 +64,7 @@ impl Transfer {
         }
     }
 
-    fn complete_path(&self) -> Result<PathBuf, Box<dyn std::error::Error>> {
+    fn complete_path(&self) -> Result<PathBuf, Box<dyn Error>> {
         let path = Path::new(&self.dump_file_path);
 
         if path.is_absolute() {
