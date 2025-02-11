@@ -75,7 +75,7 @@ impl ReportsHandlers {
             }
 
             if self.pdf.unwrap_or(false) {
-                let file = Generate.random_string(16) + ".pdf";
+                let file = Generate.uuid_v4() + ".pdf";
     
                 let _ = ReportsPdfs::new(
                     &file, &self.path, self.interval,  self.counter
