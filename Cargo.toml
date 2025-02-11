@@ -14,7 +14,7 @@ homepage = "https://dumpsync.com"
 [dependencies]
 aes-gcm = "0.10.3"
 chrono = "0.4.39"
-clap = { version = "4.5.26", features = ["cargo", "derive"] }
+clap = { version = "4.5.28", features = ["cargo", "derive"] }
 clap-cargo = "0.15.2"
 colored = "3.0.0"
 crc32fast = "1.4.2"
