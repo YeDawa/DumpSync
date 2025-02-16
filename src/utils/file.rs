@@ -33,7 +33,7 @@ impl FileUtils {
     }
 
     pub fn size(size: u64) -> String {
-        let sizes = ["B", "KB", "MB", "GB", "TB"];
+        let sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
         let mut size_f = size as f64;
         let mut index = 0;
     
