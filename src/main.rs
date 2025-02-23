@@ -4,15 +4,16 @@ mod utils;
 mod plugins;
 mod helpers;
 mod handlers;
+
 mod args_cli;
 mod dump_sync;
 mod constants;
 
-use std::error::Error;
+use anyhow::Result;
 use crate::dump_sync::DumpSync;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    DumpSync.init().await?;
+async fn main() -> Result<()> {
+    let _ = DumpSync.init().await;
     Ok(())
 }

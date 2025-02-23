@@ -13,8 +13,9 @@ homepage = "https://dumpsync.com"
 
 [dependencies]
 aes-gcm = "0.10.3"
+anyhow = "1.0.96"
 chrono = "0.4.39"
-clap = { version = "4.5.28", features = ["cargo", "derive"] }
+clap = { version = "4.5.30", features = ["cargo", "derive"] }
 clap-cargo = "0.15.2"
 colored = "3.0.0"
 crc32fast = "1.4.2"
@@ -30,8 +31,8 @@ rand = "0.9.0"
 regex = "1.11.1"
 reqwest = { version = "0.12.12", features = ["blocking"] }
 rpassword = "7.3.1"
-serde = { version = "1.0.217", features = ["derive"] }
-serde_json = "1.0.137"
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.139"
 serde_yaml = "0.9.34"
 sha1 = "0.10.6"
 sha2 = "0.10.8"
