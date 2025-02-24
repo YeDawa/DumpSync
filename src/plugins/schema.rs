@@ -98,7 +98,7 @@ impl Schema {
                 })
                 .collect();
 
-            let foreign_keys: Vec<(String, String, String)> = conn.query(MySqlQueriesBuilders::foreign_key_info(&table))?;
+            let foreign_keys: Vec<(String, String, String)> = conn.query(MySqlQueriesBuilders.foreign_key_info(&table))?;
 
             let foreign_key_data: Vec<ForeignKey> = foreign_keys
                 .iter()

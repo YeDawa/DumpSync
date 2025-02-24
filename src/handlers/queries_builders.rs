@@ -69,7 +69,7 @@ impl MySqlQueriesBuilders {
         )
     }
 
-    pub fn foreign_key_info(table: &str) -> String {
+    pub fn foreign_key_info(&self, table: &str) -> String {
         format!(
             r#"
             SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
@@ -79,5 +79,31 @@ impl MySqlQueriesBuilders {
             table
         )
     }
+
+    pub fn get_alter_table(&self, table: &str) -> String {
+        format!(
+            r#"
+            SELECT CONSTRAINT_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME 
+            FROM information_schema.KEY_COLUMN_USAGE 
+            WHERE TABLE_NAME = DATABASE() AND TABLE_SCHEMA = '{}'
+            AND REFERENCED_TABLE_NAME IS NOT NULL
+            "#,
+            table
+        )
+    }
+
+    pub fn get_foreign_keys(&self, table: &str, constraint_name: &str, column_name: &str, ref_table: &str, ref_column: &str) -> String {
+        format!(
+            "ALTER TABLE `{}` ADD CONSTRAINT `{}` FOREIGN KEY (`{}`) REFERENCES `{}` (`{}`);",
+            table, constraint_name, column_name, ref_table, ref_column
+        )
+    }
+    
+    pub fn get_unique_keys(&self, table: &str, constraint_name: &str, column_name: &str) -> String {
+        format!(
+            "ALTER TABLE `{}` ADD CONSTRAINT `{}` UNIQUE (`{}`);",
+            table, constraint_name, column_name
+        )
+    }        
     
 }

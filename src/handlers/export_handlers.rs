@@ -163,16 +163,45 @@ impl ExportHandlers {
 
     pub fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
-
+    
         if self.drop_table_if_exists {
             writeln!(writer, "{}", MySqlQueriesBuilders.drop_table(table))?;
         }
-
+    
         let row: Row = conn.query_first(MySqlQueriesBuilders.show_create_table(table))?.unwrap();
         let create_table: String = row.get(1).expect("Error retrieving CREATE TABLE");
         writeln!(writer, "{};\n", create_table)?;
+    
+        let fk_query = MySqlQueriesBuilders.get_alter_table(table);
+        let foreign_keys: Vec<Row> = conn.query(fk_query)?;
 
+        for fk in foreign_keys {
+            let constraint_name: String = fk.get("CONSTRAINT_NAME").unwrap();
+            let column_name: String = fk.get("COLUMN_NAME").unwrap();
+            let ref_table: String = fk.get("REFERENCED_TABLE_NAME").unwrap();
+            let ref_column: String = fk.get("REFERENCED_COLUMN_NAME").unwrap();
+            
+            writeln!(
+                writer, "{}", MySqlQueriesBuilders.get_foreign_keys(
+                    table, &constraint_name, &column_name, &ref_table, &ref_column
+                )
+            )?;
+        }
+    
+        let unique_query = MySqlQueriesBuilders.get_alter_table(table);
+        let unique_keys: Vec<Row> = conn.query(unique_query)?;
+
+        for uk in unique_keys {
+            let constraint_name: String = uk.get("CONSTRAINT_NAME").unwrap();
+            let column_name: String = uk.get("COLUMN_NAME").unwrap();
+            
+            writeln!(
+                writer, "{}", MySqlQueriesBuilders.get_unique_keys(table, &constraint_name, &column_name)
+            )?;
+        }
+    
+        writeln!(writer, "-- ---------------------------------------------------\n")?;
         Ok(())
-    }
+    }    
 
 }
