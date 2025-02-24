@@ -96,7 +96,8 @@ impl Dump {
             password,
             &self.dbname,
             &dump_file_path,
-            self.encrypt
+            self.encrypt,
+            None
         ).dump().map_err(|_| "Failed to generate dump file")?;
 
         DUMP_COUNT.fetch_add(1, Ordering::SeqCst);

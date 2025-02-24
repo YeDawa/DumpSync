@@ -39,6 +39,9 @@ pub enum Commands {
     /// Initialize the new dump sync project
     Init,
 
+    /// Safe truncate the table or tables
+    Truncate(TruncateOptions),
+
     /// Scan the table for xss prevention
     Scan(ScanOptions),
 
@@ -91,6 +94,21 @@ pub struct TransferOptions {
     #[arg(short, long)]
     /// Dump file path
     pub file: Option<String>,
+}
+
+#[derive(Parser)]
+pub struct TruncateOptions {
+    #[arg(short, long)]
+    /// Table name for truncate
+    pub table: String,
+
+    #[arg(short, long)]
+    /// Backup path
+    pub folder: Option<String>,
+
+    #[arg(short, long)]
+    /// Encryption file path
+    pub encrypt: bool,
 }
 
 #[derive(Parser)]

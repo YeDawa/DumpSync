@@ -34,6 +34,20 @@ impl DumpHandlers {
             .to_string()
     }
 
+    pub fn generate_dump_file_truncate_path(&self, dbname: &str, table: &str, dump_file_path: &str) -> String {
+        Path::new(&dump_file_path)
+            .join(format!(
+                "{}_{}_{}_{}.sql",
+                dbname.replace(|c: char| !c.is_alphanumeric(), "_"),
+                table.replace(|c: char| !c.is_alphanumeric(), "_"),
+                Local::now().format("%Y_%m_%d_%H%M%S"),
+                Generate.random_string(6)
+            ))
+            .to_str()
+            .expect("Failed to convert PathBuf to str")
+            .to_string()
+    }
+
     pub fn setup_retry_config(&self) -> (usize, u64, u64) {
         let max_retries = Configs.generic("connection", "max_retries").as_u64().unwrap_or(3);
         let retry_interval = Configs.generic("connection", "retry_connection_interval")

@@ -28,6 +28,16 @@ impl SuccessAlerts {
         );
     }
 
+    pub fn truncate(table: &str) {
+        let current_datetime = Date::date_time();
+    
+        println!(
+            "{} Table '{}' successfully truncated.", 
+            current_datetime.green().bold(), 
+            table.blue()
+        );
+    }
+
     pub fn import(database: &str) {
         let current_datetime = Date::date_time();
     

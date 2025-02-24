@@ -6,6 +6,10 @@ impl MySqlQueriesBuilders {
         "SHOW TABLES".to_string()
     }
 
+    pub fn truncate_table(&self, table: &str) -> String {
+        format!("TRUNCATE TABLE `{}`;", table)
+    }
+
     pub fn show_create_table(&self, table: &str) -> String {
         format!("SHOW CREATE TABLE `{}`;", table)
     }

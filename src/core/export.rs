@@ -31,7 +31,8 @@ pub struct Export {
     pub password: String,
     pub dbname: String,
     pub dump_file_path: String,
-    pub encrypt: Option<bool>
+    pub encrypt: Option<bool>,
+    pub table: Option<String>,
 }
 
 impl Export {
@@ -43,7 +44,8 @@ impl Export {
         password: &str, 
         dbname: &str, 
         dump_file_path: &str,
-        encrypt: Option<bool>
+        encrypt: Option<bool>,
+        table: Option<String>
     ) -> Self {
         Self {
             host: host.to_string(),
@@ -52,7 +54,8 @@ impl Export {
             password: password.to_string(),
             dbname: dbname.to_string(),
             dump_file_path: dump_file_path.to_string(),
-            encrypt
+            encrypt,
+            table,
         }
     }
 
@@ -99,6 +102,47 @@ impl Export {
             export_handlers.write_inserts_for_table(&table, &mut conn, writer.as_write())?;
             writeln!(writer.as_write(), "-- End of table `{}`", table)?;
         }
+
+        if self.encrypt.unwrap_or(false) {
+            let _ = Encrypt::new(&dump_file_path).encrypt();
+        } else {
+            SuccessAlerts::dump(&dump_file_path);
+        }
+
+        Ok(())
+    }
+
+    pub fn dump_table(&self) -> Result<(), Box<dyn Error>> {
+        let compress_data = Configs.boolean("exports", "compress_data", false);
+
+        let dump_file_path = if compress_data {
+            format!("{}.gz", self.dump_file_path)
+        } else {
+            self.dump_file_path.clone()
+        };
+
+        let export_handlers = ExportHandlers::new(
+            File::create(dump_file_path.clone())?, 
+            &self.dbname
+        );
+
+        let pool = Connection {
+            host: self.host.clone(),
+            port: self.port,
+            user: self.user.clone(),
+            password: self.password.clone(),
+            dbname: Some(self.dbname.clone()),
+        }.create_pool()?;
+
+        FileUtils::create_path(&dump_file_path.clone());
+
+        let mut conn = pool.get_conn()?;
+        let mut writer = export_handlers.create_writer()?;
+        let table = self.table.as_deref().unwrap_or("");
+
+        export_handlers.comments_header_truncate(&table, writer.as_write())?;
+        export_handlers.write_inserts_for_table(&table, &mut conn, writer.as_write())?;
+        writeln!(writer.as_write(), "-- End of table `{}`", table)?;
 
         if self.encrypt.unwrap_or(false) {
             let _ = Encrypt::new(&dump_file_path).encrypt();

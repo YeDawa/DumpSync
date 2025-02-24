@@ -14,7 +14,11 @@ use tokio::{
 use crate::{
     args_cli::*,
 
-    core::dump::Dump,
+    core::{
+        dump::Dump,
+        truncate::Truncate,
+    },
+
     helpers::env::Env,
 
     ui::{
@@ -123,6 +127,30 @@ impl DumpSync {
         ).export();
     }
 
+    fn truncate(&self, options: TruncateOptions) {
+        Env::new();
+        UI::header();
+
+        let table = options.table;
+        let encrypt = options.encrypt;
+        let backup_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
+        let (dbname, host, user, password, port) = self.load_db_config();
+
+        UI::label("Press CTRL+C to exit the tool", "normal");
+        UI::section_header("Truncate table", "info");
+
+        let _ = Truncate::new(
+            &host, 
+            port, 
+            &user, 
+            &password, 
+            &dbname, 
+            &backup_path, 
+            &table,
+            Some(encrypt),
+        ).table();
+    }
+
     async fn scan_xss(&self, options: ScanOptions) -> Result<(), Box<dyn Error>> {
         Env::new();
         UI::header();
@@ -226,10 +254,12 @@ impl DumpSync {
 
         UI::section_header("Generating checksum", "info");
 
-        let _ = Checksum::new(
+        if let Err(e) = Checksum::new(
             &file,
             output.as_deref(),
-        ).generated();
+        ).generated() {
+            eprintln!("Error generating checksum: {}", e);
+        }
     }
 
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
@@ -242,6 +272,7 @@ impl DumpSync {
             Commands::Schema(options) => self.schema(options)?,
             Commands::Transfer(options) => self.transfer(options),
             Commands::Checksum(options) => self.checksum(options),
+            Commands::Truncate(options) => self.truncate(options),
         }
 
         Ok(())

@@ -4,7 +4,8 @@ use std::{
 
     io::{
         Write, 
-        BufWriter
+        BufWriter,
+        Error as IoError
     },
 };
 
@@ -71,7 +72,7 @@ impl ExportHandlers {
         }
     }
 
-    pub fn create_writer(&self) -> Result<Writer, std::io::Error> {
+    pub fn create_writer(&self) -> Result<Writer, IoError> {
         if self.compress_data {
             let encoder = GzEncoder::new(
                 self.file.try_clone()?, Compression::default()
@@ -94,6 +95,16 @@ impl ExportHandlers {
     pub fn comments_header(&self, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         writeln!(writer, "-- Exporting using {} v.{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))?;
         writeln!(writer, "-- Database backup: {}", self.dbname)?;
+        writeln!(writer, "-- Export date and time: {}", Date::timestamp())?;
+        writeln!(writer, "-- ---------------------------------------------------\n")?;
+
+        Ok(())
+    }
+
+    pub fn comments_header_truncate(&self, table: &str, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
+        writeln!(writer, "-- Exporting using {} v.{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))?;
+        writeln!(writer, "-- Database: {}", self.dbname)?;
+        writeln!(writer, "-- Truncate table: {}", table)?;
         writeln!(writer, "-- Export date and time: {}", Date::timestamp())?;
         writeln!(writer, "-- ---------------------------------------------------\n")?;
 
