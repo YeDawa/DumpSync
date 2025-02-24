@@ -28,6 +28,7 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 - **Compression**: Compress your dump files to save disk space.
 - **Checksum**: Verify the integrity of your dump files using checksums.
 - **PDF Report**: Generate PDF reports for your dump files and your settings.
+- **Truncate**: Truncate tables to remove all data from the specified table.
 
 ## Installation
 
@@ -51,6 +52,7 @@ For more help and document, see our documentation:
 - [Export](https://docs.dumpsync.com/export)
 - [Import](https://docs.dumpsync.com/import)
 - [Transfer](https://docs.dumpsync.com/transfer)
+- [Truncate](https://docs.dumpsync.com/truncate)
 - [Scan XSS](https://docs.dumpsync.com/scan)
 - [Share](https://docs.dumpsync.com/share)
 - [Schema](https://docs.dumpsync.com/schema)
