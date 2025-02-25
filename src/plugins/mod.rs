@@ -1,4 +1,5 @@
 pub mod schema;
+pub mod diagram;
 pub mod pastebin;
 pub mod scan_xss;
 pub mod checksum;

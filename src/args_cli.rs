@@ -39,6 +39,9 @@ pub enum Commands {
     /// Initialize the new dump sync project
     Init,
 
+    /// Show ERD diagram of the table
+    ERD(ErdOptions),
+
     /// Safe truncate the table or tables
     Truncate(TruncateOptions),
 
@@ -94,6 +97,13 @@ pub struct TransferOptions {
     #[arg(short, long)]
     /// Dump file path
     pub file: Option<String>,
+}
+
+#[derive(Parser)]
+pub struct ErdOptions {
+    #[arg(short, long)]
+    /// Table name for show ER diagram
+    pub table: String,
 }
 
 #[derive(Parser)]

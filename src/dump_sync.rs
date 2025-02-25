@@ -28,6 +28,7 @@ use crate::{
 
     plugins::{
         schema::Schema,
+        diagram::Diagram,
         scan_xss::ScanXSS,
         pastebin::Pastebin,
         checksum::Checksum,
@@ -262,9 +263,30 @@ impl DumpSync {
         }
     }
 
+    async fn erd(&self, options: ErdOptions) {Env::new();
+        Env::new();
+        UI::header();
+
+        let table = options.table;
+        let (dbname, host, user, password, port) = self.load_db_config();
+
+        let header = format!("Generating ER diagram for table: '{}'", table);
+        UI::section_header(&header, "info");
+
+        let _ = Diagram::new(
+            &host,
+            port,
+            &user,
+            &password,
+            &dbname,
+            &table,
+        ).diagram().await;
+    }
+
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
         match Cli::parse().command {
             Commands::Init => self.initialize().await?,
+            Commands::ERD(options) => self.erd(options).await,
             Commands::Export(options) => self.export(options),
             Commands::Import(options) => self.import(options),
             Commands::Scan(options) => self.scan_xss(options).await?,
