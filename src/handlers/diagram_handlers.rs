@@ -119,7 +119,7 @@ impl DiagramHandlers {
         for line in &column_lines {
             let line_upper = line.to_uppercase();
 
-            if line_upper.starts_with("PRIMARY KEY") || line_upper.starts_with("FOREIGN KEY") || line_upper.starts_with("KEY") || line_upper.starts_with("CONSTRAINT") {
+            if line_upper.starts_with("PRIMARY KEY") || line_upper.starts_with("FOREIGN KEY") || line_upper.starts_with("KEY") || line_upper.starts_with("UNIQUE KEY") || line_upper.starts_with("CONSTRAINT") {
                 constraints.push(*line);
                 continue;
             }
@@ -157,6 +157,8 @@ impl DiagramHandlers {
                                 column.key = Some("FK".to_string());
                             } else if cons_line_upper.starts_with("KEY") && column.key.is_none() {
                                 column.key = Some("KEY".to_string());
+                            } else if cons_line_upper.starts_with("UNIQUE KEY") {
+                                column.key = Some("UNI".to_string());
                             }
                         }
                     }
