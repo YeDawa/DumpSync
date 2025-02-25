@@ -114,7 +114,7 @@ impl DiagramHandlers {
     
         let mut columns = Vec::new();
         let mut constraints = Vec::new();
-        let column_re = Regex::new(RegExp::CREATE_TABLE_COLUMNS)?;
+        let column_re = Regex::new(r"(?i)^`?(\w+)`?\s+([^\s]+)(.*)$")?;
         
         for line in &column_lines {
             let line_upper = line.to_uppercase();
@@ -136,7 +136,7 @@ impl DiagramHandlers {
             }
         }
     
-        let cols_in_constraint_re = Regex::new(RegExp::COLS_IN_CONSTRAINT_RE)?;
+        let cols_in_constraint_re = Regex::new(r"\(([^)]+)\)")?;
         for cons_line in constraints {
             let cons_line_upper = cons_line.to_uppercase();
 

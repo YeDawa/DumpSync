@@ -1,4 +1,3 @@
-use regex::Regex;
 use std::error::Error;
 
 use mysql::{
@@ -14,19 +13,6 @@ use crate::{
         queries_builders::MySqlQueriesBuilders,
     },
 };
-
-#[derive(Debug)]
-pub struct ColumnDefinition {
-    pub name: String,
-    pub col_type: String,
-    pub key: Option<String>,
-}
-
-#[derive(Debug)]
-pub struct TableDefinition {
-    pub name: String,
-    pub columns: Vec<ColumnDefinition>,
-}
 
 pub struct Diagram {
     host: String,
@@ -64,8 +50,7 @@ impl Diagram {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }
-        .create_pool()?;
+        }.create_pool()?;
     
         let mut conn = pool.get_conn()?;
         let sql = MySqlQueriesBuilders.show_create_table(&self.table);
