@@ -6,7 +6,7 @@ To create a database dump, you can use the following command:
 dumpsync export
 ```
 
-For connectting to a server, read the [Connecting to a Server](../connection) guide.
+For connectting to a server, read the [Connecting to a Server](connection.md) guide.
 
 ### Command Breakdown
 

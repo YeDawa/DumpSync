@@ -39,6 +39,7 @@ nav:
     - Share: share.md
     - Schema: schema.md
     - Checksum: checksum.md
+    - Visual: visual.md
   - Resources:
     - Writing patterns: writing-patterns.md
 
