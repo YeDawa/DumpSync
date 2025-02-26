@@ -1,6 +1,6 @@
 # DumpSync Command: Visual
 
-The `checksum` command in DumpSync is used to view the table structure of a database. This feature allows you to visualize the table structure.
+The `visual` command in DumpSync is used to view the table structure of a database. This feature allows you to visualize the table structure.
 
 ```bash
 dumpsync visual --table table1
