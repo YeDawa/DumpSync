@@ -17,10 +17,10 @@ dumpsync visual --table table1
 
 ### Example
 
-To view the table structure of a table named `table1`, you would run:
+To view the table structure of a table named `users`, you would run:
 
 ```bash
-dumpsync visual --table table1
+dumpsync visual --table users
 ```
 
 ```bash
