@@ -263,7 +263,7 @@ impl DumpSync {
         }
     }
 
-    async fn erd(&self, options: ErdOptions) {Env::new();
+    async fn visual(&self, options: VisualOptions) {
         Env::new();
         UI::header();
 
@@ -286,12 +286,12 @@ impl DumpSync {
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
         match Cli::parse().command {
             Commands::Init => self.initialize().await?,
-            Commands::ERD(options) => self.erd(options).await,
             Commands::Export(options) => self.export(options),
             Commands::Import(options) => self.import(options),
-            Commands::Scan(options) => self.scan_xss(options).await?,
-            Commands::Share(options) => self.share(options).await?,
             Commands::Schema(options) => self.schema(options)?,
+            Commands::Visual(options) => self.visual(options).await,
+            Commands::Share(options) => self.share(options).await?,
+            Commands::Scan(options) => self.scan_xss(options).await?,
             Commands::Transfer(options) => self.transfer(options),
             Commands::Checksum(options) => self.checksum(options),
             Commands::Truncate(options) => self.truncate(options),

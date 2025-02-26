@@ -39,8 +39,8 @@ pub enum Commands {
     /// Initialize the new dump sync project
     Init,
 
-    /// Show ERD diagram of the table
-    ERD(ErdOptions),
+    /// Show Visual diagram of the table
+    Visual(VisualOptions),
 
     /// Safe truncate the table or tables
     Truncate(TruncateOptions),
@@ -100,7 +100,7 @@ pub struct TransferOptions {
 }
 
 #[derive(Parser)]
-pub struct ErdOptions {
+pub struct VisualOptions {
     #[arg(short, long)]
     /// Table name for show ER diagram
     pub table: String,
