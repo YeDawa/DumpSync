@@ -7,11 +7,8 @@ use mysql::{
 
 use crate::{
     core::connection::Connection,
-
-    handlers::{
-        diagram_handlers::DiagramHandlers,
-        queries_builders::MySqlQueriesBuilders,
-    },
+    handlers::diagram_handlers::DiagramHandlers,
+    queries_builders::mysql_queries_builders::MySqlQueriesBuilders,
 };
 
 pub struct Diagram {

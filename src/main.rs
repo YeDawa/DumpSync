@@ -4,6 +4,7 @@ mod utils;
 mod plugins;
 mod helpers;
 mod handlers;
+mod queries_builders;
 
 mod args_cli;
 mod dump_sync;

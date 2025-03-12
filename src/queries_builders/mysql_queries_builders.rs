@@ -104,6 +104,6 @@ impl MySqlQueriesBuilders {
             "ALTER TABLE `{}` ADD CONSTRAINT `{}` UNIQUE (`{}`);",
             table, constraint_name, column_name
         )
-    }        
+    }
     
 }
