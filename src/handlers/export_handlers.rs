@@ -23,8 +23,11 @@ use mysql::{
 use crate::{
     utils::date::Date,
     helpers::configs::Configs,
-    handlers::html_handlers::HTMLHandlers,
-    queries_builders::mysql_queries_builders::MySqlQueriesBuilders,
+
+    handlers::{
+        html_handlers::HTMLHandlers,
+        mysql_queries_builders::MySqlQueriesBuilders,
+    },
 };
 
 pub enum Writer {

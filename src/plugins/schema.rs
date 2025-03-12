@@ -14,7 +14,7 @@ use mysql::{
 use crate::{
     core::connection::Connection,
     ui::schema_alerts::SchemaAlerts,
-    queries_builders::mysql_queries_builders::MySqlQueriesBuilders,
+    handlers::mysql_queries_builders::MySqlQueriesBuilders,
 };
 
 #[derive(Serialize, Debug)]

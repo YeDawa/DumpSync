@@ -8,13 +8,16 @@ use mysql::{
 use crate::{
     core::connection::Connection,
     plugins::reports_xss::ReportsXSS,
-    handlers::scan_handlers::ScanHandlers,
-    queries_builders::mysql_queries_builders::MySqlQueriesBuilders,
     
     ui::{
         ui_base::UI,
         scan_alerts::ScanAlerts,
     },
+
+    handlers::{
+        scan_handlers::ScanHandlers,
+        mysql_queries_builders::MySqlQueriesBuilders,
+    }
 };
 
 pub struct ScanXSS {
