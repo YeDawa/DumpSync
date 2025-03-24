@@ -56,6 +56,12 @@ pub enum Commands {
 
     /// Generate checksum for the file
     Checksum(ChecksumOptions),
+
+    /// Pull the data from the web
+    Pull {
+        /// SQL file url
+        file: String,
+    },
 }
 
 #[derive(Parser)]
