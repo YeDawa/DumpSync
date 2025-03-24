@@ -214,25 +214,13 @@ impl Dump {
 
     pub fn import(&self) {
         Import::new(
-            &self.host,
-            self.port,
-            &self.user,
-            &self.password,
-            &self.dbname,
-            &self.dump_file_path,
-            &self.path,
+            &self.host, self.port, &self.user, &self.password, &self.dbname, &self.dump_file_path, &self.path,
         ).dump().expect("Failed to import dump");
     }
 
     pub fn transfer(&self) {
         Transfer::new(
-            &self.host,
-            self.port,
-            &self.user,
-            &self.password,
-            &self.dbname,
-            &self.dump_file_path,
-            &self.path,
+            &self.host, self.port, &self.user, &self.password, &self.dbname, &self.dump_file_path, &self.path,
         ).dump().expect("Failed to transfer dump");
     }
 

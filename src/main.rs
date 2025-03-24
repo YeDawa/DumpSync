@@ -6,6 +6,7 @@ mod helpers;
 mod handlers;
 
 mod addons;
+mod dumper;
 mod args_cli;
 mod dump_sync;
 mod constants;
