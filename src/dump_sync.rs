@@ -13,6 +13,7 @@ use tokio::{
 
 use crate::{
     args_cli::*,
+    addons::DumpSyncAddons,
 
     core::{
         dump::Dump,
@@ -26,14 +27,6 @@ use crate::{
         success_alerts::SuccessAlerts,
     },
 
-    plugins::{
-        schema::Schema,
-        diagram::Diagram,
-        scan_xss::ScanXSS,
-        pastebin::Pastebin,
-        checksum::Checksum,
-    },
-
     constants::{
         urls::Urls,
         global::Global,
@@ -44,7 +37,7 @@ pub struct DumpSync;
 
 impl DumpSync {
 
-    fn load_db_config(&self) -> (String, String, String, String, u16) {
+    pub fn load_db_config(&self) -> (String, String, String, String, u16) {
         let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
         let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
         let user = env::var("DB_USER").or_else(|_| env::var("DS_DB_USER")).unwrap_or_default();
@@ -123,45 +116,6 @@ impl DumpSync {
         ).table();
     }
 
-    async fn scan_xss(&self, options: ScanOptions) -> Result<(), Box<dyn Error>> {
-        Env::new();
-        UI::header();
-
-        let table = options.table;
-        let payload = options.payload;
-
-        let file = options.file;
-        let offset = options.offset.unwrap_or(0);
-        let limit = options.limit.unwrap_or(99999999999);
-        let (dbname, host, user, password, port) = self.load_db_config();
-
-        let header = format!("Scanning table(s): '{}'", table);
-        UI::section_header(&header, "info");
-
-        ScanXSS::new(
-            &host, port, &user, &password, &dbname, &table, payload.as_deref(), Some(offset), Some(limit), file.as_deref(),
-        ).scan().await.expect("Failed to scan tables for XSS");
-
-        Ok(())
-    }
-
-    fn schema(&self, options: SchemaOptions) -> Result<(), Box<dyn Error>> {
-        Env::new();
-        UI::header();
-
-        let file = options.file;
-        let (dbname, host, user, password, port) = self.load_db_config();
-
-        let header = "Generating schema file".to_string();
-        UI::section_header(&header, "info");
-
-        Schema::new(
-            &host, port, &user, &password, &dbname, &file,
-        ).create()?;
-
-        Ok(())
-    }
-
     fn transfer(&self, options: TransferOptions) {
         Env::new();
         UI::header();
@@ -177,65 +131,19 @@ impl DumpSync {
         ).transfer();
     }
 
-    async fn share(&self, options: ShareOptions) -> Result<(), Box<dyn Error>> {
-        Env::new();
-        UI::header();
-
-        let file = options.file;
-        let privacy = options.privacy.unwrap_or("unlisted".to_string());
-        let api_key = env::var("PASTEBIN_API_KEY").unwrap_or_default();
-
-        let header = format!("Sharing file: '{}'", file);
-        UI::section_header(&header, "info");
-
-        Pastebin::new(&file, &api_key, &privacy).share().await?;
-        Ok(())
-    }
-
-    fn checksum(&self, options: ChecksumOptions) {
-        Env::new();
-        UI::header();
-
-        let file = options.file;
-        let output = options.output;
-
-        UI::section_header("Generating checksum", "info");
-
-        if let Err(e) = Checksum::new(
-            &file,
-            output.as_deref(),
-        ).generated() {
-            eprintln!("Error generating checksum: {}", e);
-        }
-    }
-
-    async fn visual(&self, options: VisualOptions) {
-        Env::new();
-        UI::header();
-
-        let table = options.table;
-        let (dbname, host, user, password, port) = self.load_db_config();
-
-        let header = format!("Generating ER diagram for table: '{}'", table);
-        UI::section_header(&header, "info");
-
-        let _ = Diagram::new(
-            &host, port, &user, &password, &dbname, &table,
-        ).diagram().await;
-    }
-
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
         match Cli::parse().command {
             Commands::Init => self.initialize().await?,
             Commands::Export(options) => self.export(options),
             Commands::Import(options) => self.import(options),
-            Commands::Schema(options) => self.schema(options)?,
-            Commands::Visual(options) => self.visual(options).await,
-            Commands::Share(options) => self.share(options).await?,
-            Commands::Scan(options) => self.scan_xss(options).await?,
+            Commands::Schema(options) => DumpSyncAddons.schema(options)?,
+            Commands::Visual(options) => DumpSyncAddons.visual(options).await,
+            Commands::Share(options) => DumpSyncAddons.share(options).await?,
+            Commands::Scan(options) => DumpSyncAddons.scan_xss(options).await?,
             Commands::Transfer(options) => self.transfer(options),
-            Commands::Checksum(options) => self.checksum(options),
+            Commands::Checksum(options) => DumpSyncAddons.checksum(options),
             Commands::Truncate(options) => self.truncate(options),
+            Commands::Pull(_options) => todo!(),
         }
 
         Ok(())
