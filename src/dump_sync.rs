@@ -79,18 +79,7 @@ impl DumpSync {
 
         UI::section_header("Importing dump to server", "info");
         Dump::new(
-            &host, 
-            port, 
-            &user, 
-            &password, 
-            &dbname, 
-            &backup_path, 
-            None, 
-            &backup_path,
-            None,
-            None,
-            None,
-            None,
+            &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, None, None, None,
         ).import();
     }
 
@@ -113,18 +102,7 @@ impl DumpSync {
         UI::section_header("Dumping the database", "info");
 
         Dump::new(
-            &host, 
-            port, 
-            &user, 
-            &password, 
-            &dbname, 
-            &backup_path, 
-            Some(interval), 
-            &backup_path,
-            Some(encrypt),
-            Some(once),
-            retain,
-            Some(pdf),
+            &host, port, &user, &password, &dbname, &backup_path, Some(interval), &backup_path, Some(encrypt), Some(once), retain, Some(pdf),
         ).export();
     }
 
@@ -141,14 +119,7 @@ impl DumpSync {
         UI::section_header("Truncate table", "info");
 
         let _ = Truncate::new(
-            &host, 
-            port, 
-            &user, 
-            &password, 
-            &dbname, 
-            &backup_path, 
-            &table,
-            Some(encrypt),
+            &host, port, &user, &password, &dbname, &backup_path, &table, Some(encrypt),
         ).table();
     }
 
@@ -168,16 +139,7 @@ impl DumpSync {
         UI::section_header(&header, "info");
 
         ScanXSS::new(
-            &host,
-            port,
-            &user,
-            &password,
-            &dbname,
-            &table,
-            payload.as_deref(),
-            Some(offset),
-            Some(limit),
-            file.as_deref(),
+            &host, port, &user, &password, &dbname, &table, payload.as_deref(), Some(offset), Some(limit), file.as_deref(),
         ).scan().await.expect("Failed to scan tables for XSS");
 
         Ok(())
@@ -194,12 +156,7 @@ impl DumpSync {
         UI::section_header(&header, "info");
 
         Schema::new(
-            &host,
-            port,
-            &user,
-            &password,
-            &dbname,
-            &file,
+            &host, port, &user, &password, &dbname, &file,
         ).create()?;
 
         Ok(())
@@ -216,18 +173,7 @@ impl DumpSync {
         UI::section_header("Importing dump to server", "info");
 
         Dump::new(
-            &host, 
-            port, 
-            &user, 
-            &password, 
-            &dbname, 
-            &backup_path, 
-            None, 
-            &backup_path, 
-            None,
-            None,
-            None,
-            None,
+            &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, None, None, None,
         ).transfer();
     }
 
@@ -274,12 +220,7 @@ impl DumpSync {
         UI::section_header(&header, "info");
 
         let _ = Diagram::new(
-            &host,
-            port,
-            &user,
-            &password,
-            &dbname,
-            &table,
+            &host, port, &user, &password, &dbname, &table,
         ).diagram().await;
     }
 
