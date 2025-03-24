@@ -236,7 +236,6 @@ impl DumpSync {
             Commands::Transfer(options) => self.transfer(options),
             Commands::Checksum(options) => self.checksum(options),
             Commands::Truncate(options) => self.truncate(options),
-            Commands::Pull { file: _ } => println!("Soon..."),
         }
 
         Ok(())
