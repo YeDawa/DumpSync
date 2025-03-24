@@ -64,10 +64,10 @@ pub enum Commands {
 #[derive(Parser)]
 pub struct PullOptions {
     #[arg(short, long)]
-    /// Import SQL file
+    /// Import SQL file for server
     pub import: Option<u64>,
 
-    /// Checksum SQL file
+    /// Checksum SQL file of cloud
     pub checksum: Option<u64>,
 }
 
