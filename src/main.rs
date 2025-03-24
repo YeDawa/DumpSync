@@ -5,6 +5,7 @@ mod plugins;
 mod helpers;
 mod handlers;
 
+mod init;
 mod addons;
 mod dumper;
 mod args_cli;

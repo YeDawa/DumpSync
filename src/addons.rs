@@ -5,7 +5,7 @@ use std::{
 
 use crate::{
     args_cli::*,
-    dump_sync::DumpSync,
+    init::DumpSyncInit,
 
     ui::ui_base::UI,
     helpers::env::Env,
@@ -33,7 +33,7 @@ impl DumpSyncAddons {
         let file = options.file;
         let offset = options.offset.unwrap_or(0);
         let limit = options.limit.unwrap_or(99999999999);
-        let (dbname, host, user, password, port) = DumpSync.load_db_config();
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
         let header = format!("Scanning table(s): '{}'", table);
         UI::section_header(&header, "info");
@@ -50,7 +50,7 @@ impl DumpSyncAddons {
         UI::header();
 
         let file = options.file;
-        let (dbname, host, user, password, port) = DumpSync.load_db_config();
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
         let header = "Generating schema file".to_string();
         UI::section_header(&header, "info");
@@ -99,7 +99,7 @@ impl DumpSyncAddons {
         UI::header();
 
         let table = options.table;
-        let (dbname, host, user, password, port) = DumpSync.load_db_config();
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
         let header = format!("Generating ER diagram for table: '{}'", table);
         UI::section_header(&header, "info");

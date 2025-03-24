@@ -2,7 +2,7 @@ use std::env;
 
 use crate::{
     args_cli::*,
-    dump_sync::DumpSync,
+    init::DumpSyncInit,
 
     core::{
         dump::Dump,
@@ -22,7 +22,7 @@ impl DumpSyncDumper {
         UI::header();
 
         let backup_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
-        let (dbname, host, user, password, port) = DumpSync.load_db_config();
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
         UI::section_header("Importing dump to server", "info");
         Dump::new(
@@ -43,7 +43,7 @@ impl DumpSyncDumper {
         let encrypt = options.encrypt;
         let retain = options.retain;
         let backup_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
-        let (dbname, host, user, password, port) = DumpSync.load_db_config();
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
         UI::label("Press CTRL+C to exit the tool", "normal");
         UI::section_header("Dumping the database", "info");
@@ -60,7 +60,7 @@ impl DumpSyncDumper {
         let table = options.table;
         let encrypt = options.encrypt;
         let backup_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
-        let (dbname, host, user, password, port) = DumpSync.load_db_config();
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
         UI::label("Press CTRL+C to exit the tool", "normal");
         UI::section_header("Truncate table", "info");
@@ -75,7 +75,7 @@ impl DumpSyncDumper {
         UI::header();
 
         let backup_path = options.file.unwrap();
-        let (_, host, user, password, port) = DumpSync.load_db_config();
+        let (_, host, user, password, port) = DumpSyncInit.load_db_config();
         let dbname = env::var("DS_TRANSFER_DB_NAME").or_else(|_| env::var("DS_TRANSFER_DB_NAME")).unwrap_or_default();
 
         UI::section_header("Importing dump to server", "info");
