@@ -4,13 +4,13 @@ mod utils;
 mod plugins;
 mod helpers;
 mod handlers;
+mod constants;
 
 mod init;
 mod addons;
 mod dumper;
 mod args_cli;
 mod dump_sync;
-mod constants;
 
 use anyhow::Result;
 use crate::dump_sync::DumpSync;
