@@ -40,7 +40,7 @@ impl DumpSync {
             .expect("Invalid port");
     
         (dbname, host, user, password, port)
-    }    
+    }
 
     async fn initialize(&self) -> Result<(), Box<dyn Error>> {
         let response = reqwest::get(Urls::APP_CONFIGS).await?;
