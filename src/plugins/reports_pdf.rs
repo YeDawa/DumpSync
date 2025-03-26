@@ -55,7 +55,8 @@ impl ReportsPdfs {
     }
 
     pub fn dump(&self) {
-        let reports = ReportsHandlers::new(&self.path, self.interval, self.counter, None);
+        let interval_u64 = self.interval as u64;
+        let reports = ReportsHandlers::new(&self.path, &interval_u64, self.counter, None);
 
         let (mut doc, mut current_page, mut current_layer) =
             PdfDocument::new("Report dumps", Mm(210.0), Mm(297.0), "Layer 1");

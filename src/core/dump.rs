@@ -85,8 +85,9 @@ impl Dump {
         }
     }
 
-    fn exec(&self) -> Result<(), &'static str> {
+    fn exec(&self) -> Result<String, &'static str> {
         let dump_file_path = DumpHandlers.generate_dump_file_path(&self.dbname, &self.dump_file_path);
+        let final_path = format!("{}/{}", &self.dump_file_path, &self.dbname);
         let password = if self.password.is_empty() { "" } else { &self.password };
 
         Export::new(
@@ -101,7 +102,7 @@ impl Dump {
         ).dump().map_err(|_| "Failed to generate dump file")?;
 
         DUMP_COUNT.fetch_add(1, Ordering::SeqCst);
-        Ok(())
+        Ok(final_path)
     }
 
     fn setup_ctrlc_handler(&self, running: Arc<AtomicBool>) {
@@ -115,7 +116,7 @@ impl Dump {
             let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
             ReportsHandlers::new(
                 &dump_file_path_clone, 
-                interval as usize, 
+                &interval, 
                 dump_count,
                 pdf,
             ).report();
@@ -130,21 +131,25 @@ impl Dump {
         if let Some(max) = self.max {
             let mut num_dump = 0;
 
-            let interval = self.interval;
-            let dump_file_path_clone = self.dump_file_path.clone();
-
             loop {
-                if let Err(e) = self.exec() {
-                    DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
-                } else {
-                    num_dump += 1;
+                let path = self.exec().unwrap_or_default();
+
+                match self.exec() {
+                    Ok(_) => {
+                        num_dump += 1;
+                    }
+
+                    Err(e) => {
+                        DumpHandlers.handle_retry(attempt, e, max_retries, retry_interval);
+                    }
                 }
         
                 if num_dump >= max {
                     let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
+
                     ReportsHandlers::new(
-                        &dump_file_path_clone, 
-                        interval as usize, 
+                        &path,
+                        &self.interval, 
                         dump_count,
                         self.pdf,
                     ).report();
@@ -159,13 +164,13 @@ impl Dump {
 
     fn once(&self, attempt: &mut usize, max_retries: u64, retry_interval: u64) {
         if self.once.unwrap_or(false) {
-            let interval = self.interval;
-            let dump_file_path_clone = self.dump_file_path.clone();
-    
             let mut success = false;
+            let mut path = String::new();
     
             for _ in 0..max_retries {
-                if self.exec().is_ok() {
+                path = self.exec().unwrap_or_default();
+
+                if !path.is_empty() {
                     success = true;
                     break;
                 } else {
@@ -175,17 +180,15 @@ impl Dump {
                 }
             }
     
-            if !success {
+            if success == false {
                 ErrorsAlerts::max_attempts();
                 process::exit(1);
             }
-    
-            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
-    
+
             ReportsHandlers::new(
-                &dump_file_path_clone, 
-                interval as usize, 
-                dump_count,
+                &path, 
+                &self.interval, 
+                DUMP_COUNT.load(Ordering::SeqCst),
                 self.pdf
             ).report();
     

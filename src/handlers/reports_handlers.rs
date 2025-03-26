@@ -26,10 +26,10 @@ pub struct ReportsHandlers {
 
 impl ReportsHandlers {
 
-    pub fn new(path: &str, interval: usize, counter: usize, pdf: Option<bool>) -> Self {
+    pub fn new(path: &str, interval: &u64, counter: usize, pdf: Option<bool>) -> Self {
         Self {
             path: path.to_string(),
-            interval,
+            interval: *interval as usize,
             counter,
             pdf
         }
