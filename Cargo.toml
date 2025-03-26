@@ -1,6 +1,6 @@
 [package]
 name = "dumpsync"
-version = "0.1.29"
+version = "0.1.30"
 edition = "2021"
 license = "MIT"
 authors = ["kremilly"]
@@ -13,9 +13,9 @@ homepage = "https://dumpsync.com"
 
 [dependencies]
 aes-gcm = "0.10.3"
-anyhow = "1.0.96"
-chrono = "0.4.39"
-clap = { version = "4.5.31", features = ["cargo", "derive"] }
+anyhow = "1.0.97"
+chrono = "0.4.40"
+clap = { version = "4.5.33", features = ["cargo", "derive"] }
 clap-cargo = "0.15.2"
 colored = "3.0.0"
 crc32fast = "1.4.2"
@@ -29,14 +29,14 @@ mysql = "26.0.0"
 printpdf = "0.7.0"
 rand = "0.9.0"
 regex = "1.11.1"
-reqwest = { version = "0.12.12", features = ["blocking"] }
+reqwest = { version = "0.12.15", features = ["blocking"] }
 rpassword = "7.3.1"
-serde = { version = "1.0.218", features = ["derive"] }
-serde_json = "1.0.139"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
 serde_yaml = "0.9.34"
 sha1 = "0.10.6"
 sha2 = "0.10.8"
-tokio = { version = "1.43.0", features = ["full"] }
+tokio = { version = "1.44.1", features = ["full"] }
 
 [profile.release]
 lto = true
