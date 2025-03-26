@@ -85,9 +85,12 @@ impl Dump {
         }
     }
 
+    fn get_final_path(&self) -> String {
+        format!("{}/{}", &self.dump_file_path, &self.dbname)
+    }
+
     fn exec(&self) -> Result<String, &'static str> {
         let dump_file_path = DumpHandlers.generate_dump_file_path(&self.dbname, &self.dump_file_path);
-        let final_path = format!("{}/{}", &self.dump_file_path, &self.dbname);
         let password = if self.password.is_empty() { "" } else { &self.password };
 
         Export::new(
@@ -102,22 +105,20 @@ impl Dump {
         ).dump().map_err(|_| "Failed to generate dump file")?;
 
         DUMP_COUNT.fetch_add(1, Ordering::SeqCst);
-        Ok(final_path)
+        Ok(self.get_final_path())
     }
 
     fn setup_ctrlc_handler(&self, running: Arc<AtomicBool>) {
-        let dump_file_path_clone = self.dump_file_path.clone();
+        let final_path = self.get_final_path();
         let interval = self.interval;
         let pdf = self.pdf.clone();
     
         ctrlc::set_handler(move || {
             running.store(false, Ordering::SeqCst);
-    
-            let dump_count = DUMP_COUNT.load(Ordering::SeqCst);
             ReportsHandlers::new(
-                &dump_file_path_clone, 
+                &final_path, 
                 &interval, 
-                dump_count,
+                DUMP_COUNT.load(Ordering::SeqCst),
                 pdf,
             ).report();
     
