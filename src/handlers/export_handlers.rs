@@ -9,15 +9,15 @@ use std::{
     },
 };
 
-use flate2::{
-    Compression, 
-    write::GzEncoder
-};
-
 use mysql::{
     *, 
     Row, 
     prelude::*
+};
+
+use flate2::{
+    Compression, 
+    write::GzEncoder
 };
 
 use crate::{
