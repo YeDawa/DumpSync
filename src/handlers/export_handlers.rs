@@ -48,7 +48,6 @@ impl Writer {
 pub struct ExportHandlers {
     file: File,
     dbname: String,
-
     dump_data: bool,
     compress_data: bool,
     insert_ignore_into: bool,
