@@ -37,17 +37,18 @@ impl DumpHandlers {
     }
 
     pub fn generate_dump_file_truncate_path(&self, dbname: &str, table: &str, dump_file_path: &str) -> String {
-        Path::new(&dump_file_path)
-            .join(format!(
-                "{}_{}_{}_{}.sql",
-                dbname.replace(|c: char| !c.is_alphanumeric(), "_"),
-                table.replace(|c: char| !c.is_alphanumeric(), "_"),
-                Local::now().format("%Y_%m_%d_%H%M%S"),
-                Generate.random_string(6)
-            ))
-            .to_str()
-            .expect("Failed to convert PathBuf to str")
-            .to_string()
+        let sanitized = dbname.replace(|c: char| !c.is_alphanumeric(), "_");
+        let folder = Path::new(dump_file_path).join(&sanitized);
+        fs::create_dir_all(&folder).expect("Failed to create dump folder");
+
+        format!(
+            "{}/{}_{}_{}_{}.sql",
+            folder.display(),
+            sanitized,
+            table.replace(|c: char| !c.is_alphanumeric(), "_"),
+            Local::now().format("%Y_%m_%d_%H%M%S"),
+            Generate.random_string(6)
+        )
     }
 
     pub fn setup_retry_config(&self) -> (usize, u64, u64) {
