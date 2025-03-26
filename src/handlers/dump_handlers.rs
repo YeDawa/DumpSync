@@ -27,28 +27,28 @@ impl DumpHandlers {
         let folder = Path::new(dump_file_path).join(&sanitized);
         fs::create_dir_all(&folder).expect("Failed to create dump folder");
 
-        format!(
-            "{}/{}_{}_{}.sql",
-            folder.display(),
-            sanitized,
+        let filename = format!(
+            "{}_{}.sql",
             Local::now().format("%Y_%m_%d_%H%M%S"),
             Generate.random_string(6)
-        )
+        );
+
+        Path::new(&folder).join(&filename).to_str().unwrap().to_string()
     }
 
     pub fn generate_dump_file_truncate_path(&self, dbname: &str, table: &str, dump_file_path: &str) -> String {
         let sanitized = dbname.replace(|c: char| !c.is_alphanumeric(), "_");
         let folder = Path::new(dump_file_path).join(&sanitized);
         fs::create_dir_all(&folder).expect("Failed to create dump folder");
-
-        format!(
-            "{}/{}_{}_{}_{}.sql",
-            folder.display(),
-            sanitized,
+        
+        let filename = format!(
+            "{}_{}_{}.sql",
             table.replace(|c: char| !c.is_alphanumeric(), "_"),
             Local::now().format("%Y_%m_%d_%H%M%S"),
             Generate.random_string(6)
-        )
+        );
+
+        Path::new(&folder).join(&filename).to_str().unwrap().to_string()
     }
 
     pub fn setup_retry_config(&self) -> (usize, u64, u64) {
