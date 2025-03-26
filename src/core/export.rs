@@ -20,6 +20,7 @@ use crate::{
 
     handlers::{
         export_handlers::ExportHandlers,
+        comments_headers::CommentsHeaders,
         mysql_queries_builders::MySqlQueriesBuilders,
     },
 };
@@ -86,7 +87,7 @@ impl Export {
         let mut conn = pool.get_conn()?;
         let mut writer = export_handlers.create_writer()?;
 
-        export_handlers.comments_header(writer.as_write())?;
+        CommentsHeaders.core(&self.dbname, writer.as_write())?;
         export_handlers.write_create_new_database(writer.as_write())?;
 
         let tables: Vec<String> = conn.query(MySqlQueriesBuilders.show_tables())?;
@@ -140,7 +141,7 @@ impl Export {
         let mut writer = export_handlers.create_writer()?;
         let table = self.table.as_deref().unwrap_or("");
 
-        export_handlers.comments_header_truncate(&table, writer.as_write())?;
+        CommentsHeaders.truncate(&self.dbname, &table, writer.as_write())?;
         export_handlers.write_inserts_for_table(&table, &mut conn, writer.as_write())?;
         writeln!(writer.as_write(), "-- End of table `{}`", table)?;
 

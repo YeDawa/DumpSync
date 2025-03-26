@@ -21,7 +21,6 @@ use mysql::{
 };
 
 use crate::{
-    utils::date::Date,
     helpers::configs::Configs,
 
     handlers::{
@@ -92,32 +91,13 @@ impl ExportHandlers {
         }
     }
 
-    pub fn comments_header(&self, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
-        writeln!(writer, "-- Exporting using {} v.{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))?;
-        writeln!(writer, "-- Database backup: {}", self.dbname)?;
-        writeln!(writer, "-- Export date and time: {}", Date::timestamp())?;
-        writeln!(writer, "-- ---------------------------------------------------\n")?;
-
-        Ok(())
-    }
-
-    pub fn comments_header_truncate(&self, table: &str, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
-        writeln!(writer, "-- Exporting using {} v.{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))?;
-        writeln!(writer, "-- Database: {}", self.dbname)?;
-        writeln!(writer, "-- Truncate table: {}", table)?;
-        writeln!(writer, "-- Export date and time: {}", Date::timestamp())?;
-        writeln!(writer, "-- ---------------------------------------------------\n")?;
-
-        Ok(())
-    }
-
     pub fn write_create_new_database(&self, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if self.database_if_not_exists {
             let queries = MySqlQueriesBuilders.create_database(&self.dbname)?;
 
             write!(writer, "{}", queries.0)?;
             writeln!(writer, "{}", queries.1)?;
-            writeln!(writer, "-- ---------------------------------------------------")?;
+            writeln!(writer, "-- ---------------------------------------------------\n")?;
         }
 
         Ok(())
