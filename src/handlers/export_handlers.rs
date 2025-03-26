@@ -117,7 +117,7 @@ impl ExportHandlers {
 
             write!(writer, "{}", queries.0)?;
             writeln!(writer, "{}", queries.1)?;
-            writeln!(writer, "-- ---------------------------------------------------\n")?;
+            writeln!(writer, "-- ---------------------------------------------------")?;
         }
 
         Ok(())
