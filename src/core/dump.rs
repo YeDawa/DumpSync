@@ -1,6 +1,7 @@
 use std::{
     thread, 
     process, 
+    path::Path,
     time::Duration,
     
     sync::{
@@ -86,7 +87,8 @@ impl Dump {
     }
 
     fn get_final_path(&self) -> String {
-        format!("{}/{}", &self.dump_file_path, &self.dbname)
+        let path_join = Path::new(&self.path).join(&self.dbname);
+        path_join.display().to_string()
     }
 
     fn exec(&self) -> Result<String, &'static str> {
