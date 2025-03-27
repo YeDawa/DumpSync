@@ -27,8 +27,6 @@ impl DumpSync {
             Commands::Visual(options) => DumpSyncAddons.visual(options).await,
             Commands::Share(options) => DumpSyncAddons.share(options).await?,
             Commands::Scan(options) => DumpSyncAddons.scan_xss(options).await?,
-
-            Commands::Pull(_options) => todo!(),
         }
 
         Ok(())

@@ -57,19 +57,19 @@ pub enum Commands {
     /// Generate checksum for the file
     Checksum(ChecksumOptions),
 
-    /// Pull the dump of DumpSync Cloud
-    Pull(PullOptions),
+    // Pull the dump of DumpSync Cloud
+    //Pull(PullOptions),
 }
 
-#[derive(Parser)]
-pub struct PullOptions {
-    #[arg(short, long)]
-    /// Import SQL file for server
-    pub import: Option<u64>,
+// #[derive(Parser)]
+// pub struct PullOptions {
+//     #[arg(short, long)]
+//     /// Import SQL file for server
+//     pub import: Option<u64>,
 
-    /// Checksum SQL file of cloud
-    pub checksum: Option<u64>,
-}
+//     /// Checksum SQL file of cloud
+//     pub checksum: Option<u64>,
+// }
 
 #[derive(Parser)]
 pub struct ExportOptions {
