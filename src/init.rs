@@ -23,6 +23,17 @@ pub struct DumpSyncInit;
 
 impl DumpSyncInit {
 
+    pub async fn initialize(&self) -> Result<(), Box<dyn Error>> {
+        let response = reqwest::get(Urls::APP_CONFIGS).await?;
+        let content = response.bytes().await?;
+        
+        let mut file = File::create(Global::app_config()).await?;
+        file.write_all(&content).await?;
+        
+        SuccessAlerts::settings();
+        Ok(())
+    }
+
     pub fn load_db_config(&self) -> (String, String, String, String, u16) {
         let dbname = env::var("DB_NAME").or_else(|_| env::var("DS_DB_NAME")).unwrap_or_default();
         let host = env::var("DB_HOST").or_else(|_| env::var("DS_DB_HOST")).unwrap_or_default();
@@ -36,17 +47,6 @@ impl DumpSyncInit {
             .expect("Invalid port");
     
         (dbname, host, user, password, port)
-    }
-
-    pub async fn initialize(&self) -> Result<(), Box<dyn Error>> {
-        let response = reqwest::get(Urls::APP_CONFIGS).await?;
-        let content = response.bytes().await?;
-        
-        let mut file = File::create(Global::app_config()).await?;
-        file.write_all(&content).await?;
-        
-        SuccessAlerts::settings();
-        Ok(())
     }
 
 }
