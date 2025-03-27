@@ -19,7 +19,6 @@ impl DumpSync {
             Commands::Import(options) => DumpSyncDumper.import(options),
             Commands::Transfer(options) => DumpSyncDumper.transfer(options),
             Commands::Truncate(options) => DumpSyncDumper.truncate(options),
-            
             Commands::Schema(options) => DumpSyncAddons.schema(options)?,
             Commands::Checksum(options) => DumpSyncAddons.checksum(options),
             Commands::Visual(options) => DumpSyncAddons.visual(options).await,
