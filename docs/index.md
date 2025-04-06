@@ -1,4 +1,4 @@
-<div align='center'><img src='https://camo.githubusercontent.com/bba1e2629a190a9a11efa835abf931ffd18488d4479ab45898a93c899d59fa2a/68747470733a2f2f692e696d6775722e636f6d2f4e376d573934332e706e67'/></div>
+<div align='center'><img src='https://camo.githubusercontent.com/e7b3e88d71aeda92f83f8f1a380769b396a49e7d7b394738d40d03f9655e3577/68747470733a2f2f692e696d6775722e636f6d2f4a335a4c784b522e706e67'/></div>
 
 DumpSync is a simple yet powerful tool designed for dumping and restoring MySQL databases. It can be utilized for backup and restore operations or for transferring a database between different servers.
 
@@ -25,3 +25,4 @@ DumpSync automates the process of creating dumps of a MySQL database at configur
 - **Checksums**: Verify the integrity of your dump files using checksums.
 - **PDF Report**: Generate PDF reports for your dump files and your settings.
 - **Truncate**: Truncate tables to remove all data from the specified table.
+- **Visual**: Visualize the table structure of a database.
