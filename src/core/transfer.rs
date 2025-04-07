@@ -14,6 +14,7 @@ use std::{
         PathBuf
     },
 };
+
 use flate2::read::GzDecoder;
 
 use mysql::{
