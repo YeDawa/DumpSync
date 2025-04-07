@@ -1,20 +1,19 @@
-use regex::Regex;
-
 use std::{
     fs::File, 
     error::Error,
-
+    
     io::{
         Read,
         BufReader, 
     }, 
-
+    
     path::{
         Path, 
         PathBuf
     },
 };
 
+use regex::Regex;
 use flate2::read::GzDecoder;
 
 use mysql::{
