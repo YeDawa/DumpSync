@@ -49,4 +49,14 @@ impl ErrorsAlerts {
         );
     }
 
+    pub fn checksum(error: &str) {
+        let current_datetime = Date::date_time();
+
+        println!(
+            "{} Error generating checksum': {}", 
+            current_datetime.red().bold(),
+            error.red()
+        );
+    }
+
 }

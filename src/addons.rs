@@ -7,8 +7,12 @@ use crate::{
     args_cli::*,
     init::DumpSyncInit,
 
-    ui::ui_base::UI,
     helpers::env::Env,
+
+    ui::{
+        ui_base::UI,
+        errors_alerts::ErrorsAlerts,
+    },
 
     plugins::{
         schema::Schema,
@@ -90,7 +94,7 @@ impl DumpSyncAddons {
             &file,
             output.as_deref(),
         ).generated() {
-            eprintln!("Error generating checksum: {}", e);
+            ErrorsAlerts::checksum(e.to_string().as_str());
         }
     }
 
