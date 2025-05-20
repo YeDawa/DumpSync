@@ -102,16 +102,23 @@ impl ExportHandlers {
         Ok(())
     }
 
-    pub fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
+    pub fn write_inserts_for_table(
+        &self,
+        table: &str,
+        conn: &mut PooledConn,
+        writer: &mut dyn Write,
+    ) -> Result<(), Box<dyn Error>> {
         if self.dump_data {
             let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.select(table, None, None))?;
-    
+
             if rows.is_empty() {
                 writeln!(writer, "-- Table `{}` contains no data.", table)?;
             } else {
                 let mut values_batch: Vec<String> = Vec::new();
-    
-                for row in rows {
+
+                'row_loop: for row in rows {
+                    let mut has_xss = false;
+
                     let values: Vec<String> = row
                         .clone()
                         .unwrap()
@@ -119,8 +126,12 @@ impl ExportHandlers {
                         .map(|value| match value {
                             Value::NULL => "NULL".to_string(),
                             Value::Bytes(bytes) => {
-                                let escaped = String::from_utf8_lossy(&bytes);
-                                format!("'{}'", HTMLHandlers.escape_single_quotes(&escaped))
+                                let s = String::from_utf8_lossy(&bytes);
+                                if HTMLHandlers.is_xss_payload(&s) {
+                                    has_xss = true;
+                                }
+                                
+                                format!("'{}'", s.replace('\'', "''"))
                             }
                             Value::Int(int) => int.to_string(),
                             Value::UInt(uint) => uint.to_string(),
@@ -128,17 +139,24 @@ impl ExportHandlers {
                             _ => "NULL".to_string(),
                         })
                         .collect();
-    
+
+                    if has_xss {
+                        continue 'row_loop;
+                    }
+
                     values_batch.push(format!("({})", values.join(", ")));
                 }
-    
-                let insert_command = MySqlQueriesBuilders.insert_into(table, values_batch, self.insert_ignore_into);
-                writeln!(writer, "{}", insert_command)?;
+
+                if !values_batch.is_empty() {
+                    let insert_command =
+                        MySqlQueriesBuilders.insert_into(table, values_batch, self.insert_ignore_into);
+                    writeln!(writer, "{}", insert_command)?;
+                }
             }
         }
-    
+
         Ok(())
-    }    
+    }
 
     pub fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         writeln!(writer, "-- Exporting the table: `{}`", table)?;

@@ -2,27 +2,19 @@ pub struct HTMLHandlers;
 
 impl HTMLHandlers {
 
-    pub fn html_escape(&self, input: &str) -> String {
-        input
-            .replace('&', "&amp;")
-            .replace('<', "&lt;")
-            .replace('>', "&gt;")
-            .replace('"', "&quot;")
-            .replace('\'', "&#39;")
-            .replace('`', "&#96;")
-            .replace(' ', "&nbsp;")
-            .replace('\n', "<br>")
-            .replace('\r', "")
-            .replace('\t', "&emsp;")
-            .replace('(', "&#40;")
-            .replace(')', "&#41;")
-            .replace('{', "&#123;")
-            .replace('}', "&#125;")
-            .replace("'", "&#39;")
-    }
+    pub fn is_xss_payload(&self, s: &str) -> bool {
+        let s = s.to_lowercase();
+        let xss_keywords = [
+            "<script", "<iframe", "<img", "<svg", "<link", "<meta", "<object", "<embed",
+            "<bgsound", "<video", "<audio", "<marquee", "<form", "<style", "<body",
+            "onerror=", "onload=", "onstart=", "onmouseover=", "onclick=", "javascript:",
+            "data:text/html", "srcdoc=", "src=", "href=", "url(", "document.cookie",
+            "window.location", "window.open", "window.alert", "window.confirm",
+            "window.prompt", "eval(", "setTimeout(", "setInterval(", "XMLHttpRequest",
+            "ActiveXObject", "iframe src=", "script src=", "object data=", "embed src=",
+        ];
 
-    pub fn escape_single_quotes(&self, input: &str) -> String {
-        input.replace('\'', "''")
+        xss_keywords.iter().any(|kw| s.contains(kw))
     }
 
 }
