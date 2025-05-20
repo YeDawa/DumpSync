@@ -57,8 +57,11 @@ pub enum Commands {
     /// Generate checksum for the file
     Checksum(ChecksumOptions),
 
-    // /// Pull the dump of DumpSync Cloud
-    // Pull(PullOptions),
+    /// Pull the dump of DumpSync Cloud
+    Pull {
+        /// Pull the dump from the cloud
+        file: String,
+    },
 }
 
 // #[derive(Parser)]

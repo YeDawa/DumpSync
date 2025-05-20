@@ -175,6 +175,40 @@ impl Import {
         Ok(())
     }
 
+    pub async fn dump_directly(&self, content: &str) -> Result<(), Box<dyn Error>> {
+        let pool = Connection {
+            host: self.host.clone(),
+            port: self.port,
+            user: self.user.clone(),
+            password: self.password.clone(),
+            dbname: Some(self.dbname.clone()),
+        }.create_pool()?;
+        
+        let mut conn = pool.get_conn()?;
+        let dump_content = ImportHandlers::new(&self.dbname, &content).check_db_name();
+        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
+
+        for statement in dump_content.split(';') {
+            let trimmed = statement.trim();
+
+            if !trimmed.is_empty() {
+                match conn.query_drop(trimmed) {
+                    Ok(_) => {
+                        if let Some(captures) = create_table_regex.captures(trimmed) {
+                            if let Some(table_name) = captures.get(1) {
+                                SuccessAlerts::table(table_name.as_str());
+                            }
+                        }
+                    }
+
+                    Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
+                }
+            }
+        }
+
+        Ok(())
+    }
+
     pub fn dump(&self) -> Result<(), Box<dyn Error>> {
         if Encrypt::new(&self.dump_file_path).calculate_entropy()? > 7.5 {
             let _ = self.dump_encrypted();

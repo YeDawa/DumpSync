@@ -6,6 +6,7 @@ use crate::{
     init::DumpSyncInit,
     addons::DumpSyncAddons,
     dumper::DumpSyncDumper,
+    service::DumpSyncService,
 };
 
 pub struct DumpSync;
@@ -26,6 +27,8 @@ impl DumpSync {
             Commands::Visual(options) => DumpSyncAddons.visual(options).await,
             Commands::Share(options) => DumpSyncAddons.share(options).await?,
             Commands::Scan(options) => DumpSyncAddons.scan_xss(options).await?,
+
+            Commands::Pull { file } => DumpSyncService.pull(&file).await,
         }
 
         Ok(())

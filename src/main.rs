@@ -1,6 +1,7 @@
 mod ui;
 mod core;
 mod utils;
+mod cloud;
 mod plugins;
 mod helpers;
 mod handlers;
@@ -9,6 +10,7 @@ mod constants;
 mod init;
 mod addons;
 mod dumper;
+mod service;
 mod args_cli;
 mod dump_sync;
 
