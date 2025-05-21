@@ -29,13 +29,14 @@ impl MySqlQueriesBuilders {
         Ok((create_db, use_db))
     }
 
-    pub fn insert_into(&self, table: &str, values: Vec<String>, ignore: bool) -> String {
+    pub fn insert_into(&self, table: &str, columns: Vec<String>, values: Vec<String>, ignore: bool) -> String {
         let insert_ignore = if ignore { "INSERT IGNORE INTO" } else { "INSERT INTO" };
 
         format!(
-            "{} `{}` VALUES\n{};",
+            "{} `{}` ({}) VALUES\n{};",
             insert_ignore,
             table,
+            columns.join(", "),
             values.join(",\n")
         )
     }
@@ -104,6 +105,10 @@ impl MySqlQueriesBuilders {
             "ALTER TABLE `{}` ADD CONSTRAINT `{}` UNIQUE (`{}`);",
             table, constraint_name, column_name
         )
+    }
+
+    pub fn show_columns(&self, table: &str) -> String {
+        format!("SHOW COLUMNS FROM `{}`", table)
     }
     
 }

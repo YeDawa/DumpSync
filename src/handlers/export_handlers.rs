@@ -103,60 +103,54 @@ impl ExportHandlers {
     }
 
     pub fn write_inserts_for_table(
-        &self,
-        table: &str,
-        conn: &mut PooledConn,
-        writer: &mut dyn Write,
-    ) -> Result<(), Box<dyn Error>> {
-        if self.dump_data {
-            let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.select(table, None, None))?;
+    &self,
+    table: &str,
+    conn: &mut PooledConn,
+    writer: &mut dyn Write,
+) -> Result<(), Box<dyn Error>> {
+    if self.dump_data {
+        let columns: Vec<String> = conn.query_map(MySqlQueriesBuilders.show_columns(table), |row: Row| {
+            let field: String = row.get("Field").unwrap();
+            format!("`{}`", field)
+        })?;
+        
+        let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.select(table, None, None))?;
 
-            if rows.is_empty() {
-                writeln!(writer, "-- Table `{}` contains no data.", table)?;
-            } else {
-                let mut values_batch: Vec<String> = Vec::new();
+        if rows.is_empty() {
+            writeln!(writer, "-- Table `{}` contains no data.", table)?;
+        } else {
+            let mut values_batch: Vec<String> = Vec::new();
 
-                'row_loop: for row in rows {
-                    let mut has_xss = false;
+            for row in rows {
+                let values: Vec<String> = row
+                    .clone()
+                    .unwrap()
+                    .into_iter()
+                    .map(|value| match value {
+                        Value::NULL => "NULL".to_string(),
+                        Value::Bytes(bytes) => {
+                            let raw = String::from_utf8_lossy(&bytes);
+                            format!("'{}'", HTMLHandlers.escape_for_sql(&raw))
+                        }
+                        Value::Int(i) => i.to_string(),
+                        Value::UInt(u) => u.to_string(),
+                        Value::Float(f) => f.to_string(),
+                        _ => "NULL".to_string(),
+                    })
+                    .collect();
 
-                    let values: Vec<String> = row
-                        .clone()
-                        .unwrap()
-                        .into_iter()
-                        .map(|value| match value {
-                            Value::NULL => "NULL".to_string(),
-                            Value::Bytes(bytes) => {
-                                let s = String::from_utf8_lossy(&bytes);
-                                if HTMLHandlers.is_xss_payload(&s) {
-                                    has_xss = true;
-                                }
-                                
-                                format!("'{}'", s.replace('\'', "''"))
-                            }
-                            Value::Int(int) => int.to_string(),
-                            Value::UInt(uint) => uint.to_string(),
-                            Value::Float(float) => float.to_string(),
-                            _ => "NULL".to_string(),
-                        })
-                        .collect();
+                values_batch.push(format!("({})", values.join(", ")));
+            }
 
-                    if has_xss {
-                        continue 'row_loop;
-                    }
-
-                    values_batch.push(format!("({})", values.join(", ")));
-                }
-
-                if !values_batch.is_empty() {
-                    let insert_command =
-                        MySqlQueriesBuilders.insert_into(table, values_batch, self.insert_ignore_into);
-                    writeln!(writer, "{}", insert_command)?;
-                }
+            if !values_batch.is_empty() {
+                let insert_command = MySqlQueriesBuilders.insert_into(table, columns, values_batch, self.insert_ignore_into);
+                writeln!(writer, "{}", insert_command)?;
             }
         }
-
-        Ok(())
     }
+
+    Ok(())
+}    
 
     pub fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         writeln!(writer, "-- Exporting the table: `{}`", table)?;

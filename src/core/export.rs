@@ -101,7 +101,7 @@ impl Export {
 
             export_handlers.write_structure_for_table(&table, &mut conn, writer.as_write())?;
             export_handlers.write_inserts_for_table(&table, &mut conn, writer.as_write())?;
-            writeln!(writer.as_write(), "-- End of table `{}`", table)?;
+            writeln!(writer.as_write(), "-- End of table `{}`\n", table)?;
         }
 
         if self.encrypt.unwrap_or(false) {
