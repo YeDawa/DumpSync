@@ -55,6 +55,7 @@ For more help and document, see our documentation:
 - [Import](https://docs.dumpsync.com/import)
 - [Transfer](https://docs.dumpsync.com/transfer)
 - [Truncate](https://docs.dumpsync.com/truncate)
+- [Pull](https://docs.dumpsync.com/pull)
 - [Scan XSS](https://docs.dumpsync.com/scan)
 - [Share](https://docs.dumpsync.com/share)
 - [Schema](https://docs.dumpsync.com/schema)
