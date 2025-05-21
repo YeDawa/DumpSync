@@ -59,4 +59,13 @@ impl ErrorsAlerts {
         );
     }
 
+    pub fn api_key() {
+        let current_datetime = Date::date_time();
+
+        println!(
+            "{} API key is not set", 
+            current_datetime.red().bold(),
+        );
+    }
+
 }

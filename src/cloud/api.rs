@@ -5,7 +5,7 @@ use std::{
     error::Error,
 
     io::{
-        ErrorKind, 
+        ErrorKind,
         Error as ErrorIo, 
     },
 };
@@ -15,7 +15,11 @@ use reqwest::header::{
     AUTHORIZATION, 
 };
 
-use crate::helpers::env::Env; 
+use crate::{
+    helpers::env::Env,
+    constants::urls::Urls,
+    ui::errors_alerts::ErrorsAlerts,
+}; 
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
@@ -43,7 +47,8 @@ impl API {
     }
 
     pub async fn get(&self) -> Result<Response, Box<dyn Error>> {
-        let mut api_url = String::from("https://api.dumpsync.com/backups/get/");
+        let mut api_url = String::from(Urls::DUMPSYNC_API);
+        api_url.push_str("backups/get/");
         api_url.push_str(&self.backup);
 
         let api_token = env::var("DS_API_KEY").unwrap_or_else(|_| {
@@ -51,6 +56,8 @@ impl API {
         });
 
         if api_token.is_empty() {
+            ErrorsAlerts::api_key();
+
             return Err(Box::new(ErrorIo::new(
                 ErrorKind::Other,
                 "API token is not set",
