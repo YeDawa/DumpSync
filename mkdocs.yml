@@ -34,6 +34,7 @@ nav:
     - Import: import.md
     - Transfer: transfer.md
     - Truncate: truncate.md
+    - Pull: pull.md
   - Plugins:
     - Scan XSS: scan.md
     - Share: share.md
