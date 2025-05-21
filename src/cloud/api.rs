@@ -3,11 +3,6 @@ use serde::Deserialize;
 use std::{
     env,
     error::Error,
-
-    io::{
-        ErrorKind,
-        Error as ErrorIo, 
-    },
 };
 
 use reqwest::header::{
@@ -53,13 +48,6 @@ impl API {
         let api_token = env::var("DS_API_KEY").unwrap_or_else(|_| {
             Env::get_var("DS_API_KEY")
         });
-
-        if api_token.is_empty() {
-            return Err(Box::new(ErrorIo::new(
-                ErrorKind::Other,
-                "API token is not set",
-            )));
-        }
 
         let client = reqwest::Client::new();
         let response = client
