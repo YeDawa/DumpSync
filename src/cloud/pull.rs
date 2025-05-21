@@ -21,7 +21,6 @@ pub struct Pull {
     password: String,
     dbname: String,
 
-    path: String, 
     backup: String,
 }
 
@@ -34,7 +33,6 @@ impl Pull {
         password: &str,
         dbname: &str,
         
-        path: &str,
         backup: &str,
     ) -> Self {
         Self {
@@ -44,13 +42,11 @@ impl Pull {
             password: password.to_string(),
             dbname: dbname.to_string(),
 
-            path: path.to_string(),
             backup: backup.to_string(),
         }
     }
 
     pub async fn import_sql_from_url(&self) -> Result<String, Box<dyn Error>> {
-        let file_name = &self.backup.split('/').last().unwrap_or("dump.sql");
         let response = reqwest::get(&self.backup).await?;
         
         if !response.status().is_success() {
@@ -72,9 +68,11 @@ impl Pull {
             &self.user,
             &self.password,
             &self.dbname,
-            &self.path,
-            &file_name,
-        ).dump_directly(&sql_content.to_string()).await?;
+            None,
+            None,
+            Some(&sql_content),
+        ).dump_directly().await?;
+        
         Ok(sql_content)
     }
 

@@ -220,7 +220,14 @@ impl Dump {
 
     pub fn import(&self) {
         Import::new(
-            &self.host, self.port, &self.user, &self.password, &self.dbname, &self.dump_file_path, &self.path,
+            &self.host,
+            self.port,
+            &self.user,
+            &self.password,
+            &self.dbname,
+            Some(self.dump_file_path.as_str()),
+            Some(self.path.as_str()),
+            None,
         ).dump().expect("Failed to import dump");
     }
 

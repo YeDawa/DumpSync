@@ -42,8 +42,9 @@ pub struct Import {
     user: String,
     password: String,
     dbname: String,
-    path: String,
-    dump_file_path: String,
+    path: Option<String>,
+    dump_file_path: Option<String>,
+    sql_content: Option<String>
 }
 
 impl Import {
@@ -54,8 +55,9 @@ impl Import {
         user: &str, 
         password: &str, 
         dbname: &str, 
-        dump_file_path: &str, 
-        path: &str,
+        dump_file_path: Option<&str>, 
+        path: Option<&str>,
+        sql_content: Option<&str>,
     ) -> Self {
         Self {
             host: host.to_string(),
@@ -63,19 +65,21 @@ impl Import {
             user: user.to_string(),
             password: password.to_string(),
             dbname: dbname.to_string(),
-            path: path.to_string(),
-            dump_file_path: dump_file_path.to_string(),
+            path: path.map(|s| s.to_string()),
+            dump_file_path: dump_file_path.map(|s| s.to_string()),
+            sql_content: sql_content.map(|s| s.to_string()),
         }
     }
 
     fn complete_path(&self) -> Result<PathBuf, Box<dyn Error>> {
-        let path = Path::new(&self.dump_file_path);
+        let dump_file_path = self.dump_file_path.as_ref().ok_or("dump_file_path is None")?;
+        let path = Path::new(dump_file_path);
 
         if path.is_absolute() {
             Ok(path.to_path_buf())
         } else {
-            let dump_file_path = Path::new(&self.dump_file_path);
-            Ok(dump_file_path.join(&self.path))
+            let base_path = self.path.as_ref().ok_or("path is None")?;
+            Ok(Path::new(base_path).join(dump_file_path))
         }
     }
 
@@ -125,7 +129,8 @@ impl Import {
 
         let mut conn = pool.get_conn()?;
 
-        let decrypt = Encrypt::new(&self.dump_file_path);
+        let dump_file_path = self.dump_file_path.as_ref().ok_or("dump_file_path is None")?;
+        let decrypt = Encrypt::new(dump_file_path);
         let dump_content = String::from_utf8(decrypt.decrypt_and_read()?)?;
 
         let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
@@ -145,7 +150,7 @@ impl Import {
         }.create_pool()?;
 
         let mut conn = pool.get_conn()?;
-        let is_compressed = self.dump_file_path.ends_with(".sql.gz");
+        let is_compressed = self.dump_file_path.as_ref().map_or(false, |s| s.ends_with(".sql.gz"));
 
         let file = self.complete_path()?;
 
@@ -156,7 +161,8 @@ impl Import {
             decoder.read_to_string(&mut content)?;
             content
         } else {
-            let mut file = File::open(&self.dump_file_path)?;
+            let dump_file_path = self.dump_file_path.as_ref().ok_or("dump_file_path is None")?;
+            let mut file = File::open(dump_file_path)?;
             let mut content = String::new();
             file.read_to_string(&mut content)?;
             content
@@ -169,7 +175,7 @@ impl Import {
         Ok(())
     }
 
-    pub async fn dump_directly(&self, content: &str) -> Result<(), Box<dyn Error>> {
+    pub async fn dump_directly(&self) -> Result<(), Box<dyn Error>> {
         let pool = Connection {
             host: self.host.clone(),
             port: self.port,
@@ -179,14 +185,16 @@ impl Import {
         }.create_pool()?;
 
         let mut conn = pool.get_conn()?;
-        let dump_content = ImportHandlers::new(&self.dbname, &content).check_db_name();
+        let sql_content = self.sql_content.as_deref().ok_or("sql_content is None")?;
+        let dump_content = ImportHandlers::new(&self.dbname, sql_content).check_db_name();
         let _ = &self.process_statements(&mut conn, &dump_content, &self.dbname);
 
         Ok(())
     }
 
     pub fn dump(&self) -> Result<(), Box<dyn Error>> {
-        if Encrypt::new(&self.dump_file_path).calculate_entropy()? > 7.5 {
+        let dump_file_path = self.dump_file_path.as_ref().ok_or("dump_file_path is None")?;
+        if Encrypt::new(dump_file_path.as_str()).calculate_entropy()? > 7.5 {
             let _ = self.dump_encrypted();
         } else {
             let _ =  self.dump_plain();
