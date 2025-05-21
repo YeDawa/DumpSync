@@ -79,6 +79,41 @@ impl Import {
         }
     }
 
+    fn process_statements(&self, conn: &mut PooledConn, dump_content: &str, dbname: &str) {
+        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
+        let mut buffer = String::new();
+
+        for line in dump_content.lines() {
+            let trimmed_line = line.trim();
+
+            if trimmed_line.is_empty() || trimmed_line.starts_with("--") {
+                continue;
+            }
+
+            buffer.push_str(trimmed_line);
+            buffer.push(' ');
+
+            if trimmed_line.ends_with(");") || trimmed_line.ends_with(";") {
+                let sql = buffer.trim();
+
+                if !sql.is_empty() {
+                    match conn.query_drop(sql) {
+                        Ok(_) => {
+                            if let Some(captures) = create_table_regex.captures(sql) {
+                                if let Some(table_name) = captures.get(1) {
+                                    SuccessAlerts::table(table_name.as_str());
+                                }
+                            }
+                        }
+                        Err(e) => ErrorsAlerts::import(dbname, sql, &e.to_string()),
+                    }
+                }
+
+                buffer.clear();
+            }
+        }
+    }
+
     pub fn dump_encrypted(&self) -> Result<(), Box<dyn Error>> {
         let pool = Connection {
             host: self.host.clone(),
@@ -94,26 +129,7 @@ impl Import {
         let dump_content = String::from_utf8(decrypt.decrypt_and_read()?)?;
 
         let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
-
-        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
-
-        for statement in dump_content.split(';') {
-            let trimmed = statement.trim();
-
-            if !trimmed.is_empty() {
-                match conn.query_drop(trimmed) {
-                    Ok(_) => {
-                        if let Some(captures) = create_table_regex.captures(trimmed) {
-                            if let Some(table_name) = captures.get(1) {
-                                SuccessAlerts::table(table_name.as_str());
-                            }
-                        }
-                    }
-
-                    Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
-                }
-            }
-        }
+        let _ = &self.process_statements(&mut conn, &dump_content, &self.dbname);
 
         SuccessAlerts::import(&self.dbname);
         Ok(())
@@ -135,41 +151,19 @@ impl Import {
 
         let dump_content = if is_compressed {
             let file = File::open(file)?;
-
             let mut decoder = GzDecoder::new(BufReader::new(file));
             let mut content = String::new();
-
             decoder.read_to_string(&mut content)?;
             content
         } else {
             let mut file = File::open(&self.dump_file_path)?;
             let mut content = String::new();
-
             file.read_to_string(&mut content)?;
             content
         };
 
         let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
-
-        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
-
-        for statement in dump_content.split(';') {
-            let trimmed = statement.trim();
-
-            if !trimmed.is_empty() {
-                match conn.query_drop(trimmed) {
-                    Ok(_) => {
-                        if let Some(captures) = create_table_regex.captures(trimmed) {
-                            if let Some(table_name) = captures.get(1) {
-                                SuccessAlerts::table(table_name.as_str());
-                            }
-                        }
-                    }
-
-                    Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
-                }
-            }
-        }
+        let _ = &self.process_statements(&mut conn, &dump_content, &self.dbname);
 
         SuccessAlerts::import(&self.dbname);
         Ok(())
@@ -183,28 +177,10 @@ impl Import {
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
         }.create_pool()?;
-        
+
         let mut conn = pool.get_conn()?;
         let dump_content = ImportHandlers::new(&self.dbname, &content).check_db_name();
-        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
-
-        for statement in dump_content.split(';') {
-            let trimmed = statement.trim();
-
-            if !trimmed.is_empty() {
-                match conn.query_drop(trimmed) {
-                    Ok(_) => {
-                        if let Some(captures) = create_table_regex.captures(trimmed) {
-                            if let Some(table_name) = captures.get(1) {
-                                SuccessAlerts::table(table_name.as_str());
-                            }
-                        }
-                    }
-
-                    Err(e) => ErrorsAlerts::import(&self.dbname, trimmed, &e.to_string()),
-                }
-            }
-        }
+        let _ = &self.process_statements(&mut conn, &dump_content, &self.dbname);
 
         Ok(())
     }
