@@ -32,7 +32,6 @@ impl Pull {
         user: &str,
         password: &str,
         dbname: &str,
-        
         backup: &str,
     ) -> Self {
         Self {
@@ -41,7 +40,6 @@ impl Pull {
             user: user.to_string(),
             password: password.to_string(),
             dbname: dbname.to_string(),
-
             backup: backup.to_string(),
         }
     }
@@ -72,7 +70,7 @@ impl Pull {
             None,
             Some(&sql_content),
         ).dump_directly().await?;
-        
+
         Ok(sql_content)
     }
 
