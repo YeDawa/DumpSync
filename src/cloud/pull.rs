@@ -10,6 +10,7 @@ use std::{
 };
 
 use crate::{
+    cloud::api::API,
     core::import::Import,
     ui::errors_alerts::ErrorsAlerts,
 };
@@ -44,8 +45,8 @@ impl Pull {
         }
     }
 
-    pub async fn pull(&self) -> Result<String, Box<dyn Error>> {
-        let response = reqwest::get(&self.backup).await?;
+    async fn pull_url(&self, url: &str) -> Result<String, Box<dyn Error>> {
+        let response = reqwest::get(url).await?;
         
         if !response.status().is_success() {
             let status_code = response.status();
@@ -72,6 +73,30 @@ impl Pull {
         ).dump_directly().await?;
 
         Ok(sql_content)
+    }
+
+    async fn pull_dumpsync(&self, backup: &str) -> Result<(), Box<dyn Error>> {
+        match API::new(&backup).get().await {
+            Ok(api_data) => {
+                let _ = self.pull_url(&api_data.url).await;
+            }
+
+            Err(e) => {
+                eprintln!("{}", e);
+            }
+        }
+
+        Ok(())
+    }
+
+    pub async fn pull(&self) -> Result<(), Box<dyn Error>> {
+        if self.backup.starts_with("https://") || self.backup.starts_with("http://") {
+            let _ = self.pull_url(&self.backup).await;
+        } else {
+            let _ = self.pull_dumpsync(&self.backup).await;
+        }
+
+        Ok(())
     }
 
 }
