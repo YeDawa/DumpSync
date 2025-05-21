@@ -18,7 +18,6 @@ use reqwest::header::{
 use crate::{
     helpers::env::Env,
     constants::urls::Urls,
-    ui::errors_alerts::ErrorsAlerts,
 }; 
 
 #[allow(dead_code)]
@@ -56,8 +55,6 @@ impl API {
         });
 
         if api_token.is_empty() {
-            ErrorsAlerts::api_key();
-
             return Err(Box::new(ErrorIo::new(
                 ErrorKind::Other,
                 "API token is not set",
