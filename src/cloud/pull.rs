@@ -44,7 +44,7 @@ impl Pull {
         }
     }
 
-    pub async fn import_sql_from_url(&self) -> Result<String, Box<dyn Error>> {
+    pub async fn pull(&self) -> Result<String, Box<dyn Error>> {
         let response = reqwest::get(&self.backup).await?;
         
         if !response.status().is_success() {

@@ -16,7 +16,7 @@ impl DumpSyncService {
 
         let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
         UI::section_header("Importing dump to server", "info");
-        
+
         Pull::new(
             &host,
             port,
@@ -24,7 +24,7 @@ impl DumpSyncService {
             &password,
             &dbname,
             &backup,
-        ).import_sql_from_url().await.expect("Failed to download SQL file");
+        ).pull().await.expect("Failed to download SQL file");
     }
 
 }
