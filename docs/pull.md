@@ -5,7 +5,7 @@ The `pull` command allows you to download SQL files directly from a URL and impo
 ## Usage
 
 ```bash
-dumpsync pull <file_url> [options]
+dumpsync pull <file_url>
 ```
 
 ### Parameters
