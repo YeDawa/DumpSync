@@ -30,6 +30,7 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 - **PDF Report**: Generate PDF reports for your dump files and your settings.
 - **Truncate**: Truncate tables to remove all data from the specified table.
 - **Visual**: Visualize the table structure of a database.
+- **Pull**: Pull the latest changes from a remote database to your local environment.
 
 ## Installation
 
