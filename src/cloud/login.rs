@@ -1,10 +1,13 @@
 use open;
 use rpassword::prompt_password;
 
-use std::process::Command;
-
 use crate::{
-    constants::urls::Urls,
+    helpers::write_env::WriteEnv,
+
+    constants::{
+        urls::Urls,
+        global::Global,
+    },
 
     ui::{
         errors_alerts::ErrorsAlerts,
@@ -32,26 +35,14 @@ impl Login {
     pub fn save_var(&self) {
         let api_key = prompt_password("Enter the api key [input is hiding]: ")
             .expect("Error reading the password");
+        
+        WriteEnv::new(
+            Some(Global::DS_API_ENV.to_string()),
+            Some(api_key)
+        ).edit_env_var()
+            .expect("Error writing the env file");
 
-        println!("{}", api_key);
-
-        let status = if cfg!(target_os = "windows") {
-            let cmd = format!("$env:DS_API_KEY = '{}';", api_key);
-            Command::new("powershell")
-                .args(["-Command", &cmd])
-                .status()
-        } else {
-            let cmd = format!("export DS_API_KEY='{}';", api_key);
-            Command::new("sh")
-                .arg("-c")
-                .arg(&cmd)
-                .status()
-        };
-
-        match status {
-            Ok(e) => println!("API Key saved: {}", e),
-            Err(_) => ErrorsAlerts::api_key(),
-        }
+        SuccessAlerts::api_key();
     }
 
 }

@@ -93,15 +93,6 @@ impl SuccessAlerts {
         );
     }
 
-    pub fn write_env(var_name: &str) {
-        let current_datetime = Date::date_time();
-
-        println!("{} Added env '{}' variable", 
-            current_datetime.green().bold(),
-            var_name.blue(),
-        );
-    }
-
     pub fn edit_env(var_name: &str) {
         let current_datetime = Date::date_time();
 

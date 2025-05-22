@@ -6,7 +6,6 @@ use std::{
 
     fs::{
         write,
-        OpenOptions,
         read_to_string,
     },
 
@@ -45,26 +44,6 @@ impl WriteEnv {
         });
 
         Self { key, value }
-    }
-
-    pub fn write_env(&self) -> Result<(), IoError> {
-        let app_folder = &*Folders::APP_FOLDER;
-        let env_path: PathBuf = app_folder.join(".env");
-
-        let mut file = OpenOptions::new()
-            .write(true)
-            .append(true)
-            .create(true)
-            .open(env_path)?;
-
-        writeln!(file, "{}=\"{}\"", self.key, self.value)?;
-        Ok(())
-    }
-
-    pub fn add_env_var(&self) -> Result<(), IoError> {
-        let _ = &self.write_env()?;
-        SuccessAlerts::write_env(&self.key);
-        Ok(())
     }
 
     pub fn edit_env_var(&self) -> Result<(), IoError> {

@@ -16,14 +16,4 @@ impl Folders {
         path
     });
     
-    pub const SETTINGS_FILE: Lazy<PathBuf> = Lazy::new(|| {
-        let mut path = config_dir().expect("No config directory");
-        path.push(Global::APP_NAME);
-        path.push(
-            format!("{}.yml", Global::APP_NAME)
-        );
-
-        path
-    });
-    
 }

@@ -97,13 +97,4 @@ impl ErrorsAlerts {
         );
     }
 
-    pub fn api_key() {
-        let current_datetime = Date::date_time();
-
-        println!(
-            "{} Failed to set the API key in the environment variable.", 
-            current_datetime.red().bold(),
-        );
-    }
-
 }

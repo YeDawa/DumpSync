@@ -12,6 +12,8 @@ impl Global {
 
     pub const FORMATS_SUPPORTED: &'static [&'static str] = &["sql", "txt", "xml", "csv", "json", "html"];
     
+    pub const DS_API_ENV: &'static str = "DS_API_KEY";
+    
     pub fn app_config() -> String {
         format!("{}.yml", Self::APP_NAME)
     }

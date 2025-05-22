@@ -1,7 +1,6 @@
 use serde::Deserialize;
 
 use std::{
-    env,
     io::Read,
     fs::File,
     error::Error,
@@ -24,7 +23,11 @@ use reqwest::{
 
 use crate::{
     helpers::env::Env,
-    constants::urls::Urls,
+
+    constants::{
+        urls::Urls,
+        global::Global,
+    },
 }; 
 
 #[allow(dead_code)]
@@ -85,8 +88,7 @@ impl API {
         api_url.push_str("backups/get/");
         api_url.push_str(self.backup.as_deref().unwrap_or(""));
         
-        let api_token = Env::get_system_var("DS_API_KEY");
-        println!("API Token: {}", api_token);
+        let api_token = Env.system(Global::DS_API_ENV);
 
         let client = reqwest::Client::new();
         let response = client
@@ -108,17 +110,14 @@ impl API {
 
         let path = self.path.as_ref().ok_or("No path provided")?;
         let db_name = self.dbname.clone().unwrap_or_default();
-
-        let api_token = env::var("DS_API_KEY").unwrap_or_else(|_| {
-            Env::get_var("DS_API_KEY")
-        });
+        
+        let api_token = Env.system(Global::DS_API_ENV);
 
         let client = Client::new();
         let mut file = File::open(path)?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
 
-        // Corrige o nome do arquivo para apenas o nome base
         let file_name = std::path::Path::new(path)
             .file_name()
             .and_then(|name| name.to_str())
@@ -143,6 +142,23 @@ impl API {
         let response_raw = response.text().await?;
         let parsed: ResponseUpload = serde_json::from_str(&response_raw)?;
         Ok(parsed)
+    }
+
+    pub async fn download(&self, url: &str) -> Result<String, Box<dyn Error>> {
+        let api_token = Env.system(Global::DS_API_ENV);
+
+        let client = reqwest::Client::new();
+        let response = client
+            .get(url)
+            .header(AUTHORIZATION, format!("Bearer {}", api_token))
+            .header(CONTENT_TYPE, "application/json")
+            .send()
+            .await?
+            .error_for_status()?
+            .text()
+            .await?;
+
+        Ok(response)
     }
 
 }

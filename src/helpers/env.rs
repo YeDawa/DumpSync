@@ -2,8 +2,10 @@ use dotenvy::dotenv;
 
 use std::{
     env,
-    process::Command,
+    sync::Once,
 };
+
+use crate::constants::folders::Folders;
 
 pub struct Env;
 
@@ -19,24 +21,16 @@ impl Env {
         )
     }
 
-    pub fn get_system_var(var: &str) -> String {
-        let output = if cfg!(target_os = "windows") {
-            let cmd = format!("echo $env:{}", var);
-            Command::new("powershell")
-                .args(["-Command", &cmd])
-                .output()
-        } else {
-            let cmd = format!("echo ${}", var);
-            Command::new("sh")
-                .arg("-c")
-                .arg(&cmd)
-                .output()
-        };
+    pub fn system(&self, key: &str) -> String {
+        let load_env: Once = Once::new();
 
-        match output {
-            Ok(output) => String::from_utf8_lossy(&output.stdout).trim().to_string(),
-            Err(e) => panic!("Failed to get environment variable: {}", e),
-        }
+        load_env.call_once(|| {
+            dotenvy::from_path(
+                &Folders::APP_FOLDER.join(".env")
+            ).ok();
+        });
+    
+        env::var(key).expect(&format!("{} not set", key))
     }
 
     pub fn get_var_u64(var: &str) -> u64 {
