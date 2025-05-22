@@ -62,17 +62,13 @@ pub enum Commands {
         /// Pull the dump from the cloud
         file: String,
     },
+
+    /// Push the dump to DumpSync Cloud
+    Push {
+        /// Push the dump to the cloud
+        file: String,
+    },
 }
-
-// #[derive(Parser)]
-// pub struct PullOptions {
-//     #[arg(short, long)]
-//     /// Import SQL file for server
-//     pub import: Option<u64>,
-
-//     /// Checksum SQL file of cloud
-//     pub checksum: Option<u64>,
-// }
 
 #[derive(Parser)]
 pub struct ExportOptions {

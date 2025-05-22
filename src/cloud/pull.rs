@@ -21,7 +21,6 @@ pub struct Pull {
     user: String,
     password: String,
     dbname: String,
-
     backup: String,
 }
 
@@ -76,7 +75,12 @@ impl Pull {
     }
 
     async fn pull_dumpsync(&self, backup: &str) -> Result<(), Box<dyn Error>> {
-        match API::new(&backup).get().await {
+        match API::new(
+            None,
+            Some(backup),
+            None,
+            None,
+        ).get().await {
             Ok(api_data) => {
                 let _ = self.pull_url(&api_data.url).await;
             }
