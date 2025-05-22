@@ -9,5 +9,6 @@ impl Urls {
     pub const CDN_BOOTSTRAP: &'static str = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css";
 
     pub const DUMPSYNC_API: &'static str = "https://api.dumpsync.com/";
+    pub const DUMPSYNC_API_KEY: &'static str = "https://dumpsync.com/dashboard/settings/api-key";
     
 }

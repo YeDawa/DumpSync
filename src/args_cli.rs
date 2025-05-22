@@ -68,6 +68,9 @@ pub enum Commands {
         /// Push the dump to the cloud
         file: String,
     },
+
+    /// Login to DumpSync Cloud
+    Login,
 }
 
 #[derive(Parser)]

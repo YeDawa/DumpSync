@@ -86,7 +86,7 @@ impl Pull {
             }
 
             Err(e) => {
-                eprintln!("{}", e);
+                ErrorsAlerts::pull(&e.to_string());
             }
         }
 

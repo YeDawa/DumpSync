@@ -5,6 +5,7 @@ use std::{
     io::Read,
     fs::File,
     error::Error,
+    process::exit,
 };
 
 use reqwest::{
@@ -77,6 +78,17 @@ impl API {
             backup: backup.map(|s| s.to_string()),
 
             encrypted,
+        }
+    }
+
+    pub fn get_api_key() {
+        let api_key = env::var("DS_API_KEY").unwrap_or_else(|_| {
+            Env::get_var("DS_API_KEY")
+        });
+
+        if api_key.is_empty() {
+            println!("No API key found. Please set it using the command: ds login");
+            exit(0);
         }
     }
 

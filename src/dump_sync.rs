@@ -29,7 +29,8 @@ impl DumpSync {
             Commands::Scan(options) => DumpSyncAddons.scan_xss(options).await?,
 
             Commands::Pull { file } => DumpSyncService.pull(&file).await,
-            Commands::Push { file } => { DumpSyncService.push(&file).await }
+            Commands::Push { file } => DumpSyncService.push(&file).await,
+            Commands::Login => DumpSyncService.login(),
         }
 
         Ok(())

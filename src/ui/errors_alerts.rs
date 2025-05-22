@@ -59,11 +59,39 @@ impl ErrorsAlerts {
         );
     }
 
-    pub fn cloud() {
+    pub fn push() {
         let current_datetime = Date::date_time();
 
         println!(
             "{} Failed to upload dump to the cloud.", 
+            current_datetime.red().bold(),
+        );
+    }
+
+    pub fn pull(message: &str) {
+        let current_datetime = Date::date_time();
+
+        println!(
+            "{} Failed to download dump from the cloud: {}", 
+            current_datetime.red().bold(),
+            message.red()
+        );
+    }
+
+    pub fn open_link() {
+        let current_datetime = Date::date_time();
+
+        println!(
+            "{} Failed to open the link in the browser.", 
+            current_datetime.red().bold(),
+        );
+    }
+
+    pub fn api_key() {
+        let current_datetime = Date::date_time();
+
+        println!(
+            "{} Failed to set the API key in the environment variable.", 
             current_datetime.red().bold(),
         );
     }

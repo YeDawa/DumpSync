@@ -68,13 +68,23 @@ impl SuccessAlerts {
         );
     }
 
-    pub fn cloud(message: &str) {
+    pub fn push(message: &str) {
         let current_datetime = Date::date_time();
     
         println!(
             "\r{} {}", 
             current_datetime.green().bold(), 
             message.blue()
+        );
+    }
+
+    pub fn api_key() {
+        let current_datetime = Date::date_time();
+    
+        println!(
+            "\r{} {}",
+            current_datetime.green().bold(),
+            "API Key successfully saved".blue()
         );
     }
 

@@ -8,12 +8,23 @@ use crate::{
     cloud::{
         push::Push,
         pull::Pull,
+        login::Login,
     },
 };
 
 pub struct DumpSyncService;
 
 impl DumpSyncService {
+
+    pub fn login(&self) {
+        Env::new();
+        UI::header();
+        UI::section_header("Login to DumpSync", "info");
+
+        let login = Login::new();
+        login.print();
+        login.save_var();
+    }
 
     pub async fn pull(&self, backup: &str) {
         Env::new();

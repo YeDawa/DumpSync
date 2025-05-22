@@ -39,11 +39,11 @@ impl Push {
             Some(self.encrypted),
         ).upload().await {
             Ok(data) => {
-                SuccessAlerts::cloud(&data.message);
+                SuccessAlerts::push(&data.message);
             }
 
             Err(_) => {
-                ErrorsAlerts::cloud();
+                ErrorsAlerts::push();
             }
         }
 
