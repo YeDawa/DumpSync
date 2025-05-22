@@ -4,14 +4,14 @@ use rpassword::prompt_password;
 use crate::{
     helpers::write_env::WriteEnv,
 
-    constants::{
-        urls::Urls,
-        global::Global,
-    },
-
     ui::{
         errors_alerts::ErrorsAlerts,
         success_alerts::SuccessAlerts,
+    },
+
+    constants::{
+        urls::Urls,
+        global::Global,
     },
 };
 
