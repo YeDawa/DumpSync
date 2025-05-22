@@ -1,7 +1,15 @@
 extern crate reqwest;
 
 use std::error::Error;
-use crate::cloud::api::API;
+
+use crate::{
+    cloud::api::API,
+
+    ui::{
+        errors_alerts::ErrorsAlerts,
+        success_alerts::SuccessAlerts,
+    }
+};
 
 pub struct Push {
     path: String,
@@ -31,11 +39,11 @@ impl Push {
             Some(self.encrypted),
         ).upload().await {
             Ok(data) => {
-                println!("{:?}", data);
+                SuccessAlerts::cloud(&data.message);
             }
 
-            Err(e) => {
-                eprintln!("{}", e);
+            Err(_) => {
+                ErrorsAlerts::cloud();
             }
         }
 

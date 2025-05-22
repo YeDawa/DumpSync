@@ -59,4 +59,13 @@ impl ErrorsAlerts {
         );
     }
 
+    pub fn cloud() {
+        let current_datetime = Date::date_time();
+
+        println!(
+            "{} Failed to upload dump to the cloud.", 
+            current_datetime.red().bold(),
+        );
+    }
+
 }

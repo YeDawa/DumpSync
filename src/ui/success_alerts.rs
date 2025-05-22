@@ -68,4 +68,14 @@ impl SuccessAlerts {
         );
     }
 
+    pub fn cloud(message: &str) {
+        let current_datetime = Date::date_time();
+    
+        println!(
+            "\r{} {}", 
+            current_datetime.green().bold(), 
+            message.blue()
+        );
+    }
+
 }
