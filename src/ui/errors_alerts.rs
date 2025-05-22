@@ -8,6 +8,16 @@ pub struct ErrorsAlerts;
 
 impl ErrorsAlerts {
 
+    pub fn env(e: &str) {
+        let current_datetime = Date::date_time();
+
+        eprintln!(
+            "{} Failed to download the file: {}", 
+            current_datetime.red().bold(), 
+            e.red()
+        );
+    }
+
     pub fn dump(e: &str) {
         let current_datetime = Date::date_time();
 

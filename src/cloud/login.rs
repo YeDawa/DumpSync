@@ -4,7 +4,6 @@ use rpassword::prompt_password;
 use std::process::Command;
 
 use crate::{
-    cloud::api::API,
     constants::urls::Urls,
 
     ui::{
@@ -22,8 +21,6 @@ impl Login {
     }
 
     pub fn print(&self) {
-        API::get_api_key();
-
         let url = Urls::DUMPSYNC_API_KEY;
         println!("Open URL {} for get the API Key", url);
 
@@ -35,6 +32,8 @@ impl Login {
     pub fn save_var(&self) {
         let api_key = prompt_password("Enter the api key [input is hiding]: ")
             .expect("Error reading the password");
+
+        println!("{}", api_key);
 
         let status = if cfg!(target_os = "windows") {
             let cmd = format!("$env:DS_API_KEY = '{}';", api_key);
@@ -50,7 +49,7 @@ impl Login {
         };
 
         match status {
-            Ok(_) => SuccessAlerts::api_key(),
+            Ok(e) => println!("API Key saved: {}", e),
             Err(_) => ErrorsAlerts::api_key(),
         }
     }

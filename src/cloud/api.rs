@@ -5,7 +5,6 @@ use std::{
     io::Read,
     fs::File,
     error::Error,
-    process::exit,
 };
 
 use reqwest::{
@@ -81,25 +80,13 @@ impl API {
         }
     }
 
-    pub fn get_api_key() {
-        let api_key = env::var("DS_API_KEY").unwrap_or_else(|_| {
-            Env::get_var("DS_API_KEY")
-        });
-
-        if api_key.is_empty() {
-            println!("No API key found. Please set it using the command: ds login");
-            exit(0);
-        }
-    }
-
     pub async fn get(&self) -> Result<Response, Box<dyn Error>> {
         let mut api_url = String::from(Urls::DUMPSYNC_API);
         api_url.push_str("backups/get/");
         api_url.push_str(self.backup.as_deref().unwrap_or(""));
-
-        let api_token = env::var("DS_API_KEY").unwrap_or_else(|_| {
-            Env::get_var("DS_API_KEY")
-        });
+        
+        let api_token = Env::get_system_var("DS_API_KEY");
+        println!("API Token: {}", api_token);
 
         let client = reqwest::Client::new();
         let response = client

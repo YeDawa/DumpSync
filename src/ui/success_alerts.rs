@@ -8,6 +8,11 @@ pub struct SuccessAlerts;
 
 impl SuccessAlerts {
 
+    pub fn env() {
+        let current_datetime = Date::date_time();
+        println!("{} Downloaded env file", current_datetime.green().bold());
+    }
+
     pub fn dump(file: &str) {
         let current_datetime = Date::date_time();
     
@@ -85,6 +90,24 @@ impl SuccessAlerts {
             "\r{} {}",
             current_datetime.green().bold(),
             "API Key successfully saved".blue()
+        );
+    }
+
+    pub fn write_env(var_name: &str) {
+        let current_datetime = Date::date_time();
+
+        println!("{} Added env '{}' variable", 
+            current_datetime.green().bold(),
+            var_name.blue(),
+        );
+    }
+
+    pub fn edit_env(var_name: &str) {
+        let current_datetime = Date::date_time();
+
+        println!("{} Edited env '{}' variable", 
+            current_datetime.green().bold(),
+            var_name.blue(),
         );
     }
 
