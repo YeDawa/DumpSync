@@ -38,8 +38,6 @@ pub struct Response {
     pub private: bool,
     pub size: u64,
     pub db_name: String,
-
-    #[serde(rename = "createdAt")]
     pub created_at: String,
 }
 

@@ -88,6 +88,7 @@ impl Pull {
                     None, 
                     None
                 ).download(&api_data.url).await;
+
                 match download {
                     Ok(ref sql_content) => {
                         Import::new(
@@ -101,6 +102,7 @@ impl Pull {
                             Some(sql_content),
                         ).dump_directly().await?;
                     }
+                    
                     Err(e) => {
                         ErrorsAlerts::dump(&format!("Failed to download SQL data: {}", e));
                         return Err(e);
