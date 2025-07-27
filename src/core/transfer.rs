@@ -24,7 +24,7 @@ use mysql::{
 use crate::{
     constants::regexp::RegExp,
     core::connection::Connection,
-    handlers::mysql::import_handlers::ImportHandlers,
+    handlers::import_handlers::ImportHandlers,
 
     ui::{
         errors_alerts::ErrorsAlerts,

@@ -14,9 +14,9 @@ use crate::{
         scan_alerts::ScanAlerts,
     },
 
-    handlers::mysql::{
+    handlers::{
         scan_handlers::ScanHandlers,
-        mysql_queries_builders::MySqlQueriesBuilders,
+        mysql::mysql_queries_builders::MySqlQueriesBuilders,
     }
 };
 

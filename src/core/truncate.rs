@@ -13,9 +13,9 @@ use crate::{
         connection::Connection,
     },
 
-    handlers::mysql::{
+    handlers::{
         dump_handlers::DumpHandlers,
-        mysql_queries_builders::MySqlQueriesBuilders,
+        mysql::mysql_queries_builders::MySqlQueriesBuilders,
     },
 };
 

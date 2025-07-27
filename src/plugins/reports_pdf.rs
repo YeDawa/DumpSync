@@ -8,7 +8,7 @@ use std::{
 use crate::{
     helpers::configs::Configs,
     ui::report_alerts::ReportAlerts,
-    handlers::mysql::reports_handlers::ReportsHandlers,
+    handlers::reports_handlers::ReportsHandlers,
 };
 
 pub struct ReportsPdfs {

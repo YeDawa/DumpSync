@@ -18,10 +18,13 @@ use crate::{
         connection::Connection,
     },
 
-    handlers::mysql::{
-        export_handlers::ExportHandlers,
+    handlers::{
         comments_headers::CommentsHeaders,
-        mysql_queries_builders::MySqlQueriesBuilders,
+
+        mysql::{
+            mysql_export_handlers::ExportHandlers,
+            mysql_queries_builders::MySqlQueriesBuilders,
+        },
     },
 };
 

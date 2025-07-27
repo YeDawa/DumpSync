@@ -23,8 +23,10 @@ use flate2::{
 use crate::{
     helpers::configs::Configs,
 
-    handlers::mysql::html_handlers::HTMLHandlers,
-    handlers::mysql::mysql_queries_builders::MySqlQueriesBuilders,
+    handlers::{
+        html_handlers::HTMLHandlers,
+        mysql::mysql_queries_builders::MySqlQueriesBuilders,
+    },
 };
 
 pub enum Writer {

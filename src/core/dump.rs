@@ -28,7 +28,7 @@ use crate::{
         transfer::Transfer,
     },
 
-    handlers::mysql::{
+    handlers::{
         dump_handlers::DumpHandlers,
         reports_handlers::ReportsHandlers,
     },

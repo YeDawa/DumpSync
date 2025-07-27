@@ -8,9 +8,9 @@ use mysql::{
 use crate::{
     core::connection::Connection,
 
-    handlers::mysql::{
+    handlers::{
         diagram_handlers::DiagramHandlers,
-        mysql_queries_builders::MySqlQueriesBuilders,
+        mysql::mysql_queries_builders::MySqlQueriesBuilders,
     }
 };
 
