@@ -18,7 +18,7 @@ use crate::{
         connection::Connection,
     },
 
-    handlers::{
+    handlers::mysql::{
         export_handlers::ExportHandlers,
         comments_headers::CommentsHeaders,
         mysql_queries_builders::MySqlQueriesBuilders,
@@ -80,7 +80,7 @@ impl Export {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
 
         FileUtils::create_path(&dump_file_path.clone());
 
@@ -133,7 +133,7 @@ impl Export {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
 
         FileUtils::create_path(&dump_file_path.clone());
 

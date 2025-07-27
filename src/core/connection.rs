@@ -18,7 +18,7 @@ pub struct Connection {
 
 impl Connection {
 
-    pub fn create_pool(&self) -> Result<Pool, Box<dyn Error>> {
+    pub fn create_mysql_pool(&self) -> Result<Pool, Box<dyn Error>> {
         let mut opts_builder = OptsBuilder::new()
             .ip_or_hostname(Some(&self.host))
             .tcp_port(self.port)

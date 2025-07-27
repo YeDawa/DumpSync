@@ -10,7 +10,7 @@ use std::{
 
 use crate::{
     utils::file::FileUtils,
-    handlers::html_handlers::HTMLHandlers,
+    handlers::mysql::html_handlers::HTMLHandlers,
     ui::report_xss_alerts::ReportXSSAlerts,
 
     constants::{

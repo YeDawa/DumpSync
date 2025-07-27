@@ -13,7 +13,7 @@ use crate::{
         connection::Connection,
     },
 
-    handlers::{
+    handlers::mysql::{
         dump_handlers::DumpHandlers,
         mysql_queries_builders::MySqlQueriesBuilders,
     },
@@ -79,7 +79,7 @@ impl Truncate {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
 
         let _ = &self.dump_table()?;
 

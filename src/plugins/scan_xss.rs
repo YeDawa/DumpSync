@@ -14,7 +14,7 @@ use crate::{
         scan_alerts::ScanAlerts,
     },
 
-    handlers::{
+    handlers::mysql::{
         scan_handlers::ScanHandlers,
         mysql_queries_builders::MySqlQueriesBuilders,
     }
@@ -71,7 +71,7 @@ impl ScanXSS {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
     
         let mut conn = pool.get_conn()?;
         let patterns = ScanHandlers.read_patterns(self.payload.clone()).await?;

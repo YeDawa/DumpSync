@@ -24,7 +24,7 @@ use mysql::{
 use crate::{
     constants::regexp::RegExp,
     core::connection::Connection,
-    handlers::import_handlers::ImportHandlers,
+    handlers::mysql::import_handlers::ImportHandlers,
 
     ui::{
         errors_alerts::ErrorsAlerts,
@@ -82,7 +82,7 @@ impl Transfer {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
 
         let mut conn = pool.get_conn()?;
         let is_compressed = self.dump_file_path.ends_with(".sql.gz");

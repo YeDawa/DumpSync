@@ -2,7 +2,7 @@ use regex::Regex;
 
 use crate::{
     constants::regexp::RegExp,
-    handlers::mysql_queries_builders::MySqlQueriesBuilders,
+    handlers::mysql::mysql_queries_builders::MySqlQueriesBuilders,
 };
 
 pub struct ImportHandlers {

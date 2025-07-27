@@ -14,7 +14,7 @@ use mysql::{
 use crate::{
     core::connection::Connection,
     ui::schema_alerts::SchemaAlerts,
-    handlers::mysql_queries_builders::MySqlQueriesBuilders,
+    handlers::mysql::mysql_queries_builders::MySqlQueriesBuilders,
 };
 
 #[derive(Serialize, Debug)]
@@ -78,7 +78,7 @@ impl Schema {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
     
         let mut conn = pool.get_conn()?;
         let tables: Vec<String> = conn.query(MySqlQueriesBuilders.get_table_names())?;

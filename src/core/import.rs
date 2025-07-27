@@ -23,7 +23,7 @@ use std::{
 
 use crate::{
     constants::regexp::RegExp,
-    handlers::import_handlers::ImportHandlers,
+    handlers::mysql::import_handlers::ImportHandlers,
 
     ui::{
         errors_alerts::ErrorsAlerts,
@@ -125,7 +125,7 @@ impl Import {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
 
         let mut conn = pool.get_conn()?;
 
@@ -147,7 +147,7 @@ impl Import {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
 
         let mut conn = pool.get_conn()?;
         let is_compressed = self.dump_file_path.as_ref().map_or(false, |s| s.ends_with(".sql.gz"));
@@ -182,7 +182,7 @@ impl Import {
             user: self.user.clone(),
             password: self.password.clone(),
             dbname: Some(self.dbname.clone()),
-        }.create_pool()?;
+        }.create_mysql_pool()?;
 
         let mut conn = pool.get_conn()?;
         let sql_content = self.sql_content.as_deref().ok_or("sql_content is None")?;
