@@ -29,18 +29,6 @@ impl MySqlQueriesBuilders {
         Ok((create_db, use_db))
     }
 
-    pub fn insert_into(&self, table: &str, columns: Vec<String>, values: Vec<String>, ignore: bool) -> String {
-        let insert_ignore = if ignore { "INSERT IGNORE INTO" } else { "INSERT INTO" };
-
-        format!(
-            "{} `{}` ({}) VALUES\n{};",
-            insert_ignore,
-            table,
-            columns.join(", "),
-            values.join(",\n")
-        )
-    }
-
     pub fn select(&self, table: &str, offset: Option<usize>, limit: Option<usize>) -> String {
         let mut query = format!("SELECT * FROM `{}`", table);
 
@@ -109,6 +97,11 @@ impl MySqlQueriesBuilders {
 
     pub fn show_columns(&self, table: &str) -> String {
         format!("SHOW COLUMNS FROM `{}`", table)
+    }
+
+    pub fn insert_into_start(&self, table: &str, columns: &[String], insert_ignore: bool) -> String {
+        let cmd = if insert_ignore { "INSERT IGNORE INTO" } else { "INSERT INTO" };
+        format!("{} `{}` ({}) VALUES ", cmd, table, columns.join(", "))
     }
     
 }
