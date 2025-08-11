@@ -3,15 +3,25 @@ use std::{
     error::Error,
 };
 
+use chrono::Utc;
+
 use mysql::{
     *, 
     prelude::*
 };
 
 use crate::{
-    utils::file::FileUtils,
-    helpers::configs::Configs,
     ui::success_alerts::SuccessAlerts, 
+
+    utils::{
+        file::FileUtils,
+        generate::Generate,
+    },
+
+    helpers::{
+        configs::Configs,
+        history::History,
+    },
     
     core::{
         encrypt::Encrypt,
@@ -112,6 +122,18 @@ impl Export {
         } else {
             SuccessAlerts::dump(&dump_file_path);
         }
+
+        let file_size = FileUtils::file_size(&dump_file_path)? as i64;
+        History::new().insert_backup(
+            &Generate.random_string(16),
+            &dump_file_path,
+            &self.dbname,
+            &self.host,
+            &Utc::now().to_rfc3339(),
+            file_size,
+            self.encrypt.unwrap_or(false),
+            compress_data,
+        )?;
 
         Ok(())
     }

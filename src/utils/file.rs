@@ -1,5 +1,6 @@
 use std::{
     fs,
+    io::Error,
     path::Path
 };
 
@@ -43,6 +44,11 @@ impl FileUtils {
         }
     
         format!("{:.2} {}", size_f, sizes[index])
+    }
+
+    pub fn file_size(file_path: &str) -> Result<u64, Error> {
+        let metadata = fs::metadata(file_path)?;
+        Ok(metadata.len())
     }
 
 }

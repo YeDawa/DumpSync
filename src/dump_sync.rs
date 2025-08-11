@@ -7,6 +7,7 @@ use crate::{
     addons::DumpSyncAddons,
     dumper::DumpSyncDumper,
     service::DumpSyncService,
+    helpers::history::History,
 };
 
 pub struct DumpSync;
@@ -14,6 +15,8 @@ pub struct DumpSync;
 impl DumpSync {
 
     pub async fn init(&self) -> Result<(), Box<dyn Error>> {
+        History::new().init_db()?;
+        
         match Cli::parse().command {
             Commands::Init => DumpSyncInit.initialize().await?,
 
