@@ -69,6 +69,9 @@ pub enum Commands {
         file: String,
     },
 
+    /// History of backups
+    History,
+
     /// Login to DumpSync Cloud
     Login,
 }

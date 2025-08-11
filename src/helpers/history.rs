@@ -51,4 +51,27 @@ impl History {
         Ok(())
     }
 
+    pub fn list_backups_with_filters(&self, filter: Option<&str>) -> Result<Vec<(i64, String, String, String, String, String, i64, bool, bool)>> {
+        let conn = Connection::open(&self.db_path)?;
+        let mut stmt = conn.prepare("SELECT id, slug, db, filename, host, created_at, size, encrypt, compress FROM backups WHERE slug LIKE ?1 OR filename LIKE ?1 OR created_at LIKE ?1 OR db LIKE ?1 OR host LIKE ?1")?;
+
+        let backups = stmt
+            .query_map(params![format!("%{}%", filter.unwrap_or(""))], |row| {
+                Ok((
+                    row.get(0)?,
+                    row.get(1)?,
+                    row.get(2)?,
+                    row.get(3)?,
+                    row.get(4)?,
+                    row.get(5)?,
+                    row.get(6)?,
+                    row.get(7)?,
+                    row.get(8)?,
+                ))
+            })?
+            .collect::<Result<Vec<_>, _>>()?;
+
+        Ok(backups)
+    }
+
 }
