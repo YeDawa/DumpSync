@@ -20,6 +20,7 @@ use crate::{
         scan_xss::ScanXSS,
         pastebin::Pastebin,
         checksum::Checksum,
+        history_logs::HistoryLogs,
     },
 };
 
@@ -111,6 +112,19 @@ impl DumpSyncAddons {
         let _ = Diagram::new(
             &host, port, &user, &password, &dbname, &table,
         ).diagram().await;
+    }
+
+    pub fn history(&self, history_type: &str, filter: Option<String>) {
+        Env::new();
+        UI::header();
+
+        match history_type {
+            "backups" => {
+                UI::section_header("Backup History", "info");
+                HistoryLogs::new().backups(filter);
+            },
+            _ => UI::label("Unknown history type", "error"),
+        }
     }
 
 }

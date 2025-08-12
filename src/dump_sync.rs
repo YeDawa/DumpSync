@@ -19,9 +19,7 @@ impl DumpSync {
 
         match Cli::parse().command {
             Commands::Init => DumpSyncInit.initialize().await?,
-
-            Commands::History => DumpSyncDumper.history(),
-
+            
             Commands::Export(options) => DumpSyncDumper.export(options),
             Commands::Import(options) => DumpSyncDumper.import(options),
             Commands::Transfer(options) => DumpSyncDumper.transfer(options),
@@ -32,6 +30,7 @@ impl DumpSync {
             Commands::Visual(options) => DumpSyncAddons.visual(options).await,
             Commands::Share(options) => DumpSyncAddons.share(options).await?,
             Commands::Scan(options) => DumpSyncAddons.scan_xss(options).await?,
+            Commands::History { history_type, filter } => DumpSyncAddons.history(&history_type, filter),
 
             Commands::Pull { file } => DumpSyncService.pull(&file).await,
             Commands::Push { file } => DumpSyncService.push(&file).await,

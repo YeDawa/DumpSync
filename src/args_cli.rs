@@ -70,7 +70,13 @@ pub enum Commands {
     },
 
     /// History of backups
-    History,
+    History {
+        /// Type of history
+        history_type: String,
+
+        /// Filter by different fields
+        filter: Option<String>,
+    },
 
     /// Login to DumpSync Cloud
     Login,
