@@ -34,7 +34,6 @@ nav:
     - Import: import.md
     - Transfer: transfer.md
     - Truncate: truncate.md
-    - Pull: pull.md
   - Plugins:
     - Scan XSS: scan.md
     - Share: share.md
@@ -43,6 +42,7 @@ nav:
     - Visual: visual.md
     - History: history.md
   - Resources:
+    - Pull: pull.md
     - Writing patterns: writing-patterns.md
 
 markdown_extensions:
