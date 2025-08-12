@@ -22,7 +22,9 @@ impl HistoryLogs {
         UI::header();
 
         UI::section_header("Backup History", "info");
-        let items = History::new().list_backups_with_filters(Some(filter.as_deref().unwrap_or("")));
+        let items = History::new().list_backups_with_filters(
+            Some(filter.as_deref().unwrap_or(""))
+        );
         
         match items {
             Ok(backups) => {
