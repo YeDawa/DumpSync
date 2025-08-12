@@ -31,6 +31,7 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 - **Truncate**: Truncate tables to remove all data from the specified table.
 - **Visual**: Visualize the table structure of a database.
 - **Pull**: Pull the latest changes from a remote database to your local environment.
+- **History**: View the history of actions performed by the DumpSync tool.
 
 ## Installation
 
@@ -61,6 +62,7 @@ For more help and document, see our documentation:
 - [Schema](https://docs.dumpsync.com/schema)
 - [Checksum](https://docs.dumpsync.com/checksum)
 - [Visual](https://docs.dumpsync.com/visual)
+- [History](https://docs.dumpsync.com/history)
 - [Writing patterns](https://docs.dumpsync.com/writing-patterns)
 
 ## License

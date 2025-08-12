@@ -41,6 +41,7 @@ nav:
     - Schema: schema.md
     - Checksum: checksum.md
     - Visual: visual.md
+    - History: history.md
   - Resources:
     - Writing patterns: writing-patterns.md
 
