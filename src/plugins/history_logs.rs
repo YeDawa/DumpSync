@@ -58,15 +58,7 @@ impl HistoryLogs {
                     let print_row = |id: &str, slug: &str, db: &str, filename: &str, host: &str, date: &str, size: &str, encrypt: &str, compress: &str| {
                         println!(
                             "| {:<idw$} | {:<slugw$} | {:<dbw$} | {:<fnw$} | {:<hostw$} | {:<datew$} | {:>sizew$} | {:<encw$} | {:<compw$} |",
-                            id,
-                            slug,
-                            db,
-                            filename,
-                            host,
-                            date,
-                            size,
-                            encrypt,
-                            compress,
+                            id, slug, db, filename, host, date, size, encrypt, compress,
                             idw = max_id,
                             slugw = max_slug,
                             dbw = max_db,
@@ -103,6 +95,7 @@ impl HistoryLogs {
                     for (id, slug, db, filename, host, created_at, size, encrypt, compress) in backups {
                         let replaced = created_at.replace("T", " ");
                         let date = replaced.split('.').next().unwrap_or(&created_at);
+                        
                         print_row(
                             &id.to_string(),
                             &slug,
