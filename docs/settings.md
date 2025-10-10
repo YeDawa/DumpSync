@@ -1,6 +1,6 @@
 # Settings File for DumpSync
 
-The configuration file `dumpsync.yml` allows you to customize the options for the dump process. 
+The configuration file `dumpsync.yml` allows you to customize the options for the dump process.
 
 It should be saved as `dumpsync.yml` in the same directory where your project is running.
 
@@ -11,6 +11,7 @@ Example structure:
 ```yaml
 exports:
   dump_data: true
+  lock_tables: true
   compress_data: true
   insert_ignore_into: false
   drop_table_if_exists: true
@@ -23,7 +24,8 @@ connection:
 
 ### Properties of `exports`
 
-- **dump_data** (`boolean`): Determines whether all data in your database should be exported. If set to `true`, the content of all tables will be included in the dump. If `false`, only the structures of the tables will be exported.
+- **dump_data** (`boolean`): Determines whether all data in your database should be exported. If set to `true`, the content of all tables will be included in the dump. If `false`, only the structures of the tables will be exported.\
+- **lock_tables** (`boolean`): Indicates whether tables should be locked during the dump process. If set to `true`, the tables will be locked to prevent any changes while the dump is being created, ensuring data consistency. If `false`, tables will remain unlocked, which may lead to potential inconsistencies if data is modified during the dump.
 - **compress_data** (`boolean`): Specifies whether the dump should be compressed. If set to `true`, the dump will be compressed using the `gzip` algorithm, reducing the file size. If `false`, the dump will be saved as a plain SQL file.
 - **drop_table_if_exists** (`boolean`): Specifies whether existing tables should be dropped before being recreated during the import process. Setting this to `true` will include a `DROP TABLE IF EXISTS` statement before the `CREATE TABLE` statement, preventing table duplication conflicts.
 - **insert_ignore_into** (`boolean`): The `insert_ignore_into` property specifies whether data should be inserted using the `INSERT IGNORE INTO` statement during the import process. Setting it to `true` will ensure that duplicate records are ignored, preventing errors from duplicate entries in the table.
