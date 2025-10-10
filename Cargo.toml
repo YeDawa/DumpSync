@@ -7,7 +7,7 @@ authors = ["kremilly"]
 categories = ["command-line-utilities", "database"]
 keywords = ["mysql", "dump", "restore", "backup", "database"]
 description = "DumpSync is a lightweight tool designed for efficiently dumping and restoring MySQL databases. Whether you need to create backups, restore databases, or transfer data between servers."
-repository = "https://github.com/Gausix/DumpSync"
+repository = "https://github.com/YeDawa/DumpSync"
 documentation = "https://docs.dumpsync.com/"
 homepage = "https://dumpsync.com"
 
