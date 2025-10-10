@@ -6,6 +6,14 @@ impl MySqlQueriesBuilders {
         "SHOW TABLES".to_string()
     }
 
+    pub fn lock_tables(&self, table: &str) -> String {
+        format!("LOCK TABLE `{}`;", table)
+    }
+
+    pub fn unlock_tables(&self, table: &str) -> String {
+        format!("UNLOCK TABLE `{}`;", table)
+    }
+
     pub fn truncate_table(&self, table: &str) -> String {
         format!("TRUNCATE TABLE `{}`;", table)
     }

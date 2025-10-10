@@ -49,6 +49,7 @@ pub struct ExportHandlers {
     file: File,
     dbname: String,
     dump_data: bool,
+    lock_tables: bool,
     compress_data: bool,
     insert_ignore_into: bool,
     drop_table_if_exists: bool,
@@ -63,6 +64,7 @@ impl ExportHandlers {
             dbname: dbname.to_string(),
 
             dump_data: Configs.boolean("exports", "dump_data", true),
+            lock_tables: Configs.boolean("exports", "lock_tables", false),
             compress_data: Configs.boolean("exports", "compress_data", false),
             insert_ignore_into: Configs.boolean("exports", "insert_ignore_into", false),
             drop_table_if_exists: Configs.boolean("exports", "drop_table_if_exists", false),
@@ -156,6 +158,10 @@ impl ExportHandlers {
             }
 
             writeln!(writer, "-- Total rows exported: {}", batch_count)?;
+
+            if self.lock_tables {
+                writeln!(writer, "{}", MySqlQueriesBuilders.unlock_tables(table))?;
+            }
         }
 
         Ok(())
@@ -163,6 +169,10 @@ impl ExportHandlers {
 
     pub fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         writeln!(writer, "-- Exporting the table: `{}`", table)?;
+
+        if self.lock_tables {
+            writeln!(writer, "{}", MySqlQueriesBuilders.lock_tables(table))?;
+        }
     
         if self.drop_table_if_exists {
             writeln!(writer, "{}", MySqlQueriesBuilders.drop_table(table))?;
