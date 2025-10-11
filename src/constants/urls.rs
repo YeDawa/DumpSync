@@ -11,7 +11,7 @@ impl Urls {
     pub const DUMPSYNC_API: &'static str = "https://api.dumpsync.com/";
     pub const DUMPSYNC_API_KEY: &'static str = "https://dumpsync.com/dashboard/settings/api-key";
 
-    pub const DOWNLOAD_FILES_URI: &'static str = "https://raw.githubusercontent.com/Gausix/DumpSync/main/";
+    pub const DOWNLOAD_FILES_URI: &'static str = "https://raw.githubusercontent.com/YeDawa/DumpSync/main/";
 
     // DumpSync Package Manager
     
