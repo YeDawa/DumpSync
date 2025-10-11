@@ -109,7 +109,7 @@ impl MySqlQueriesBuilders {
             MySQLKeywords::InsertInto.as_str() 
         };
 
-        format!("{} `{}` ({}) {}", prefix, table, columns.join(", "), MySQLKeywords::Values.as_str())
+        format!("{} `{}` ({}) {};", prefix, table, columns.join(", "), MySQLKeywords::Values.as_str())
     }
     
 }
