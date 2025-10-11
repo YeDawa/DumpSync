@@ -32,6 +32,26 @@ impl MySqlQueriesBuilders {
         format!("{} {} `{}`;", MySQLKeywords::CreateDatabase.as_str(), MySQLKeywords::IfNotExists.as_str(), dbname)
     }
 
+    pub fn get_table_names(&self) -> String {
+        format!("{};", MySQLKeywords::GetTableNames.as_str())
+    }
+
+    pub fn show_columns(&self, table: &str) -> String {
+        format!("{} `{}`;", MySQLKeywords::ShowColumns.as_str(), table)
+    }
+
+    pub fn table_info(&self, table: &str) -> String {
+        format!("{} = '{}'", MySQLKeywords::TableInfo.as_str(), table)
+    }
+
+    pub fn foreign_key_info(&self, table: &str) -> String {
+        format!("{} = '{}' {};", MySQLKeywords::ForeignKeyInfo.as_str(), table, MySQLKeywords::AndReferencedIsNotNull.as_str())
+    }
+
+    pub fn get_alter_table(&self, table: &str) -> String {
+        format!("{} = '{}' {}", MySQLKeywords::GetAlterTable.as_str(), table, MySQLKeywords::AndReferencedIsNotNull.as_str())
+    }
+
     pub fn create_database(&self, dbname: &str) -> Result<(String, String), String> {
         let create_db = format!(
             "{} {} `{}`;\n", MySQLKeywords::CreateDatabase.as_str(), MySQLKeywords::IfNotExists.as_str(), dbname
@@ -53,26 +73,6 @@ impl MySqlQueriesBuilders {
         }
 
         query
-    }
-
-    pub fn get_table_names(&self) -> String {
-        format!("{};", MySQLKeywords::GetTableNames.as_str())
-    }
-
-    pub fn show_columns(&self, table: &str) -> String {
-        format!("{} `{}`;", MySQLKeywords::ShowColumns.as_str(), table)
-    }
-
-    pub fn table_info(&self, table: &str) -> String {
-        format!("{} = '{}'", MySQLKeywords::TableInfo.as_str(), table)
-    }
-
-    pub fn foreign_key_info(&self, table: &str) -> String {
-        format!("{} = '{}' {};", MySQLKeywords::ForeignKeyInfo.as_str(), table, MySQLKeywords::AndReferencedIsNotNull.as_str())
-    }
-
-    pub fn get_alter_table(&self, table: &str) -> String {
-        format!("{} = '{}' {}", MySQLKeywords::GetAlterTable.as_str(), table, MySQLKeywords::AndReferencedIsNotNull.as_str())
     }
 
     pub fn get_foreign_keys(&self, table: &str, constraint_name: &str, column_name: &str, ref_table: &str, ref_column: &str) -> String {
