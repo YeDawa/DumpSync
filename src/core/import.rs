@@ -102,7 +102,7 @@ impl Import {
             }
 
             if self.ignore_drop_table.unwrap_or(false) {
-                if trimmed_line.is_empty() || trimmed_line.starts_with(MySQLKeywords::DropTable.as_str()) {
+                if trimmed_line.starts_with(MySQLKeywords::DropTable.as_str()) {
                     continue;
                 }
             }
