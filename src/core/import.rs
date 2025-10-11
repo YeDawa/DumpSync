@@ -1,4 +1,3 @@
-use regex::Regex;
 use flate2::read::GzDecoder;
 
 use mysql::{
@@ -22,8 +21,6 @@ use std::{
 };
 
 use crate::{
-    constants::regexp::RegExp,
-
     ui::{
         errors_alerts::ErrorsAlerts,
         success_alerts::SuccessAlerts,
@@ -91,7 +88,6 @@ impl Import {
     }
 
     fn process_statements(&self, conn: &mut PooledConn, dump_content: &str, dbname: &str) {
-        let create_table_regex = Regex::new(RegExp::CREATE_TABLE).unwrap();
         let mut buffer = String::new();
 
         for line in dump_content.lines() {
@@ -105,6 +101,20 @@ impl Import {
                 if trimmed_line.starts_with(MySQLKeywords::DropTable.as_str()) {
                     continue;
                 }
+
+                if trimmed_line.starts_with(MySQLKeywords::CreateTable.as_str()) {
+                    let create_table_line = trimmed_line.replace(
+                        MySQLKeywords::CreateTable.as_str(),
+                        &format!(
+                            "{} {}",
+                            MySQLKeywords::CreateTable.as_str(),
+                            MySQLKeywords::IfNotExists.as_str()
+                        ),
+                    );
+
+                    buffer.push_str(&create_table_line);
+                    continue;
+                }
             }
 
             buffer.push_str(trimmed_line);
@@ -116,10 +126,31 @@ impl Import {
                 if !sql.is_empty() {
                     match conn.query_drop(sql) {
                         Ok(_) => {
-                            if let Some(captures) = create_table_regex.captures(sql) {
-                                if let Some(table_name) = captures.get(1) {
-                                    SuccessAlerts::table(table_name.as_str());
-                                }
+                            if sql.to_uppercase().contains(MySQLKeywords::CreateTable.as_str()) {
+                                let actual_table_name = if let Some(table_start) = sql.to_uppercase().find(MySQLKeywords::CreateTable.as_str()) {
+                                    let after_create_table = &sql[table_start + 12..];
+                                    let trimmed = after_create_table.trim();
+                                    
+                                    let table_part = if trimmed.to_uppercase().starts_with(MySQLKeywords::IfNotExists.as_str()) {
+                                        trimmed[13..].trim()
+                                    } else {
+                                        trimmed
+                                    };
+
+                                    if let Some(backtick_start) = table_part.find('`') {
+                                        if let Some(backtick_end) = table_part[backtick_start + 1..].find('`') {
+                                            &table_part[backtick_start + 1..backtick_start + 1 + backtick_end]
+                                        } else {
+                                            table_part.split_whitespace().next().unwrap_or("unknown")
+                                        }
+                                    } else {
+                                        table_part.split_whitespace().next().unwrap_or("unknown")
+                                    }
+                                } else {
+                                    "unknown"
+                                };
+
+                                SuccessAlerts::table(actual_table_name);
                             }
                         }
                         Err(e) => ErrorsAlerts::import(dbname, sql, &e.to_string()),
