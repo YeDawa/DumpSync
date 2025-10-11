@@ -1,6 +1,6 @@
 use crate::{
     init::DumpSyncInit,
-    core::encrypt::Encrypt,
+    core::entropy::Entropy,
 
     ui::ui_base::UI,
     helpers::env::Env,
@@ -49,9 +49,9 @@ impl DumpSyncService {
         UI::section_header("Pushing dump to server", "info");
 
         let (dbname, _, _, _, _) = DumpSyncInit.load_db_config();
-        let encrypt = Encrypt::new(path).calculate_entropy();
+        let entropy = Entropy::new(path).calculate();
 
-        let encrypted = match encrypt {
+        let encrypted = match entropy {
             Ok(val) => val > 0.5,
             Err(e) => {
                 eprintln!("Failed to calculate entropy: {}", e);

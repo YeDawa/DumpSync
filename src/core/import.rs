@@ -28,6 +28,7 @@ use crate::{
 
     core::{
         encrypt::Encrypt,
+        entropy::Entropy,
         connection::Connection,
     },
 
@@ -238,7 +239,8 @@ impl Import {
 
     pub fn dump(&self) -> Result<(), Box<dyn Error>> {
         let dump_file_path = self.dump_file_path.as_ref().ok_or("dump_file_path is None")?;
-        if Encrypt::new(dump_file_path.as_str()).calculate_entropy()? > 7.5 {
+
+        if Entropy::new(dump_file_path.as_str()).calculate()? > 7.5 {
             let _ = self.dump_encrypted();
         } else {
             let _ =  self.dump_plain();

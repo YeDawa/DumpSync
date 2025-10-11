@@ -1,13 +1,7 @@
 use std::{
-    collections::HashMap,
-
-    io::{
-        Read,
-        Result, 
-    },
+    io::Result,
 
     fs::{
-        File,
         read, 
         write, 
         remove_file
@@ -47,26 +41,6 @@ impl<'a> Encrypt<'a> {
         Self {
             file_path
         }
-    }
-
-    pub fn calculate_entropy(&self) -> Result<f64> {
-        let mut file = File::open(self.file_path)?;
-        let mut buffer = Vec::new();
-        file.read_to_end(&mut buffer)?;
-    
-        let mut freq = HashMap::new();
-        for &byte in &buffer {
-            *freq.entry(byte).or_insert(0) += 1;
-        }
-    
-        let len = buffer.len() as f64;
-        Ok(freq.values()
-            .map(|&count| {
-                let prob = count as f64 / len;
-                -prob * prob.log2()
-            })
-            .sum()
-        )
     }
 
     pub fn encrypt(&self) -> Result<()> {
@@ -117,6 +91,6 @@ impl<'a> Encrypt<'a> {
             .expect("Decryption error");
     
         Ok(decrypted_data)
-    }    
+    }
 
 }
