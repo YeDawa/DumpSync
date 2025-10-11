@@ -68,6 +68,7 @@ impl Pull {
             &self.dbname,
             None,
             None,
+            None,
             Some(&sql_content),
         ).dump_directly().await?;
 
@@ -97,6 +98,7 @@ impl Pull {
                             &self.user,
                             &self.password,
                             &self.dbname,
+                            None,
                             None,
                             None,
                             Some(sql_content),

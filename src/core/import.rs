@@ -23,7 +23,6 @@ use std::{
 
 use crate::{
     constants::regexp::RegExp,
-    handlers::import_handlers::ImportHandlers,
 
     ui::{
         errors_alerts::ErrorsAlerts,
@@ -34,6 +33,11 @@ use crate::{
         encrypt::Encrypt,
         connection::Connection,
     },
+
+    handlers::{
+        import_handlers::ImportHandlers,
+        mysql::mysql_keywords::MySQLKeywords,
+    },
 };
 
 pub struct Import {
@@ -43,6 +47,7 @@ pub struct Import {
     password: String,
     dbname: String,
     path: Option<String>,
+    ignore_drop_table: Option<bool>,
     dump_file_path: Option<String>,
     sql_content: Option<String>
 }
@@ -55,6 +60,7 @@ impl Import {
         user: &str, 
         password: &str, 
         dbname: &str, 
+        ignore_drop_table: Option<bool>,
         dump_file_path: Option<&str>, 
         path: Option<&str>,
         sql_content: Option<&str>,
@@ -62,6 +68,7 @@ impl Import {
         Self {
             host: host.to_string(),
             port,
+            ignore_drop_table,
             user: user.to_string(),
             password: password.to_string(),
             dbname: dbname.to_string(),
@@ -92,6 +99,12 @@ impl Import {
 
             if trimmed_line.is_empty() || trimmed_line.starts_with("--") {
                 continue;
+            }
+
+            if self.ignore_drop_table.unwrap_or(false) {
+                if trimmed_line.is_empty() || trimmed_line.starts_with(MySQLKeywords::DropTable.as_str()) {
+                    continue;
+                }
             }
 
             buffer.push_str(trimmed_line);

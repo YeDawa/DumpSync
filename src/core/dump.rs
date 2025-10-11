@@ -44,6 +44,7 @@ pub struct Dump {
     password: String,
     dump_file_path: String,
     encrypt: Option<bool>,
+    ignore_drop_table: Option<bool>,
 
     once: Option<bool>,
     max: Option<u64>,
@@ -64,6 +65,7 @@ impl Dump {
         interval: Option<u64>,
         path: &str,
         encrypt: Option<bool>,
+        ignore_drop_table: Option<bool>,
 
         once: Option<bool>,
         max: Option<u64>,
@@ -79,6 +81,7 @@ impl Dump {
             interval: interval.unwrap_or(3600),
             path: path.to_string(),
             encrypt,
+            ignore_drop_table,
 
             once,
             max,
@@ -225,6 +228,7 @@ impl Dump {
             &self.user,
             &self.password,
             &self.dbname,
+            Some(self.ignore_drop_table.unwrap_or(false)),
             Some(self.dump_file_path.as_str()),
             Some(self.path.as_str()),
             None,

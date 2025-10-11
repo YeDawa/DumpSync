@@ -20,12 +20,13 @@ impl DumpSyncDumper {
         Env::new();
         UI::header();
 
+        let ignore_drop_table = options.ignore_drop_table.unwrap_or(false);
         let backup_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
         let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
         UI::section_header("Importing dump to server", "info");
         Dump::new(
-            &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, None, None, None,
+            &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, Some(ignore_drop_table), None, None, None,
         ).import();
     }
 
@@ -48,7 +49,7 @@ impl DumpSyncDumper {
         UI::section_header("Dumping the database", "info");
 
         Dump::new(
-            &host, port, &user, &password, &dbname, &backup_path, Some(interval), &backup_path, Some(encrypt), Some(once), retain, Some(pdf),
+            &host, port, &user, &password, &dbname, &backup_path, Some(interval), &backup_path, Some(encrypt), None, Some(once), retain, Some(pdf),
         ).export();
     }
 
@@ -80,7 +81,7 @@ impl DumpSyncDumper {
         UI::section_header("Importing dump to server", "info");
 
         Dump::new(
-            &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, None, None, None,
+            &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, None, None, None, None,
         ).transfer();
     }
 
