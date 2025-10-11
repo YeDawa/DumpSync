@@ -107,10 +107,6 @@ pub struct ExportOptions {
     #[arg(long)]
     /// Generate a pdf report
     pub pdf: bool,
-
-    #[arg(long)]
-    /// Ignore drop table option
-    pub(crate) ignore_drop_table: Option<bool>,
 }
 
 #[derive(Parser)]
@@ -119,9 +115,9 @@ pub struct ImportOptions {
     /// Dump file path
     pub file: Option<String>,
 
-    #[arg(short, long)]
+    #[arg(long)]
     /// Ignore drop table option
-    pub ignore_drop_table: Option<bool>,
+    pub ignore_drop_table: bool,
 }
 
 #[derive(Parser)]

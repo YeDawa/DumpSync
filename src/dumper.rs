@@ -20,7 +20,7 @@ impl DumpSyncDumper {
         Env::new();
         UI::header();
 
-        let ignore_drop_table = options.ignore_drop_table.unwrap_or(false);
+        let ignore_drop_table = options.ignore_drop_table;
         let backup_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
         let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
 
