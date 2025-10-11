@@ -65,7 +65,8 @@ impl<'a> Encrypt<'a> {
                 let prob = count as f64 / len;
                 -prob * prob.log2()
             })
-            .sum())
+            .sum()
+        )
     }
 
     pub fn encrypt(&self) -> Result<()> {
