@@ -33,6 +33,16 @@ impl SuccessAlerts {
         );
     }
 
+    pub fn table_ignored(table: &str) {
+        let current_datetime = Date::date_time();
+    
+        println!(
+            "{} Table '{}' was ignored.",
+            current_datetime.green().bold(),
+            table.yellow()
+        );
+    }
+
     pub fn truncate(table: &str) {
         let current_datetime = Date::date_time();
     

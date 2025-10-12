@@ -21,9 +21,32 @@ impl Runner {
 
     pub fn execute(&self, conn: &mut PooledConn, dump_content: &str, dbname: &str, ignore_drop_table: Option<bool>) {
         let mut buffer = String::new();
+        let mut tables_ignored = Vec::new();
 
         for line in dump_content.lines() {
             let trimmed_line = line.trim();
+
+            if trimmed_line.contains(SyntaxSkip::SkipTables.as_str()) {
+                let table_names = if let Some(start) = trimmed_line.find('"') {
+                    if let Some(end) = trimmed_line[start + 1..].find('"') {
+                        &trimmed_line[start + 1..start + 1 + end]
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                };
+
+                if table_names == "unknown" || table_names.is_empty() {
+                    continue;
+                }
+
+                for table_name in table_names.split(',') {
+                    tables_ignored.push(table_name.trim().to_string());
+                }
+                
+                continue;
+            }
 
             if trimmed_line.is_empty() || trimmed_line.starts_with(MySQLKeywords::Comments.as_str()) {
                 continue;
@@ -60,6 +83,26 @@ impl Runner {
                 let sql = buffer.trim();
 
                 if !sql.is_empty() {
+                    let (should_skip, table_name) = if sql.to_uppercase().contains(MySQLKeywords::Insert.as_str()) || sql.to_uppercase().contains(MySQLKeywords::CreateTable.as_str()) {
+                        let found_table = tables_ignored.iter().find(|table| {
+                            sql.contains(&format!("`{}`", table))
+                        });
+                        
+                        if let Some(table) = found_table {
+                            (true, table.clone())
+                        } else {
+                            (false, String::new())
+                        }
+                    } else {
+                        (false, String::new())
+                    };
+
+                    if should_skip {
+                        SuccessAlerts::table_ignored(&table_name);
+                        buffer.clear();
+                        continue;
+                    }
+
                     match conn.query_drop(sql) {
                         Ok(_) => {
                             if sql.to_uppercase().contains(MySQLKeywords::CreateTable.as_str()) {
