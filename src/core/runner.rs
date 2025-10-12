@@ -64,8 +64,7 @@ impl Runner {
                         Ok(_) => {
                             if sql.to_uppercase().contains(MySQLKeywords::CreateTable.as_str()) {
                                 let actual_table_name = if let Some(table_start) = sql.to_uppercase().find(MySQLKeywords::CreateTable.as_str()) {
-                                    let after_create_table = &sql[table_start + 12..];
-                                    let trimmed = after_create_table.trim();
+                                    let trimmed = &sql[table_start + 12..].trim();
                                     
                                     let table_part = if trimmed.to_uppercase().starts_with(MySQLKeywords::IfNotExists.as_str()) {
                                         trimmed[13..].trim()
