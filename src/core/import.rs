@@ -94,7 +94,7 @@ impl Import {
         let dump_content = String::from_utf8(decrypt.decrypt_and_read()?)?;
 
         let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
-        let _ = Runner.execute(&mut conn, &dump_content, &self.dbname, self.ignore_drop_table);
+        let _ = Runner.import(&mut conn, &dump_content, &self.dbname, self.ignore_drop_table);
 
         SuccessAlerts::import(&self.dbname);
         Ok(())
@@ -129,7 +129,7 @@ impl Import {
         };
 
         let dump_content = ImportHandlers::new(&self.dbname, &dump_content).check_db_name();
-        let _ = Runner.execute(&mut conn, &dump_content, &self.dbname, self.ignore_drop_table);
+        let _ = Runner.import(&mut conn, &dump_content, &self.dbname, self.ignore_drop_table);
 
         SuccessAlerts::import(&self.dbname);
         Ok(())
@@ -147,7 +147,7 @@ impl Import {
         let mut conn = pool.get_conn()?;
         let sql_content = self.sql_content.as_deref().ok_or("sql_content is None")?;
         let dump_content = ImportHandlers::new(&self.dbname, sql_content).check_db_name();
-        let _ = Runner.execute(&mut conn, &dump_content, &self.dbname, self.ignore_drop_table);
+        let _ = Runner.import(&mut conn, &dump_content, &self.dbname, self.ignore_drop_table);
 
         Ok(())
     }

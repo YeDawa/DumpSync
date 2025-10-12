@@ -19,7 +19,7 @@ pub struct Runner;
 
 impl Runner {
 
-    pub fn execute(&self, conn: &mut PooledConn, dump_content: &str, dbname: &str, ignore_drop_table: Option<bool>) {
+    pub fn import(&self, conn: &mut PooledConn, dump_content: &str, dbname: &str, ignore_drop_table: Option<bool>) {
         let mut buffer = String::new();
         let mut tables_ignored = Vec::new();
 
