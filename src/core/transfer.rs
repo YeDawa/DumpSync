@@ -23,7 +23,7 @@ use mysql::{
 
 use crate::{
     constants::regexp::RegExp,
-    core::connection::Connection,
+    cmd::connection::Connection,
     handlers::import_handlers::ImportHandlers,
 
     ui::{

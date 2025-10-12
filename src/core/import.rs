@@ -20,7 +20,7 @@ use crate::{
     ui::success_alerts::SuccessAlerts,
     handlers::import_handlers::ImportHandlers,
 
-    core::{
+    cmd::{
         runner::Runner,
         encrypt::Encrypt,
         entropy::Entropy,

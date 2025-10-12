@@ -12,6 +12,11 @@ use mysql::{
 
 use crate::{
     ui::success_alerts::SuccessAlerts, 
+    
+    cmd::{
+        encrypt::Encrypt,
+        connection::Connection,
+    },
 
     utils::{
         file::FileUtils,
@@ -21,11 +26,6 @@ use crate::{
     helpers::{
         configs::Configs,
         history::History,
-    },
-    
-    core::{
-        encrypt::Encrypt,
-        connection::Connection,
     },
 
     handlers::{

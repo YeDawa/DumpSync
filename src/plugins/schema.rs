@@ -12,7 +12,7 @@ use mysql::{
 };
 
 use crate::{
-    core::connection::Connection,
+    cmd::connection::Connection,
     ui::schema_alerts::SchemaAlerts,
     handlers::mysql::mysql_queries_builders::MySqlQueriesBuilders,
 };

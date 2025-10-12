@@ -2,7 +2,7 @@ use crate::{
     ui::ui_base::UI,
     helpers::env::Env,
     init::DumpSyncInit,
-    core::entropy::Entropy,
+    cmd::entropy::Entropy,
 
     cloud::{
         push::Push,

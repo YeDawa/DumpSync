@@ -6,7 +6,7 @@ use mysql::{
 };
 
 use crate::{
-    core::connection::Connection,
+    cmd::connection::Connection,
     plugins::reports_xss::ReportsXSS,
     
     ui::{

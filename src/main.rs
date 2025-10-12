@@ -1,4 +1,5 @@
 mod ui;
+mod cmd;
 mod core;
 mod utils;
 mod cloud;
