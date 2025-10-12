@@ -6,7 +6,6 @@ pub enum MySQLKeywords {
     Unique,
     Insert,
     IfExists,
-    Comments,
     TableInfo,
     DropTable,
     References,
@@ -29,6 +28,9 @@ pub enum MySQLKeywords {
     ForeignKeyInfo,
     ShowCreateTable,
     AndReferencedIsNotNull,
+
+    Comments,
+    FinalComments,
 }
 
 impl MySQLKeywords {
@@ -36,7 +38,6 @@ impl MySQLKeywords {
     pub fn as_str(&self) -> &'static str {
         match self {
             MySQLKeywords::Use => "USE",
-            MySQLKeywords::Comments => "--",
             MySQLKeywords::Limit => "LIMIT",
             MySQLKeywords::Insert => "INSERT",
             MySQLKeywords::Unique => "UNIQUE",
@@ -65,6 +66,9 @@ impl MySQLKeywords {
             MySQLKeywords::TableInfo => "SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_KEY FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME",
             MySQLKeywords::ForeignKeyInfo => "SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME",
             MySQLKeywords::GetAlterTable => "SELECT CONSTRAINT_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_NAME = DATABASE() AND TABLE_SCHEMA",
+            
+            MySQLKeywords::Comments => "--",
+            MySQLKeywords::FinalComments => "---------------------------------------------------",
         }
     }
 
