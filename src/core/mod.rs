@@ -1,4 +1,5 @@
 pub mod dump;
+pub mod runner;
 pub mod export;
 pub mod import;
 pub mod entropy;
