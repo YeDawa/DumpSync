@@ -33,6 +33,7 @@ use crate::{
     },
 
     handlers::{
+        syntax_skip::SyntaxSkip,
         import_handlers::ImportHandlers,
         mysql::mysql_keywords::MySQLKeywords,
     },
@@ -94,7 +95,11 @@ impl Import {
         for line in dump_content.lines() {
             let trimmed_line = line.trim();
 
-            if trimmed_line.is_empty() || trimmed_line.starts_with("--") {
+            if trimmed_line.is_empty() || trimmed_line.starts_with(MySQLKeywords::Comments.as_str()) {
+                continue;
+            }
+
+            if trimmed_line.contains(SyntaxSkip::SkipLine.as_str()) {
                 continue;
             }
 
