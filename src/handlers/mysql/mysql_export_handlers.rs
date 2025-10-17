@@ -141,7 +141,7 @@ impl ExportHandlers {
                         .unwrap()
                         .into_iter()
                         .map(|value| match value {
-                            Value::NULL => "NULL".to_string(),
+                            Value::NULL => MySQLKeywords::Null.as_str().to_string(),
                             Value::Bytes(bytes) => {
                                 let raw = String::from_utf8_lossy(&bytes);
                                 format!("'{}'", HTMLHandlers.escape_for_sql(&raw))
@@ -149,7 +149,7 @@ impl ExportHandlers {
                             Value::Int(i) => i.to_string(),
                             Value::UInt(u) => u.to_string(),
                             Value::Float(f) => f.to_string(),
-                            _ => "NULL".to_string(),
+                            _ => MySQLKeywords::Null.as_str().to_string(),
                         })
                         .collect();
 

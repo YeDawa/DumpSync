@@ -1,5 +1,6 @@
 pub enum MySQLKeywords {
     Use,
+    Null,
     Limit,
     Offset,
     Values,
@@ -38,6 +39,7 @@ impl MySQLKeywords {
     pub fn as_str(&self) -> &'static str {
         match self {
             MySQLKeywords::Use => "USE",
+            MySQLKeywords::Null => "NULL",
             MySQLKeywords::Limit => "LIMIT",
             MySQLKeywords::Insert => "INSERT",
             MySQLKeywords::Unique => "UNIQUE",
