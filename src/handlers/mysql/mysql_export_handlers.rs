@@ -190,11 +190,11 @@ impl ExportHandlers {
         let foreign_keys: Vec<Row> = conn.query(fk_query)?;
 
         for fk in foreign_keys {
-            let constraint_name: String = fk.get("CONSTRAINT_NAME").unwrap();
-            let column_name: String = fk.get("COLUMN_NAME").unwrap();
-            let ref_table: String = fk.get("REFERENCED_TABLE_NAME").unwrap();
-            let ref_column: String = fk.get("REFERENCED_COLUMN_NAME").unwrap();
-            
+            let constraint_name: String = fk.get(MySQLKeywords::ConstraintName.as_str()).unwrap();
+            let column_name: String = fk.get(MySQLKeywords::ColumnName.as_str()).unwrap();
+            let ref_table: String = fk.get(MySQLKeywords::ReferencedTableName.as_str()).unwrap();
+            let ref_column: String = fk.get(MySQLKeywords::ReferencedColumnName.as_str()).unwrap();
+
             writeln!(
                 writer, "{}", MySqlQueriesBuilders.get_foreign_keys(
                     table, &constraint_name, &column_name, &ref_table, &ref_column
@@ -206,8 +206,8 @@ impl ExportHandlers {
         let unique_keys: Vec<Row> = conn.query(unique_query)?;
 
         for uk in unique_keys {
-            let constraint_name: String = uk.get("CONSTRAINT_NAME").unwrap();
-            let column_name: String = uk.get("COLUMN_NAME").unwrap();
+            let constraint_name: String = uk.get(MySQLKeywords::ConstraintName.as_str()).unwrap();
+            let column_name: String = uk.get(MySQLKeywords::ColumnName.as_str()).unwrap();
             
             writeln!(
                 writer, "{}", MySqlQueriesBuilders.get_unique_keys(table, &constraint_name, &column_name)
