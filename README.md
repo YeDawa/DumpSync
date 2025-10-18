@@ -68,6 +68,7 @@ For more help and document, see our documentation:
 - [Checksum](https://docs.dumpsync.com/checksum)
 - [Visual](https://docs.dumpsync.com/visual)
 - [History](https://docs.dumpsync.com/history)
+- [Skip Syntax](https://docs.dumpsync.com/skip-syntax)
 - [Writing patterns](https://docs.dumpsync.com/writing-patterns)
 
 ## License
