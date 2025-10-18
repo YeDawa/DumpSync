@@ -12,6 +12,8 @@ DumpSync automates the process of creating dumps of a MySQL database at configur
 
 ### Key Features
 
+Some of the key features of DumpSync include:
+
 - **Automated Backups**: Schedule regular database dumps at configurable intervals.
 - **Flexible Configuration**: Easily configure settings using environment variables or command-line arguments.
 - **Simple Restoration**: Quickly restore your database from previously created dump files.
@@ -22,8 +24,11 @@ DumpSync automates the process of creating dumps of a MySQL database at configur
 - **Schema**: Generate a schema file for the database.
 - **Encryption**: Encrypt your dump files for added security.
 - **Compression**: Compress your dump files to save disk space.
-- **Checksums**: Verify the integrity of your dump files using checksums.
+- **Checksum**: Verify the integrity of your dump files using checksums.
 - **PDF Report**: Generate PDF reports for your dump files and your settings.
 - **Truncate**: Truncate tables to remove all data from the specified table.
 - **Visual**: Visualize the table structure of a database.
 - **Pull**: Pull the latest changes from a remote database to your local environment.
+- **History**: View the history of actions performed by the DumpSync tool.
+- **Skip Matching**: Use patterns to exclude specific tables or lines during restore operations.
+- **Lock tables**: Lock tables during dump operations to ensure data consistency.

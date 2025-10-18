@@ -35,7 +35,7 @@ Some of the key features of DumpSync include:
 - **Visual**: Visualize the table structure of a database.
 - **Pull**: Pull the latest changes from a remote database to your local environment.
 - **History**: View the history of actions performed by the DumpSync tool.
-- **Pattern Matching**: Use patterns to include or exclude specific tables during restore operations.
+- **Pattern Matching**: Use patterns to exclude specific tables or lines during restore operations.
 - **Lock tables**: Lock tables during dump operations to ensure data consistency.
 
 ## Installation
