@@ -43,6 +43,7 @@ nav:
     - History: history.md
   - Resources:
     - Pull: pull.md
+    - Skip Syntax: skip-syntax.md
     - Writing patterns: writing-patterns.md
 
 markdown_extensions:
