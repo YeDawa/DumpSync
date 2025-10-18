@@ -17,6 +17,8 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 
 ## Features
 
+Some of the key features of DumpSync include:
+
 - **Automated Backups**: Schedule regular database dumps at configurable intervals.
 - **Flexible Configuration**: Easily configure settings using environment variables or command-line arguments.
 - **Simple Restoration**: Quickly restore your database from previously created dump files.
@@ -33,6 +35,8 @@ DumpSync is a lightweight tool designed for efficiently dumping and restoring My
 - **Visual**: Visualize the table structure of a database.
 - **Pull**: Pull the latest changes from a remote database to your local environment.
 - **History**: View the history of actions performed by the DumpSync tool.
+- **Pattern Matching**: Use patterns to include or exclude specific tables during restore operations.
+- **Lock tables**: Lock tables during dump operations to ensure data consistency.
 
 ## Installation
 
