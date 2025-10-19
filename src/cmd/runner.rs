@@ -10,7 +10,7 @@ use crate::{
     },
 
     handlers::{
-        syntax_skip::SyntaxSkip,
+        syntax_skip_handlers::SyntaxSkip,
         mysql::mysql_keywords::MySQLKeywords,
     },
 };

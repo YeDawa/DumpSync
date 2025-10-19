@@ -1,6 +1,6 @@
 pub mod mysql;
 
-pub mod syntax_skip;
+pub mod syntax_skip_handlers;
 pub mod dump_handlers;
 pub mod scan_handlers;
 pub mod html_handlers;
