@@ -14,7 +14,7 @@ use std::{
 
 use crate::{
     constants::{
-        urls::Urls,
+        urls::*,
         folders::Folders,
     },
 
@@ -48,8 +48,8 @@ impl DownloadConfigsFiles {
 
     pub async fn env_file(&self, print: bool, force_mode: bool) -> Result<(), Box<dyn Error>> {
         let output_directory = &*Folders::APP_FOLDER;
-        let uri = format!("{}{}", Urls::DOWNLOAD_FILES_URI, ".env.app");
-    
+        let uri = format!("{}{}", Urls::as_str(UrlsNames::DownloadFilesUri), ".env.app");
+
         TkFs::create_dir_all(
             output_directory.clone()
         ).await?;

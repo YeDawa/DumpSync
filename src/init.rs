@@ -15,7 +15,7 @@ use crate::{
     helpers::configs_files::DownloadConfigsFiles,
 
     constants::{
-        urls::Urls,
+        urls::*,
         global::Global,
     },
 };
@@ -25,7 +25,7 @@ pub struct DumpSyncInit;
 impl DumpSyncInit {
 
     pub async fn initialize(&self) -> Result<(), Box<dyn Error>> {
-        let response = reqwest::get(Urls::APP_CONFIGS).await?;
+        let response = reqwest::get(Urls::as_str(UrlsNames::AppConfigs)).await?;
         let content = response.bytes().await?;
         
         let mut file = File::create(Global::app_config()).await?;

@@ -12,7 +12,7 @@ use std::{
     },
 };
 
-use crate::constants::urls::Urls;
+use crate::constants::urls::*;
 
 pub struct ScanHandlers;
 
@@ -99,7 +99,7 @@ impl ScanHandlers {
             }
 
             None => {
-                ScanHandlers.load_patterns_from_url(Urls::XSS_DETECT_REGEX).await?
+                ScanHandlers.load_patterns_from_url(Urls::as_str(UrlsNames::XssDetectRegex)).await?
             }
         };
 

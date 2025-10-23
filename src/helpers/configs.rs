@@ -13,7 +13,7 @@ use std::{
 };
 
 use crate::constants::{
-    urls::Urls,
+    urls::*,
     global::Global,
 };
 
@@ -22,7 +22,7 @@ pub struct Configs;
 impl Configs {
     
     fn default_config(&self) -> Result<Value, Box<dyn Error>> {
-        let response = blocking::get(Urls::APP_CONFIGS)?.text()?;
+        let response = blocking::get(Urls::as_str(UrlsNames::AppConfigs))?.text()?;
         let config: Value = serde_yaml::from_str(&response)?;
         Ok(config)
     }

@@ -10,7 +10,7 @@ use crate::{
     ui::share_alerts::ShareAlerts,
 
     constants::{
-        urls::Urls,
+        urls::*,
         global::Global,
     },
 };
@@ -68,7 +68,7 @@ impl Pastebin {
             params.insert("api_paste_format", &ext);
             
             let response = Client::new()
-            .post(Urls::PASTEBIN_API_URI)
+            .post(Urls::as_str(UrlsNames::PastebinApiUri))
             .form(&params)
             .send()
             .await?;

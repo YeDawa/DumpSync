@@ -10,7 +10,7 @@ use crate::{
     },
 
     constants::{
-        urls::Urls,
+        urls::*,
         global::Global,
     },
 };
@@ -24,7 +24,7 @@ impl Login {
     }
 
     pub fn print(&self) {
-        let url = Urls::DUMPSYNC_API_KEY;
+        let url = Urls::as_str(UrlsNames::DumpsyncApiKey);
         println!("Open URL {} for get the API Key", url);
 
         if open::that(url).is_err() {

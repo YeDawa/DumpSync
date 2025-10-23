@@ -25,7 +25,7 @@ use crate::{
     helpers::env::Env,
 
     constants::{
-        urls::Urls,
+        urls::*,
         global::Global,
     },
 }; 
@@ -82,7 +82,7 @@ impl API {
     }
 
     pub async fn get(&self) -> Result<Response, Box<dyn Error>> {
-        let mut api_url = String::from(Urls::DUMPSYNC_API);
+        let mut api_url = String::from(Urls::as_str(UrlsNames::DumpsyncApi));
         api_url.push_str("backups/get/");
         api_url.push_str(self.backup.as_deref().unwrap_or(""));
         
@@ -103,7 +103,7 @@ impl API {
     }
 
     pub async fn upload(&self) -> Result<ResponseUpload, Box<dyn Error>> {
-        let mut api_url = String::from(Urls::DUMPSYNC_API);
+        let mut api_url = String::from(Urls::as_str(UrlsNames::DumpsyncApi));
         api_url.push_str("backups/create");
 
         let path = self.path.as_ref().ok_or("No path provided")?;
