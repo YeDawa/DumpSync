@@ -23,12 +23,12 @@ use reqwest::{
 
 use crate::{
     helpers::env::Env,
-
-    constants::{
-        urls::*,
-        global::Global,
-    },
+    constants::urls::*,
 }; 
+
+pub enum ApiNames {
+    Env,
+}
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
@@ -81,12 +81,18 @@ impl API {
         }
     }
 
+    pub fn as_str(api: ApiNames) -> &'static str {
+        match api {
+            ApiNames::Env => "DS_API_KEY",
+        }
+    }
+
     pub async fn get(&self) -> Result<Response, Box<dyn Error>> {
         let mut api_url = String::from(Urls::as_str(UrlsNames::DumpsyncApi));
         api_url.push_str("backups/get/");
         api_url.push_str(self.backup.as_deref().unwrap_or(""));
-        
-        let api_token = Env.system(Global::DS_API_ENV);
+
+        let api_token = Env.system(Self::as_str(ApiNames::Env));
 
         let client = reqwest::Client::new();
         let response = client
@@ -109,7 +115,7 @@ impl API {
         let path = self.path.as_ref().ok_or("No path provided")?;
         let db_name = self.dbname.clone().unwrap_or_default();
         
-        let api_token = Env.system(Global::DS_API_ENV);
+        let api_token = Env.system(Self::as_str(ApiNames::Env));
 
         let client = Client::new();
         let mut file = File::open(path)?;
@@ -143,7 +149,7 @@ impl API {
     }
 
     pub async fn download(&self, url: &str) -> Result<String, Box<dyn Error>> {
-        let api_token = Env.system(Global::DS_API_ENV);
+        let api_token = Env.system(Self::as_str(ApiNames::Env));
 
         let client = reqwest::Client::new();
         let response = client

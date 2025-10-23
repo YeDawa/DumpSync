@@ -2,16 +2,13 @@ use open;
 use rpassword::prompt_password;
 
 use crate::{
+    cloud::api::*,
+    constants::urls::*,
     helpers::write_env::WriteEnv,
 
     ui::{
         errors_alerts::ErrorsAlerts,
         success_alerts::SuccessAlerts,
-    },
-
-    constants::{
-        urls::*,
-        global::Global,
     },
 };
 
@@ -37,7 +34,7 @@ impl Login {
             .expect("Error reading the password");
         
         WriteEnv::new(
-            Some(Global::DS_API_ENV.to_string()),
+            Some(API::as_str(ApiNames::Env).to_string()),
             Some(api_key)
         ).edit_env_var()
             .expect("Error writing the env file");
