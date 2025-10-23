@@ -5,13 +5,10 @@ use rusqlite::{
 };
 
 use crate::{
-    constants::{
-        global::Global,
-        folders::Folders, 
-    },
+    constants::folders::Folders,
 
     handlers::sqlite::{
-        tables::Tables,
+        tables::*,
         tables_names::TablesNames,
     },
 };
@@ -24,7 +21,9 @@ impl History {
 
     pub fn new() -> Self {
         History {
-            db_path: Folders::APP_FOLDER.join(Global::DB_HISTORY_FILE).to_string_lossy().to_string(),
+            db_path: Folders::APP_FOLDER.join(
+                Tables.as_str(Table::FileName)
+            ).to_string_lossy().to_string(),
         }
     }
 

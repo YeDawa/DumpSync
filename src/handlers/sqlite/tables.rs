@@ -1,8 +1,18 @@
 use crate::handlers::sqlite::tables_names::TablesNames;
 
+pub enum Table {
+    FileName,
+}
+
 pub struct Tables;
 
 impl Tables {
+
+    pub fn as_str(&self, table: Table) -> &'static str {
+        match table {
+            Table::FileName => "history.db",
+        }
+    }
 
     pub fn history(&self) -> String {
         format!("CREATE TABLE IF NOT EXISTS {} (

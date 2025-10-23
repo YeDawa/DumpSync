@@ -15,7 +15,7 @@ use crate::{
 
     constants::{
         urls::*,
-        global::Global,
+        global::*,
     }
 };
 
@@ -111,12 +111,12 @@ impl ReportsXSS {
 
     pub fn html(&self, detections: Vec<(String, usize, String, String)>, output_path: &str) -> Result<(), Box<dyn Error>> {
         let mut file = File::create(output_path)?;
-        file.write_all(format!("<html><head><title>{}: XSS Reports</title>", Global::APP_NAME).as_bytes())?;
+        file.write_all(format!("<html><head><title>{}: XSS Reports</title>", Global::app(GlobalNames::AppName)).as_bytes())?;
         file.write_all(format!("<link href='{}' rel='stylesheet'></head><body>", Urls::as_str(UrlsNames::CdnBootstrap)).as_bytes())?;
 
         file.write_all(format!(
             "<nav class='navbar navbar-dark navbar-expand-lg bg-dark'><div class='container-fluid'><img src='{}' height='36'/><a class='navbar-brand'>XSS Scan Results</a></div></nav>",
-            Global::APP_ICON,
+            Global::app(GlobalNames::AppIcon),
         ).as_bytes())?;
 
         file.write_all(b"<div class='container-fluid pt-3'><table class='table table-striped table-bordered table-hover table-dark'>")?;

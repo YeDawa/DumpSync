@@ -4,7 +4,7 @@ extern crate figlet_rs;
 use colored::*;
 use figlet_rs::FIGfont;
 
-use crate::constants::global::Global;
+use crate::constants::global::*;
 
 pub struct UI;
 
@@ -24,7 +24,7 @@ impl UI {
     }
 
     pub fn header() {
-        let name = Global::APP_NAME;
+        let name = Global::app(GlobalNames::AppName);
         let standard_font = FIGfont::standard().unwrap();
         
         if let Some(title) = standard_font.convert(&name) {
@@ -33,10 +33,10 @@ impl UI {
             println!(
                 "Version: {} | Author: {} | License: {} | Home: {}",
 
-                Global::APP_VERSION.bold().green(),
-                Global::APP_AUTHOR.bold().cyan(),
-                Global::APP_LICENSE.bold().blue(),
-                Global::APP_HOMEPAGE.bold().yellow()
+                Global::app(GlobalNames::AppVersion).bold().green(),
+                Global::app(GlobalNames::AppAuthor).bold().cyan(),
+                Global::app(GlobalNames::AppLicense).bold().blue(),
+                Global::app(GlobalNames::AppHome).bold().yellow()
             );
         }
     }

@@ -7,11 +7,11 @@ use std::{
 
 use crate::{
     utils::file::FileUtils,
-    ui::share_alerts::ShareAlerts,
+    ui::share_alerts::ShareAlerts, 
 
     constants::{
         urls::*,
-        global::Global,
+        global::*, 
     },
 };
 
@@ -56,7 +56,7 @@ impl Pastebin {
         if Global::FORMATS_SUPPORTED.iter().any(|&e| e == ext) {
             let privacy = &self.privacy();
             let api_option = "paste".to_string();
-            let name = format!("{}: {}", Global::APP_NAME, &self.file);
+            let name = format!("{}: {}", Global::app(GlobalNames::AppName), &self.file);
             let content = FileUtils::content(&self.file);
             
             let mut params = HashMap::new();
