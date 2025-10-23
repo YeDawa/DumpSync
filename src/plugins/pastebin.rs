@@ -53,7 +53,7 @@ impl Pastebin {
             return Ok(());
         }
 
-        if Global::FORMATS_SUPPORTED.iter().any(|&e| e == ext) {
+        if Global::formats_supported().iter().any(|&e| e == ext) {
             let privacy = &self.privacy();
             let api_option = "paste".to_string();
             let name = format!("{}: {}", Global::app(GlobalNames::AppName), &self.file);
