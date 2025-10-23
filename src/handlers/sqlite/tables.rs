@@ -1,9 +1,11 @@
+use crate::handlers::sqlite::tables_names::TablesNames;
+
 pub struct Tables;
 
 impl Tables {
 
-    pub fn history(&self) -> &'static str {
-        "CREATE TABLE IF NOT EXISTS backups (
+    pub fn history(&self) -> String {
+        format!("CREATE TABLE IF NOT EXISTS {} (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             slug TEXT NOT NULL,
             db TEXT NOT NULL,
@@ -13,7 +15,7 @@ impl Tables {
             encrypt BOOLEAN NOT NULL,
             size INTEGER NOT NULL,
             created_at TEXT NOT NULL
-        )"
+        )", TablesNames::Backups.as_str())
     }
 
 }

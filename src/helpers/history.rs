@@ -4,10 +4,16 @@ use rusqlite::{
     Connection, 
 };
 
-use crate::constants::{
-    global::Global,
-    tables::Tables,
-    folders::Folders, 
+use crate::{
+    constants::{
+        global::Global,
+        folders::Folders, 
+    },
+
+    handlers::sqlite::{
+        tables::Tables,
+        tables_names::TablesNames,
+    },
 };
 
 pub struct History {
@@ -25,7 +31,7 @@ impl History {
     pub fn init_db(&self) -> Result<()> {
         let conn = Connection::open(&self.db_path)?;
         conn.execute(
-            Tables.history(), [],
+            &Tables.history(), [],
         )?;
         
         Ok(())
@@ -34,7 +40,7 @@ impl History {
     pub fn insert_backup(&self, slug: &str, filename: &str, db: &str, host: &str, created_at: &str, size: i64, encrypt: bool, compress: bool) -> Result<()> {
         let conn = Connection::open(&self.db_path)?;
         conn.execute(
-            "INSERT INTO backups (slug, filename, db, host, created_at, size, encrypt, compress) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            &format!("INSERT INTO {} (slug, filename, db, host, created_at, size, encrypt, compress) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)", TablesNames::Backups.as_str()),
             params![slug, filename, db, host, created_at, size, encrypt, compress],
         )?;
     
@@ -43,7 +49,7 @@ impl History {
 
     pub fn list_backups_with_filters(&self, filter: Option<&str>) -> Result<Vec<(i64, String, String, String, String, String, i64, bool, bool)>> {
         let conn = Connection::open(&self.db_path)?;
-        let mut stmt = conn.prepare("SELECT id, slug, db, filename, host, created_at, size, encrypt, compress FROM backups WHERE id LIKE ?1 OR slug LIKE ?1 OR filename LIKE ?1 OR created_at LIKE ?1 OR db LIKE ?1 OR host LIKE ?1")?;
+        let mut stmt = conn.prepare(&format!("SELECT id, slug, db, filename, host, created_at, size, encrypt, compress FROM {} WHERE id LIKE ?1 OR slug LIKE ?1 OR filename LIKE ?1 OR created_at LIKE ?1 OR db LIKE ?1 OR host LIKE ?1", TablesNames::Backups.as_str()))?;
 
         let backups = stmt
             .query_map(params![format!("%{}%", filter.unwrap_or(""))], |row| {

@@ -1,4 +1,5 @@
 pub mod mysql;
+pub mod sqlite;
 
 pub mod syntax_skip_handlers;
 pub mod dump_handlers;
