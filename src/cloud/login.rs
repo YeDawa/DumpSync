@@ -36,8 +36,7 @@ impl Login {
         WriteEnv::new(
             Some(API::as_str(ApiNames::Env).to_string()),
             Some(api_key)
-        ).edit_env_var()
-            .expect("Error writing the env file");
+        ).edit_env_var().expect("Error writing the env file");
 
         SuccessAlerts::api_key();
     }
