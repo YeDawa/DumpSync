@@ -12,6 +12,7 @@ use std::{
 use crate::{
     cloud::api::API,
     core::import::Import,
+    constants::protocols::Protocols,
     ui::errors_alerts::ErrorsAlerts,
 };
 
@@ -121,11 +122,14 @@ impl Pull {
     }
 
     pub async fn pull(&self) -> Result<(), Box<dyn Error>> {
-        if self.backup.starts_with("https://") || self.backup.starts_with("http://") {
-            let _ = self.pull_url(&self.backup).await;
-        } else {
-            let _ = self.pull_dumpsync(&self.backup).await;
-        }
+        match self.backup.as_str() {
+            s if s.starts_with(Protocols::Http.as_str()) || s.starts_with(Protocols::Https.as_str()) => {
+                self.pull_url(s).await?;
+            }
+            _ => {
+                self.pull_dumpsync(&self.backup).await?;
+            }
+        };
 
         Ok(())
     }
