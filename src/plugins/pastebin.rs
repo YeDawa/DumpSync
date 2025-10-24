@@ -12,6 +12,7 @@ use crate::{
     constants::{
         urls::*,
         global::*, 
+        protocols::*,
     },
 };
 
@@ -74,7 +75,7 @@ impl Pastebin {
             .await?;
             
             let response_text = response.text().await?;
-            if response_text.starts_with("http") {
+            if response_text.starts_with(Protocols::Http.as_str()) {
                 ShareAlerts::success(&response_text);
             } else {
                 ShareAlerts::error(&response_text);
