@@ -146,7 +146,6 @@ impl API {
         let parsed = match from_str::<ResponseUpload>(&response_raw) {
             Ok(json) => json,
             Err(e) => {
-                println!("[WARN] Failed to parse JSON: {}", e);
                 ResponseUpload {
                     message: response_raw.clone(),
                     ..Default::default()
