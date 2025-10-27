@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use serde_json::from_str;
 
 use std::{
     io::Read,
@@ -18,13 +19,11 @@ use reqwest::{
 };
 
 use crate::{
-    helpers::env::Env,
     utils::converter::Converter,
 
     constants::{
-        urls::*,
-        api_init::*,
         global::Global,
+        api::api_init::*,
     },
 };
 
@@ -82,21 +81,14 @@ impl API {
         }
     }
 
-    fn token_value(&self) -> String {
-        let api_token = Env.system(APIInit::as_str(ApiNames::Env));
-        format!("Bearer {}", api_token)
-    }
-
     pub async fn get(&self) -> Result<String, Box<dyn Error>> {
-        let mut api_url = String::from(Urls::as_str(UrlsNames::DumpsyncApi));
-        api_url.push_str("backups/");
-        api_url.push_str(self.backup.as_deref().unwrap_or(""));
-        api_url.push_str("/raw");
+        let endpoint = format!("{}/raw", self.backup.as_deref().unwrap_or(""));
+        let api_url = APIInit::url_builder(&endpoint);
 
         let client = reqwest::Client::new();
         let request = client
             .get(api_url)
-            .header(AUTHORIZATION, self.token_value());
+            .header(AUTHORIZATION, APIInit::token_value());
 
         let response = request
             .send()
@@ -109,8 +101,7 @@ impl API {
     }
 
     pub async fn upload(&self) -> Result<ResponseUpload, Box<dyn Error>> {
-        let mut api_url = String::from(Urls::as_str(UrlsNames::DumpsyncApi));
-        api_url.push_str("backups/create");
+        let api_url = APIInit::url_builder("create");
 
         let path = self.path.as_ref().ok_or("No path provided")?;
         let db_name = self.dbname.clone().unwrap_or_default();
@@ -141,14 +132,14 @@ impl API {
 
         let response = client
             .post(api_url)
-            .header(AUTHORIZATION, self.token_value())
+            .header(AUTHORIZATION, APIInit::token_value())
             .multipart(form)
             .send()
             .await?
             .error_for_status()?;
 
         let response_raw = response.text().await?;
-        let parsed: ResponseUpload = serde_json::from_str(&response_raw)?;
+        let parsed: ResponseUpload = from_str(&response_raw)?;
         Ok(parsed)
     }
 

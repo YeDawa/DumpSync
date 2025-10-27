@@ -12,7 +12,7 @@ use crate::{
 
     constants::{
         urls::*,
-        api_init::*,
+        api::api_names::ApiNames,
     },
 };
 
@@ -26,7 +26,7 @@ impl Login {
 
     pub fn print(&self) {
         let url = Urls::as_str(UrlsNames::DumpsyncApiKey);
-        let message = format!("Open URL {} for get the API Key", url);
+        let message = format!("Opening URL {} to retrieve the API Key", url);
         UI::label(&message, "normal");
 
         if open::that(url).is_err() {
@@ -39,7 +39,7 @@ impl Login {
             .expect("Error reading the password");
         
         WriteEnv::new(
-            Some(APIInit::as_str(ApiNames::Env).to_string()),
+            Some(ApiNames::Env.as_str().to_owned()),
             Some(api_key)
         ).edit_env_var().expect("Error writing the env file");
 
