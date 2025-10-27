@@ -102,7 +102,7 @@ impl API {
         Ok(response)
     }
 
-    pub async fn upload(&self) -> Result<ResponseUpload, Box<dyn Error>> {
+    pub async fn post(&self) -> Result<ResponseUpload, Box<dyn Error>> {
         let api_url = APIEndpoints.backups("create");
         let db_name = self.dbname.clone().unwrap_or_default();
         let path = self.path.as_ref().ok_or("No path provided")?;

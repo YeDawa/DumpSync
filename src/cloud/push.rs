@@ -45,7 +45,7 @@ impl Push {
             Some(&self.dbname),
             Some(encrypted),
             Some(self.interval),
-        ).upload().await {
+        ).post().await {
             Ok(data) => {
                 SuccessAlerts::push(&data.message);
             }
