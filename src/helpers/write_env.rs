@@ -1,5 +1,4 @@
 extern crate open;
-use rpassword::prompt_password;
 
 use std::{
     path::PathBuf,
@@ -26,14 +25,8 @@ impl WriteEnv {
         }
     }
 
-    pub fn add(&mut self, key: String, val: Option<String>) {
-        let key = key;
-
-        let value = val.unwrap_or_else(|| {
-            prompt_password("Enter the variable value: ").unwrap()
-        });
-
-        self.entries.push((key, value));
+    pub fn add(&mut self, key: String, val: String) {
+        self.entries.push((key, val));
     }
 
     pub fn save(&self) -> Result<(), IoError> {

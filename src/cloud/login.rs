@@ -39,7 +39,7 @@ impl Login {
             .expect("Error reading the password");
         
         let mut writer = WriteEnv::new();
-        writer.add(Some(ApiNames::Env.as_str().to_owned()), Some(api_key));
+        writer.add(ApiNames::Env.as_str().to_owned(), api_key);
         writer.save().expect("Error writing the env file");
 
         SuccessAlerts::api_key();
