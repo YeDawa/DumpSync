@@ -12,8 +12,8 @@ pub struct Urls;
 
 impl Urls {
 
-    const APP_CONFIGS: &'static str = "https://raw.githubusercontent.com/Kremilly/DumpSync/refs/heads/main/dumpsync.yml";
-    const XSS_DETECT_REGEX: &'static str = "https://raw.githubusercontent.com/Kremilly/DumpSync/refs/heads/main/patterns.txt";
+    const APP_CONFIGS: &'static str = "https://raw.githubusercontent.com/YeDawa/DumpSync/refs/heads/main/dumpsync.yml";
+    const XSS_DETECT_REGEX: &'static str = "https://raw.githubusercontent.com/YeDawa/DumpSync/refs/heads/main/patterns.txt";
     
     const PASTEBIN_API_URI: &'static str = "https://pastebin.com/api/api_post.php";
     const DUMPSYNC_API: &'static str = "https://service.dumpsync.com/";
