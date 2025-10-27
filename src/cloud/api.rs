@@ -145,7 +145,7 @@ impl API {
 
         let parsed = match from_str::<ResponseUpload>(&response_raw) {
             Ok(json) => json,
-            Err(e) => {
+            Err(_) => {
                 ResponseUpload {
                     message: response_raw.clone(),
                     ..Default::default()
