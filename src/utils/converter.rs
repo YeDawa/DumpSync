@@ -10,11 +10,11 @@ use serde_json::{
 
 use serde_yaml::from_str;
 
-pub struct Converters {
+pub struct Converter {
     yaml: String,
 }
 
-impl Converters {
+impl Converter {
 
     pub fn new(yaml: String) -> Self {
         Self {

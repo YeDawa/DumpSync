@@ -19,7 +19,7 @@ use reqwest::{
 
 use crate::{
     helpers::env::Env,
-    utils::converters::Converters,
+    utils::converter::Converter,
 
     constants::{
         urls::*,
@@ -127,7 +127,7 @@ impl API {
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
 
-        let settings_json = Converters::new(
+        let settings_json = Converter::new(
             Global::app_config()
         ).yaml_to_json()?;
 
