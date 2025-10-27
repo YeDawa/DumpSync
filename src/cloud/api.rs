@@ -43,11 +43,9 @@ pub struct Response {
 }
 
 #[allow(dead_code)]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 pub struct ResponseUpload {
     pub success: bool,
-    pub db_name: String,
-    pub unique_id: String,
     pub message: String,
 }
 
@@ -106,9 +104,8 @@ impl API {
 
     pub async fn upload(&self) -> Result<ResponseUpload, Box<dyn Error>> {
         let api_url = APIEndpoints.backups("create");
-
-        let path = self.path.as_ref().ok_or("No path provided")?;
         let db_name = self.dbname.clone().unwrap_or_default();
+        let path = self.path.as_ref().ok_or("No path provided")?;
 
         let client = Client::new();
         let mut file = File::open(path)?;
@@ -127,11 +124,14 @@ impl API {
         let file_part = Part::stream(Body::from(buffer))
             .file_name(file_name.to_string());
 
+        let interval_str = self.interval.map_or("0".to_string(), |v| v.to_string());
+        let encrypted_str = self.encrypted.map_or("false".to_string(), |v| v.to_string());
+
         let form = Form::new()
             .text("db_name", db_name)
             .text("settings", settings_json)
-            .text("interval", self.interval.map_or("0".to_string(), |v| v.to_string()))
-            .text("encrypted", self.encrypted.map_or("false".to_string(), |v| v.to_string()))
+            .text("interval", interval_str)
+            .text("encrypted", encrypted_str)
             .part("file", file_part);
 
         let response = client
@@ -139,11 +139,21 @@ impl API {
             .header(AUTHORIZATION, APIToken.value())
             .multipart(form)
             .send()
-            .await?
-            .error_for_status()?;
+            .await?;
 
         let response_raw = response.text().await?;
-        let parsed: ResponseUpload = from_str(&response_raw)?;
+
+        let parsed = match from_str::<ResponseUpload>(&response_raw) {
+            Ok(json) => json,
+            Err(e) => {
+                println!("[WARN] Failed to parse JSON: {}", e);
+                ResponseUpload {
+                    message: response_raw.clone(),
+                    ..Default::default()
+                }
+            }
+        };
+
         Ok(parsed)
     }
 
