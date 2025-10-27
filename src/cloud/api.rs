@@ -82,17 +82,21 @@ impl API {
         }
     }
 
+    fn token_value(&self) -> String {
+        let api_token = Env.system(APIInit::as_str(ApiNames::Env));
+        format!("Bearer {}", api_token)
+    }
+
     pub async fn get(&self) -> Result<String, Box<dyn Error>> {
         let mut api_url = String::from(Urls::as_str(UrlsNames::DumpsyncApi));
         api_url.push_str("backups/");
         api_url.push_str(self.backup.as_deref().unwrap_or(""));
         api_url.push_str("/raw");
 
-        let api_token = Env.system(APIInit::as_str(ApiNames::Env));
         let client = reqwest::Client::new();
         let request = client
             .get(api_url)
-            .header(AUTHORIZATION, format!("Bearer {}", api_token));
+            .header(AUTHORIZATION, self.token_value());
 
         let response = request
             .send()
@@ -110,8 +114,6 @@ impl API {
 
         let path = self.path.as_ref().ok_or("No path provided")?;
         let db_name = self.dbname.clone().unwrap_or_default();
-        
-        let api_token = Env.system(APIInit::as_str(ApiNames::Env));
 
         let client = Client::new();
         let mut file = File::open(path)?;
@@ -139,7 +141,7 @@ impl API {
 
         let response = client
             .post(api_url)
-            .header(AUTHORIZATION, format!("Bearer {}", api_token))
+            .header(AUTHORIZATION, self.token_value())
             .multipart(form)
             .send()
             .await?
