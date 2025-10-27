@@ -127,7 +127,7 @@ impl API {
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
 
-        let settings_json = Converters::yaml_to_json(
+        let settings_json = Converters.yaml_to_json(
             Global::app_config().as_str(),
         )?;
 

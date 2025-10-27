@@ -14,7 +14,7 @@ pub struct Converters;
 
 impl Converters {
 
-    pub fn yaml_to_json(path: &str) -> Result<String, Box<dyn Error>> {
+    pub fn yaml_to_json(&self, path: &str) -> Result<String, Box<dyn Error>> {
         let yaml_content = read_to_string(path)?;
         let data: Value = from_str(&yaml_content)?;
         Ok(to_string_pretty(&data)?)
