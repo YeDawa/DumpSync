@@ -108,8 +108,8 @@ impl Pull {
 
     pub async fn pull(&self) -> Result<(), Box<dyn Error>> {
         match self.backup.as_str() {
-            s if s.starts_with(Protocols::Http.as_str()) || s.starts_with(Protocols::Https.as_str()) => {
-                self.pull_url(s).await?;
+            http if http.starts_with(Protocols::Http.as_str()) || http.starts_with(Protocols::Https.as_str()) => {
+                self.pull_url(http).await?;
             }
             _ => {
                 self.pull_dumpsync(&self.backup).await?;
