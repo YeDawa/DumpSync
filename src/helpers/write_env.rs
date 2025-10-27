@@ -52,8 +52,13 @@ impl WriteEnv {
         let env_path: PathBuf = app_folder.join(".env");
 
         if !env_path.exists() {
-            File::create(&env_path)?; // cria vazio
-            write(&env_path, format!("{}=\"{}\"\n", self.key, self.value))?;
+            File::create(&env_path)?;
+            write(
+                &env_path, format!(
+                    "{}=\"{}\"\n", self.key, self.value
+                )
+            )?;
+
             SuccessAlerts::edit_env(&self.key);
             return Ok(());
         }
