@@ -5,6 +5,7 @@ use std::{
     path::PathBuf,
 
     fs::{
+        File,
         write,
         read_to_string,
     },
@@ -49,6 +50,13 @@ impl WriteEnv {
     pub fn edit_env_var(&self) -> Result<(), IoError> {
         let app_folder = &*Folders::APP_FOLDER;
         let env_path: PathBuf = app_folder.join(".env");
+
+        if !env_path.exists() {
+            File::create(&env_path)?; // cria vazio
+            write(&env_path, format!("{}=\"{}\"\n", self.key, self.value))?;
+            SuccessAlerts::edit_env(&self.key);
+            return Ok(());
+        }
 
         let mut contents = read_to_string(&env_path)?;
         let mut lines: Vec<String> = contents.lines().map(|line| line.to_string()).collect();
