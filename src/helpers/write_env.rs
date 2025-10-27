@@ -3,17 +3,12 @@ use rpassword::prompt_password;
 
 use std::{
     path::PathBuf,
+    io::Error as IoError,
 
     fs::{
         File, 
         write, 
         read_to_string
-    },
-
-    io::{
-        self, 
-        Write, 
-        Error as IoError
     },
 };
 
@@ -31,15 +26,8 @@ impl WriteEnv {
         }
     }
 
-    pub fn add(&mut self, key: Option<String>, val: Option<String>) {
-        let key = key.unwrap_or_else(|| {
-            print!("Enter the variable name: ");
-            io::stdout().flush().expect("Failed to flush buffer");
-
-            let mut key = String::new();
-            io::stdin().read_line(&mut key).expect("Failed to read variable name");
-            key.trim().to_string().to_uppercase()
-        });
+    pub fn add(&mut self, key: String, val: Option<String>) {
+        let key = key;
 
         let value = val.unwrap_or_else(|| {
             prompt_password("Enter the variable value: ").unwrap()
@@ -82,5 +70,5 @@ impl WriteEnv {
         write(&env_path, contents)?;
         Ok(())
     }
-    
+
 }
