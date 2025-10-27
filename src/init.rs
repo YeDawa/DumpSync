@@ -12,7 +12,6 @@ use tokio::{
 
 use crate::{
     ui::success_alerts::SuccessAlerts,
-    helpers::configs_files::DownloadConfigsFiles,
 
     constants::{
         urls::*,
@@ -32,7 +31,6 @@ impl DumpSyncInit {
         file.write_all(&content).await?;
         
         SuccessAlerts::settings();
-        DownloadConfigsFiles.env_file(false, false).await?;
         Ok(())
     }
 

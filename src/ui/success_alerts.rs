@@ -8,11 +8,6 @@ pub struct SuccessAlerts;
 
 impl SuccessAlerts {
 
-    pub fn env() {
-        let current_datetime = Date::date_time();
-        println!("{} Downloaded env file", current_datetime.green().bold());
-    }
-
     pub fn dump(file: &str) {
         let current_datetime = Date::date_time();
     
