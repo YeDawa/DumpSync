@@ -2,13 +2,17 @@ use open;
 use rpassword::prompt_password;
 
 use crate::{
-    cloud::api::*,
-    constants::urls::*,
     helpers::write_env::WriteEnv,
-
+    
     ui::{
+        ui_base::UI,
         errors_alerts::ErrorsAlerts,
         success_alerts::SuccessAlerts,
+    },
+
+    constants::{
+        urls::*,
+        api_init::*,
     },
 };
 
@@ -22,7 +26,8 @@ impl Login {
 
     pub fn print(&self) {
         let url = Urls::as_str(UrlsNames::DumpsyncApiKey);
-        println!("Open URL {} for get the API Key", url);
+        let message = format!("Open URL {} for get the API Key", url);
+        UI::label(&message, "normal");
 
         if open::that(url).is_err() {
             ErrorsAlerts::open_link();
@@ -34,7 +39,7 @@ impl Login {
             .expect("Error reading the password");
         
         WriteEnv::new(
-            Some(API::as_str(ApiNames::Env).to_string()),
+            Some(APIInit::as_str(ApiNames::Env).to_string()),
             Some(api_key)
         ).edit_env_var().expect("Error writing the env file");
 
