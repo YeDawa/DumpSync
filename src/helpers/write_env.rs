@@ -47,7 +47,7 @@ impl WriteEnv {
         Self { key, value }
     }
 
-    pub fn edit_env_var(&self) -> Result<(), IoError> {
+    pub fn edit(&self) -> Result<(), IoError> {
         let app_folder = &*Folders::APP_FOLDER;
         let env_path: PathBuf = app_folder.join(".env");
 
