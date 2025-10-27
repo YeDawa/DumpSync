@@ -23,7 +23,11 @@ use crate::{
 
     constants::{
         global::Global,
-        api::api_init::*,
+
+        api::{
+            api_token::APIToken,
+            api_endpoints::APIEndpoints,
+        },
     },
 };
 
@@ -83,12 +87,12 @@ impl API {
 
     pub async fn get(&self) -> Result<String, Box<dyn Error>> {
         let endpoint = format!("{}/raw", self.backup.as_deref().unwrap_or(""));
-        let api_url = APIInit::url_builder(&endpoint);
+        let api_url = APIEndpoints.backups(&endpoint);
 
         let client = reqwest::Client::new();
         let request = client
             .get(api_url)
-            .header(AUTHORIZATION, APIInit::token_value());
+            .header(AUTHORIZATION, APIToken.value());
 
         let response = request
             .send()
@@ -101,7 +105,7 @@ impl API {
     }
 
     pub async fn upload(&self) -> Result<ResponseUpload, Box<dyn Error>> {
-        let api_url = APIInit::url_builder("create");
+        let api_url = APIEndpoints.backups("create");
 
         let path = self.path.as_ref().ok_or("No path provided")?;
         let db_name = self.dbname.clone().unwrap_or_default();
@@ -132,7 +136,7 @@ impl API {
 
         let response = client
             .post(api_url)
-            .header(AUTHORIZATION, APIInit::token_value())
+            .header(AUTHORIZATION, APIToken.value())
             .multipart(form)
             .send()
             .await?

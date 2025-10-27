@@ -10,9 +10,9 @@ use crate::{
         success_alerts::SuccessAlerts,
     },
 
-    constants::{
-        urls::*,
-        api::api_names::ApiNames,
+    constants::api::{
+        api_names::ApiNames,
+        api_endpoints::APIEndpoints,
     },
 };
 
@@ -25,7 +25,7 @@ impl Login {
     }
 
     pub fn print(&self) {
-        let url = Urls::as_str(UrlsNames::DumpsyncApiKey);
+        let url = APIEndpoints.login();
         let message = format!("Opening URL {} to retrieve the API Key", url);
         UI::label(&message, "normal");
 
