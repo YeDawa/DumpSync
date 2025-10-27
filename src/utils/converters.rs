@@ -11,19 +11,19 @@ use serde_json::{
 use serde_yaml::from_str;
 
 pub struct Converters {
-    path: String,
+    yaml: String,
 }
 
 impl Converters {
 
-    pub fn new(path: String) -> Self {
+    pub fn new(yaml: String) -> Self {
         Self {
-            path
+            yaml: yaml
         }
     }
 
     pub fn yaml_to_json(&self) -> Result<String, Box<dyn Error>> {
-        let yaml_content = read_to_string(&self.path)?;
+        let yaml_content = read_to_string(&self.yaml)?;
         let data: Value = from_str(&yaml_content)?;
         Ok(to_string_pretty(&data)?)
     }
