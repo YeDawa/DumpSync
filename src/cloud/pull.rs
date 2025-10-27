@@ -83,7 +83,6 @@ impl Pull {
             None,
             None,
             None,
-            None,
         ).get().await {
             Ok(sql_content) => {
                 Import::new(

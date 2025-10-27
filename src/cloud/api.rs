@@ -19,7 +19,12 @@ use reqwest::{
 
 use crate::{
     helpers::env::Env,
-    constants::urls::*,
+    utils::converters::Converters,
+
+    constants::{
+        urls::*,
+        global::Global,
+    },
 }; 
 
 pub enum ApiNames {
@@ -51,7 +56,6 @@ pub struct API {
     encrypted: Option<bool>,
     backup: Option<String>,
     dbname: Option<String>,
-    settings: Option<String>,
     interval: Option<u64>,
 }
 
@@ -69,14 +73,12 @@ impl API {
         backup: Option<&str>,
         dbname: Option<&str>,
         encrypted: Option<bool>,
-        settings: Option<&str>,
         interval: Option<u64>,
     ) -> Self {
         Self {
             path: path.map(|s| s.to_string()),
             dbname: dbname.map(|s| s.to_string()),
             backup: backup.map(|s| s.to_string()),
-            settings: settings.map(|s| s.to_string()),
 
             interval,
             encrypted,
@@ -125,6 +127,10 @@ impl API {
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
 
+        let settings_json = Converters::yaml_to_json(
+            Global::app_config().as_str(),
+        )?;
+
         let file_name = std::path::Path::new(path)
             .file_name()
             .and_then(|name| name.to_str())
@@ -135,7 +141,7 @@ impl API {
 
         let form = Form::new()
             .text("db_name", db_name)
-            .text("settings", self.settings.clone().unwrap_or_default())
+            .text("settings", settings_json)
             .text("interval", self.interval.map_or("0".to_string(), |v| v.to_string()))
             .text("encrypted", self.encrypted.map_or("false".to_string(), |v| v.to_string()))
             .part("file", file_part);
