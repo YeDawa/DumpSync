@@ -2,7 +2,6 @@ use crate::{
     ui::ui_base::UI,
     helpers::env::Env,
     init::DumpSyncInit,
-    cmd::entropy::Entropy,
 
     cloud::{
         push::Push,
@@ -47,21 +46,13 @@ impl DumpSyncService {
         UI::header();
         UI::section_header("Pushing dump to server", "info");
 
+        let interval = Env::get_var_u64("DS_DUMP_INTERVAL");
         let (dbname, _, _, _, _) = DumpSyncInit.load_db_config();
-        let entropy = Entropy::new(path).calculate();
-
-        let encrypted = match entropy {
-            Ok(val) => val > 0.5,
-            Err(e) => {
-                eprintln!("Failed to calculate entropy: {}", e);
-                false
-            }
-        };
         
         Push::new(
             &path,
             &dbname,
-            encrypted,
+            interval,
         ).push().await.expect("Failed to upload SQL file");
     }
 
