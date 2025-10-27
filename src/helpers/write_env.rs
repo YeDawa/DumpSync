@@ -68,7 +68,7 @@ impl WriteEnv {
 
         for line in &mut lines {
             if line.starts_with(&self.key) {
-                *line = format!("{}=\"{}\"", self.key, self.value);
+                *line = format!("{}=\"{}\"\n", self.key, self.value);
                 break;
             }
         }
