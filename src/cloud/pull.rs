@@ -82,40 +82,26 @@ impl Pull {
             Some(backup),
             None,
             None,
+            None,
+            None,
         ).get().await {
-            Ok(api_data) => {
-                let download = API::new(
-                    None, 
-                    Some(&backup), 
-                    None, 
-                    None
-                ).download(&api_data.url).await;
-
-                match download {
-                    Ok(ref sql_content) => {
-                        Import::new(
-                            &self.host,
-                            self.port,
-                            &self.user,
-                            &self.password,
-                            &self.dbname,
-                            None,
-                            None,
-                            None,
-                            Some(sql_content),
-                        ).dump_directly().await?;
-                    }
-                    
-                    Err(e) => {
-                        ErrorsAlerts::dump(&format!("Failed to download SQL data: {}", e));
-                        return Err(e);
-                    }
-                }
+            Ok(sql_content) => {
+                Import::new(
+                    &self.host,
+                    self.port,
+                    &self.user,
+                    &self.password,
+                    &self.dbname,
+                    None,
+                    None,
+                    None,
+                    Some(&sql_content),
+                ).dump_directly().await?;
             }
 
-            Err(e) => {
-                ErrorsAlerts::pull(&e.to_string());
-            }
+            Err(_) => {
+                ErrorsAlerts::dump("Failed to pull dump from Cloud.");
+            }   
         }
 
         Ok(())

@@ -78,16 +78,6 @@ impl ErrorsAlerts {
         );
     }
 
-    pub fn pull(message: &str) {
-        let current_datetime = Date::date_time();
-
-        println!(
-            "{} Failed to download dump from the cloud: {}", 
-            current_datetime.red().bold(),
-            message.red()
-        );
-    }
-
     pub fn open_link() {
         let current_datetime = Date::date_time();
 

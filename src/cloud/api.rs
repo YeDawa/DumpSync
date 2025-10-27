@@ -9,11 +9,7 @@ use std::{
 use reqwest::{
     Body,
     Client,
-
-    header::{
-        CONTENT_TYPE,
-        AUTHORIZATION, 
-    },
+    header::AUTHORIZATION,
 
     multipart::{
         Form,
@@ -55,6 +51,8 @@ pub struct API {
     encrypted: Option<bool>,
     backup: Option<String>,
     dbname: Option<String>,
+    settings: Option<String>,
+    interval: Option<u64>,
 }
 
 #[allow(dead_code)]
@@ -71,12 +69,16 @@ impl API {
         backup: Option<&str>,
         dbname: Option<&str>,
         encrypted: Option<bool>,
+        settings: Option<&str>,
+        interval: Option<u64>,
     ) -> Self {
         Self {
             path: path.map(|s| s.to_string()),
             dbname: dbname.map(|s| s.to_string()),
             backup: backup.map(|s| s.to_string()),
+            settings: settings.map(|s| s.to_string()),
 
+            interval,
             encrypted,
         }
     }
@@ -87,22 +89,23 @@ impl API {
         }
     }
 
-    pub async fn get(&self) -> Result<Response, Box<dyn Error>> {
+    pub async fn get(&self) -> Result<String, Box<dyn Error>> {
         let mut api_url = String::from(Urls::as_str(UrlsNames::DumpsyncApi));
-        api_url.push_str("backups/get/");
+        api_url.push_str("backups/");
         api_url.push_str(self.backup.as_deref().unwrap_or(""));
+        api_url.push_str("/raw");
 
         let api_token = Env.system(Self::as_str(ApiNames::Env));
-
         let client = reqwest::Client::new();
-        let response = client
+        let request = client
             .get(api_url)
-            .header(AUTHORIZATION, format!("Bearer {}", api_token))
-            .header(CONTENT_TYPE, "application/json")
+            .header(AUTHORIZATION, format!("Bearer {}", api_token));
+
+        let response = request
             .send()
             .await?
             .error_for_status()?
-            .json::<Response>()
+            .text()
             .await?;
 
         Ok(response)
@@ -132,6 +135,8 @@ impl API {
 
         let form = Form::new()
             .text("db_name", db_name)
+            .text("settings", self.settings.clone().unwrap_or_default())
+            .text("interval", self.interval.map_or("0".to_string(), |v| v.to_string()))
             .text("encrypted", self.encrypted.map_or("false".to_string(), |v| v.to_string()))
             .part("file", file_part);
 
@@ -146,23 +151,6 @@ impl API {
         let response_raw = response.text().await?;
         let parsed: ResponseUpload = serde_json::from_str(&response_raw)?;
         Ok(parsed)
-    }
-
-    pub async fn download(&self, url: &str) -> Result<String, Box<dyn Error>> {
-        let api_token = Env.system(Self::as_str(ApiNames::Env));
-
-        let client = reqwest::Client::new();
-        let response = client
-            .get(url)
-            .header(AUTHORIZATION, format!("Bearer {}", api_token))
-            .header(CONTENT_TYPE, "application/json")
-            .send()
-            .await?
-            .error_for_status()?
-            .text()
-            .await?;
-
-        Ok(response)
     }
 
 }
