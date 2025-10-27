@@ -26,7 +26,9 @@ pub struct WriteEnv {
 impl WriteEnv {
     
     pub fn new() -> Self {
-        Self { entries: Vec::new() }
+        Self {
+            entries: Vec::new()
+        }
     }
 
     pub fn add(&mut self, key: Option<String>, val: Option<String>) {
