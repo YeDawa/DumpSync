@@ -5,38 +5,37 @@ use std::{
     path::PathBuf,
 
     fs::{
-        File,
-        write,
-        read_to_string,
+        File, 
+        write, 
+        read_to_string
     },
 
     io::{
-        self,
-        Write,
-        Error as IoError,
+        self, 
+        Write, 
+        Error as IoError
     },
 };
 
-use crate::{
-    constants::folders::Folders,
-    ui::success_alerts::SuccessAlerts,
-};
+use crate::constants::folders::Folders;
 
 pub struct WriteEnv {
-    key: String,
-    value: String,
+    entries: Vec<(String, String)>,
 }
 
 impl WriteEnv {
+    
+    pub fn new() -> Self {
+        Self { entries: Vec::new() }
+    }
 
-    pub fn new(key: Option<String>, val: Option<String>) -> Self {
+    pub fn add(&mut self, key: Option<String>, val: Option<String>) {
         let key = key.unwrap_or_else(|| {
             print!("Enter the variable name: ");
             io::stdout().flush().expect("Failed to flush buffer");
 
             let mut key = String::new();
             io::stdin().read_line(&mut key).expect("Failed to read variable name");
-
             key.trim().to_string().to_uppercase()
         });
 
@@ -44,40 +43,41 @@ impl WriteEnv {
             prompt_password("Enter the variable value: ").unwrap()
         });
 
-        Self { key, value }
+        self.entries.push((key, value));
     }
 
-    pub fn edit(&self) -> Result<(), IoError> {
+    pub fn save(&self) -> Result<(), IoError> {
         let app_folder = &*Folders::APP_FOLDER;
         let env_path: PathBuf = app_folder.join(".env");
 
         if !env_path.exists() {
             File::create(&env_path)?;
-            write(
-                &env_path, format!(
-                    "{}=\"{}\"\n", self.key, self.value
-                )
-            )?;
-
-            SuccessAlerts::edit_env(&self.key);
-            return Ok(());
         }
 
-        let mut contents = read_to_string(&env_path)?;
-        let mut lines: Vec<String> = contents.lines().map(|line| line.to_string()).collect();
+        let mut contents = read_to_string(&env_path).unwrap_or_default();
+        let mut lines: Vec<String> = contents
+            .lines()
+            .map(|line| line.to_string())
+            .collect();
 
-        for line in &mut lines {
-            if line.starts_with(&self.key) {
-                *line = format!("{}=\"{}\"\n", self.key, self.value);
-                break;
+        for (key, value) in &self.entries {
+            let mut found = false;
+
+            for line in &mut lines {
+                if line.starts_with(&format!("{}=", key)) {
+                    *line = format!("{}=\"{}\"", key, value);
+                    found = true;
+                    break;
+                }
+            }
+
+            if !found {
+                lines.push(format!("{}=\"{}\"", key, value));
             }
         }
 
-        contents = lines.join("\n");
-        write(env_path, contents)?;
-
-        SuccessAlerts::edit_env(&self.key);
+        contents = lines.join("\n") + "\n";
+        write(&env_path, contents)?;
         Ok(())
     }
-  
 }

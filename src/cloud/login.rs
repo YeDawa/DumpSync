@@ -38,10 +38,9 @@ impl Login {
         let api_key = prompt_password("Enter the api key [input is hiding]: ")
             .expect("Error reading the password");
         
-        WriteEnv::new(
-            Some(ApiNames::Env.as_str().to_owned()),
-            Some(api_key)
-        ).edit().expect("Error writing the env file");
+        let mut writer = WriteEnv::new();
+        writer.add(Some(ApiNames::Env.as_str().to_owned()), Some(api_key));
+        writer.save().expect("Error writing the env file");
 
         SuccessAlerts::api_key();
     }
