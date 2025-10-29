@@ -110,16 +110,19 @@ impl ExportHandlers {
 
     pub fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if self.dump_data {
-            let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.select(table, None, None))?;
-    
+            let offset = 0;
+            let mut batch_count = 0;
+            const PAGE_SIZE: usize = 10_000;
+            let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.select(table, Some(offset), Some(PAGE_SIZE)))?;
+
             if rows.is_empty() {
                 writeln!(writer, "-- Table `{}` contains no data.", table)?;
             } else {
                 let mut values_batch: Vec<String> = Vec::new();
+                let rows_len = rows.len();
     
                 for row in rows {
                     let values: Vec<String> = row
-                        .clone()
                         .unwrap()
                         .into_iter()
                         .map(|value| match value {
@@ -138,9 +141,12 @@ impl ExportHandlers {
                     values_batch.push(format!("({})", values.join(", ")));
                 }
     
+                batch_count += rows_len;
                 let insert_command = MySqlQueriesBuilders.insert_into_start(table, &values_batch, self.insert_ignore_into);
                 writeln!(writer, "{}", insert_command)?;
             }
+
+            writeln!(writer, "-- Total rows exported: {}", batch_count)?;
             
             if self.lock_tables {
                 writeln!(writer, "{}", MySqlQueriesBuilders.unlock_tables(table))?;
