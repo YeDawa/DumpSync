@@ -108,68 +108,47 @@ impl ExportHandlers {
         Ok(())
     }
 
-    pub fn write_inserts_for_table(
-        &self,
-        table: &str,
-        conn: &mut PooledConn,
-        writer: &mut dyn Write,
-    ) -> Result<(), Box<dyn Error>> {
+    pub fn write_inserts_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if self.dump_data {
-            let columns: Vec<String> = conn.query_map(MySqlQueriesBuilders.show_columns(table), |row: Row| {
-                let field: String = row.get("Field").unwrap();
-                format!("`{}`", field)
-            })?;
-
-            const PAGE_SIZE: usize = 10_000;
-            let mut offset = 0;
-            let mut batch_count = 0;
-
-            loop {
-                let query = MySqlQueriesBuilders.select(table, Some(PAGE_SIZE), Some(offset));
-                let rows: Vec<Row> = conn.query(query)?;
-
-                if rows.is_empty() {
-                    if offset == 0 {
-                        writeln!(writer, "-- Table `{}` contains no data.", table)?;
-                    }
-                    break;
-                }
-
-                let rows_len = rows.len();
+            let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.select(table, None, None))?;
+    
+            if rows.is_empty() {
+                writeln!(writer, "-- Table `{}` contains no data.", table)?;
+            } else {
+                let mut values_batch: Vec<String> = Vec::new();
+    
                 for row in rows {
                     let values: Vec<String> = row
+                        .clone()
                         .unwrap()
                         .into_iter()
                         .map(|value| match value {
                             Value::NULL => MySQLKeywords::Null.as_str().to_string(),
                             Value::Bytes(bytes) => {
-                                let raw = String::from_utf8_lossy(&bytes);
-                                format!("'{}'", HTMLHandlers.escape_for_sql(&raw))
+                                let escaped = String::from_utf8_lossy(&bytes);
+                                format!("'{}'", HTMLHandlers.escape_for_sql(&escaped))
                             }
-                            Value::Int(i) => i.to_string(),
-                            Value::UInt(u) => u.to_string(),
-                            Value::Float(f) => f.to_string(),
+                            Value::Int(int) => int.to_string(),
+                            Value::UInt(uint) => uint.to_string(),
+                            Value::Float(float) => float.to_string(),
                             _ => MySQLKeywords::Null.as_str().to_string(),
                         })
                         .collect();
-
-                    let insert_prefix = MySqlQueriesBuilders.insert_into_start(table, &columns, self.insert_ignore_into);
-                    writeln!(writer, "{}({});", insert_prefix, values.join(", "))?;
+    
+                    values_batch.push(format!("({})", values.join(", ")));
                 }
-
-                batch_count += rows_len;
-                offset += PAGE_SIZE;
+    
+                let insert_command = MySqlQueriesBuilders.insert_into_start(table, &values_batch, self.insert_ignore_into);
+                writeln!(writer, "{}", insert_command)?;
             }
-
-            writeln!(writer, "-- Total rows exported: {}", batch_count)?;
-
+            
             if self.lock_tables {
                 writeln!(writer, "{}", MySqlQueriesBuilders.unlock_tables(table))?;
             }
         }
 
         Ok(())
-    }    
+    }
 
     pub fn write_structure_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         writeln!(writer, "-- Exporting the table: `{}`", table)?;

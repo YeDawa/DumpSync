@@ -36,10 +36,6 @@ impl MySqlQueriesBuilders {
         format!("{};", MySQLKeywords::GetTableNames.as_str())
     }
 
-    pub fn show_columns(&self, table: &str) -> String {
-        format!("{} `{}`;", MySQLKeywords::ShowColumns.as_str(), table)
-    }
-
     pub fn table_info(&self, table: &str) -> String {
         format!("{} = '{}'", MySQLKeywords::TableInfo.as_str(), table)
     }
