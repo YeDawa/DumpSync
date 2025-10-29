@@ -1,12 +1,11 @@
-use open;
 use rpassword::prompt_password;
 
 use crate::{
+    utils::open::Open,
     helpers::write_env::WriteEnv,
-    
+
     ui::{
         ui_base::UI,
-        errors_alerts::ErrorsAlerts,
         success_alerts::SuccessAlerts,
     },
 
@@ -27,11 +26,9 @@ impl Login {
     pub fn print(&self) {
         let url = APIEndpoints.login();
         let message = format!("Opening URL {} to retrieve the API Key", url);
-        UI::label(&message, "normal");
 
-        if open::that(url).is_err() {
-            ErrorsAlerts::open_link();
-        }
+        UI::label(&message, "normal");
+        Open::new(url).link();
     }
 
     pub fn save_var(&self) {
@@ -40,8 +37,8 @@ impl Login {
         
         let mut writer = WriteEnv::new();
         writer.add(ApiNames::Env.as_str().to_owned(), api_key);
+        
         writer.save().expect("Error writing the env file");
-
         SuccessAlerts::api_key();
     }
 
