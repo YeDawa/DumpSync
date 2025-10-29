@@ -19,7 +19,7 @@ use reqwest::{
 };
 
 use crate::{
-    utils::converter::Converter,
+    helpers::converter::Converter,
 
     constants::{
         global::Global,
