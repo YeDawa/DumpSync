@@ -36,6 +36,10 @@ impl MySqlQueriesBuilders {
         format!("{};", MySQLKeywords::GetTableNames.as_str())
     }
 
+    pub fn show_columns(&self, table: &str) -> String {
+        format!("{} `{}`;", MySQLKeywords::ShowColumns.as_str(), table)
+    }
+
     pub fn table_info(&self, table: &str) -> String {
         format!("{} = '{}'", MySQLKeywords::TableInfo.as_str(), table)
     }
@@ -98,14 +102,14 @@ impl MySqlQueriesBuilders {
         )
     }
 
-    pub fn insert_into_start(&self, table: &str, columns: &[String], insert_ignore: bool) -> String {
+    pub fn insert_into_start(&self, table: &str, columns: &[String], values: &[String], insert_ignore: bool) -> String {
         let prefix = if insert_ignore { 
             MySQLKeywords::InsertIgnore.as_str() 
         } else { 
             MySQLKeywords::InsertInto.as_str() 
         };
 
-        format!("{} `{}` ({}) {};", prefix, table, columns.join(", "), MySQLKeywords::Values.as_str())
+        format!("{} `{}` ({}) {} {};", prefix, table, columns.join(", "), MySQLKeywords::Values.as_str(), values.join(", "))
     }
     
 }
