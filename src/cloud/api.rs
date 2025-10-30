@@ -133,6 +133,7 @@ impl API {
             .text("settings", settings_json)
             .text("interval", interval_str)
             .text("encrypted", encrypted_str)
+            .text("privacy", "private".to_string())
             .part("file", file_part);
 
         let response = client
