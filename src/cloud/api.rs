@@ -47,6 +47,7 @@ pub struct Response {
 pub struct ResponseUpload {
     pub success: bool,
     pub message: String,
+    pub url: String,
 }
 
 pub struct API {

@@ -4,6 +4,7 @@ use std::error::Error;
 
 use crate::{
     cloud::api::API,
+    utils::open::Open,
     cmd::entropy::Entropy,
 
     ui::{
@@ -48,6 +49,7 @@ impl Push {
         ).post().await {
             Ok(data) => {
                 SuccessAlerts::push(&data.message);
+                Open::new(&data.url).link();
             }
 
             Err(_) => {
