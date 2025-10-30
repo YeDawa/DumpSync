@@ -129,6 +129,7 @@ impl API {
 
         let form = Form::new()
             .text("db_name", db_name)
+            .text("path", path.clone())
             .text("settings", settings_json)
             .text("interval", interval_str)
             .text("encrypted", encrypted_str)
