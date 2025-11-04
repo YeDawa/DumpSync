@@ -16,6 +16,7 @@ For connectting to a server, read the [Connecting to a Server](connection.md) gu
 ### Options
 
 - **-f /path/to/dump.sql**: Specifies the path to the dump file that you want to restore. Replace `/path/to/dump.sql` with the actual file path to your SQL dump file.
+- **--ignore-drop-table**: (Optional) Use this flag if you want to ignore any `DROP TABLE` statements in the dump file during the import process. This can be useful if you want to preserve existing tables in the database.
 
 ### Example
 
