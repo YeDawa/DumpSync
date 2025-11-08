@@ -48,6 +48,13 @@ To install DumpSync, use the following command:
 cargo install dumpsync
 ```
 
+To install using Scope, run:
+
+```bash
+scoop bucket add dumpsync https://github.com/YeDawa/DumpSync
+scoop install dumpsync
+```
+
 ## Documentation
 
 For more help and document, see our documentation:
