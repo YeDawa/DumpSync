@@ -38,7 +38,6 @@ dumpsync1.yml
 *.csv
 *.xml
 *.pdf
-*.json
 *.html
 *.xlsx
 .vercel
