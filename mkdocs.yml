@@ -31,6 +31,7 @@ nav:
     - Connection: connection.md
     - Settings: settings.md
     - Export: export.md
+    - Dump Data: dumpdata.md
     - Import: import.md
     - Transfer: transfer.md
     - Truncate: truncate.md
