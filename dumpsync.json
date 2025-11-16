@@ -1,24 +1,23 @@
 {
-  "version": "0.1.37",
+  "version": "0.1.38",
   "description": "DumpSync is a lightweight tool designed for efficiently dumping and restoring MySQL databases.",
   "license": "MIT",
   "homepage": "https://dumpsync.com",
+
   "architecture": {
     "64bit": {
-      "url": "https://github.com/YeDawa/DumpSync/releases/download/$version/dumpsync-$version.zip",
+      "url": "https://github.com/YeDawa/DumpSync/releases/download/0.1.37/dumpsync-0.1.37.zip",
       "bin": "dumpsync.exe",
-      "hash": "auto"
+      "hash": "sha256:50e1f4c7b0b441c43efbc2949c31ac26372fadca64f52441d8778ab8fca1a8b8"
     }
   },
-  "checkver": {
-    "url": "https://api.github.com/repos/YeDawa/DumpSync/releases/latest",
-    "jsonpath": "$.tag_name"
-  },
+
+  "checkver": "github",
+
   "autoupdate": {
     "architecture": {
       "64bit": {
-        "url": "https://github.com/YeDawa/DumpSync/releases/download/$version/dumpsync-$version.zip",
-        "hash": "auto"
+        "url": "https://github.com/YeDawa/DumpSync/releases/download/$version/dumpsync-$version.zip"
       }
     }
   }
