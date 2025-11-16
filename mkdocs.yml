@@ -33,6 +33,7 @@ nav:
     - Export: export.md
     - Dump Data: dumpdata.md
     - Import: import.md
+    - Import Data: importdata.md
     - Transfer: transfer.md
     - Truncate: truncate.md
   - Plugins:

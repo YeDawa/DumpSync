@@ -32,3 +32,23 @@ Some of the key features of DumpSync include:
 - **History**: View the history of actions performed by the DumpSync tool.
 - **Skip Matching**: Use patterns to exclude specific tables or lines during restore operations.
 - **Lock tables**: Lock tables during dump operations to ensure data consistency.
+- **Dump Data**: Dump data from specific tables or the entire database.
+- **Import Data**: Import data from a JSON dump file into the database.
+
+## Installation
+
+To install DumpSync, use the following command:
+
+> Make sure you have Rust installed on your system. If not, you can install it from [here](https://docs.dumpsync.com/install).
+
+```bash
+cargo install dumpsync
+```
+
+To install using Scoop, run:
+
+```bash
+scoop bucket add dumpsync https://github.com/YeDawa/DumpSync.git
+
+scoop install dumpsync
+```
