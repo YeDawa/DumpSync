@@ -15,7 +15,7 @@ For connectting to a server, read the [Connecting to a Server](connection.md) gu
 
 ### Options
 
-- **-f**: (Optional) Indicates the file path where the dump will be saved. Replace `/path/to/` with the desired directory path on your system.
+- **-f**: (Optional) Indicates the file path where the dump will be saved.
 - **--table**: (Optional) Specifies the table to dump. If not provided, all tables will be dumped.
 
 ### Example
