@@ -8,7 +8,7 @@
     "64bit": {
       "url": "https://github.com/YeDawa/DumpSync/releases/download/0.1.38/dumpsync-0.1.38.zip",
       "bin": "dumpsync.exe",
-      "hash": "sha256:50e1f4c7b0b441c43efbc2949c31ac26372fadca64f52441d8778ab8fca1a8b8"
+      "hash": "sha256:3a4e3267a62177fc29376962743e11c794ea16cb6ec9ff6c2a2f980d6b0b8f8d"
     }
   }
 }
