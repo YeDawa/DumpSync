@@ -172,7 +172,6 @@ impl DumpData {
         pk_column: &str,
         row: &Row
     ) -> Result<Value, Box<dyn Error>> {
-
         let mut fields = serde_json::Map::new();
         let mut pk_value = Value::Null;
 
@@ -207,5 +206,5 @@ impl DumpData {
             "fields": fields
         }))
     }
-    
+
 }
