@@ -79,7 +79,6 @@ impl ImportDumpData {
         }
 
         tx.commit()?;
-        println!("Chunk {} imported successfully", index);
         Ok(())
     }
 
@@ -100,10 +99,22 @@ impl ImportDumpData {
             .and_then(|v| v.as_object())
             .ok_or("Missing fields")?;
 
+        let mut columns = vec![];
+        let mut values = vec![];
+
+        for (field, value) in fields {
+            columns.push(format!("`{}`", field));
+            values.push(Self::json_to_mysql(value));
+        }
+
         let mut columns = vec!["id".to_string()];
         let mut values = vec![Self::json_to_mysql(pk)];
 
         for (field, value) in fields {
+            if field == "id" {
+                continue;
+            }
+
             columns.push(format!("`{}`", field));
             values.push(Self::json_to_mysql(value));
         }
@@ -140,7 +151,6 @@ impl ImportDumpData {
             });
 
         SuccessAlerts::dump("Import completed successfully!");
-        println!("Parallel import finished.");
         Ok(())
     }
 

@@ -113,7 +113,15 @@ impl MySqlQueriesBuilders {
             MySQLKeywords::InsertInto.as_str() 
         };
 
-        format!("{} `{}` ({}) {} {};", prefix, table, columns.join(", "), MySQLKeywords::Values.as_str(), values.join(", "))
+        format!(
+            "{} `{}` ({}) {} ({}) {} id=id;",
+            prefix,
+            table,
+            columns.join(", "),
+            MySQLKeywords::Values.as_str(),
+            values.join(", "),
+            MySQLKeywords::OnDuplicateKeyUpdate.as_str()
+        )
     }
-    
+
 }
