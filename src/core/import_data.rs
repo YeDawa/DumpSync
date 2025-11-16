@@ -150,7 +150,7 @@ impl ImportDumpData {
                 }
             });
 
-        SuccessAlerts::dump("Import completed successfully!");
+        SuccessAlerts::import(&self.dbname);
         Ok(())
     }
 
