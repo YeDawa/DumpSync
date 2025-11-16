@@ -110,20 +110,32 @@ impl MySqlQueriesBuilders {
         format!("{} `{}` {}", MySQLKeywords::ShowKeysFrom.as_str(), table, MySQLKeywords::WherePrimaryKey.as_str())
     }
 
-    pub fn insert_into_start(&self, table: &str, columns: &[String], values: &[String], insert_ignore: bool) -> String {
-        let prefix = if insert_ignore { 
-            MySQLKeywords::InsertIgnore.as_str() 
-        } else { 
-            MySQLKeywords::InsertInto.as_str() 
+    pub fn insert_into_start(&self, table: &str,  columns: &[String], values: &[String], insert_ignore: bool) -> String {
+        let prefix = if insert_ignore {
+            MySQLKeywords::InsertIgnore.as_str()
+        } else {
+            MySQLKeywords::InsertInto.as_str()
         };
 
+        let sanitized_values: Vec<String> = values.iter()
+            .map(|v| v.trim_start_matches('(')
+                    .trim_end_matches(')')
+                    .to_string())
+            .collect();
+
+        let values_sql = sanitized_values
+            .iter()
+            .map(|v| format!("({})", v))
+            .collect::<Vec<String>>()
+            .join(", ");
+
         format!(
-            "{} `{}` ({}) {} ({});",
+            "{} `{}` ({}) {} {};",
             prefix,
             table,
             columns.join(", "),
             MySQLKeywords::Values.as_str(),
-            values.join(", ")
+            values_sql
         )
     }
 
