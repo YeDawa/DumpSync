@@ -106,7 +106,6 @@ impl DumpSyncDumper {
         let dbname = env::var("DS_TRANSFER_DB_NAME").or_else(|_| env::var("DS_TRANSFER_DB_NAME")).unwrap_or_default();
 
         UI::section_header("Importing dump to server", "info");
-
         Dump::new(
             &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, None, None, None, None,
         ).transfer();
