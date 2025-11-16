@@ -1,22 +1,12 @@
 use std::{
-    fs::File,
     error::Error,
-
-    io::{
-        Write, 
-        BufWriter
-    },
+    fs::File,
+    io::{Write, BufWriter},
 };
 
-use mysql::{
-    *, 
-    prelude::*,
-};
-
-use serde_json::{
-    json, 
-    Value
-};
+use mysql::*;
+use mysql::prelude::*;
+use serde_json::{json, Value};
 
 use crate::{
     utils::file::FileUtils,
@@ -135,8 +125,8 @@ impl DumpData {
             if !*is_first {
                 writer.write_all(b",\n")?;
             }
-
             *is_first = false;
+
             writer.write_all(js.as_bytes())?;
         }
 
@@ -144,7 +134,8 @@ impl DumpData {
     }
 
     fn get_primary_key(&self, conn: &mut PooledConn, table: &str) -> Result<String, Box<dyn Error>> {
-        let sql = MySqlQueriesBuilders.show_keys_from(table);
+        let sql = format!("SHOW KEYS FROM `{}` WHERE Key_name='PRIMARY'", table);
+
         let rows: Vec<Row> = conn.query(sql)?;
 
         let col = rows.first()
