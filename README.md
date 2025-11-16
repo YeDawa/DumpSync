@@ -37,6 +37,8 @@ Some of the key features of DumpSync include:
 - **History**: View the history of actions performed by the DumpSync tool.
 - **Pattern Matching**: Use patterns to exclude specific tables or lines during restore operations.
 - **Lock tables**: Lock tables during dump operations to ensure data consistency.
+- **Dump Data**: Dump data from specific tables or the entire database.
+- **Import Data**: Import data from a JSON dump file into the database.
 
 ## Installation
 
