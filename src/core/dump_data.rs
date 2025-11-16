@@ -1,12 +1,22 @@
 use std::{
-    error::Error,
     fs::File,
-    io::{Write, BufWriter},
+    error::Error,
+
+    io::{
+        Write, 
+        BufWriter
+    },
 };
 
-use mysql::*;
-use mysql::prelude::*;
-use serde_json::{json, Value};
+use mysql::{
+    *, 
+    prelude::*,
+};
+
+use serde_json::{
+    json, 
+    Value
+};
 
 use crate::{
     utils::file::FileUtils,
