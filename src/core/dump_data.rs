@@ -27,7 +27,6 @@ pub struct DumpData {
     pub password: String,
     pub dbname: String,
     pub dump_file_path: String,
-    pub table: Option<String>,
 }
 
 impl DumpData {
@@ -39,7 +38,6 @@ impl DumpData {
         password: &str,
         dbname: &str,
         dump_file_path: &str,
-        table: Option<String>,
     ) -> Self {
         Self {
             host: host.to_string(),
@@ -48,7 +46,6 @@ impl DumpData {
             password: password.to_string(),
             dbname: dbname.to_string(),
             dump_file_path: dump_file_path.to_string(),
-            table,
         }
     }
 
@@ -75,10 +72,7 @@ impl DumpData {
         writer.write_all(b"[\n")?;
 
         let mut is_first = true;
-        match &self.table {
-            Some(t) => self.dump_one_table(&mut conn, &mut writer, t, &mut is_first)?,
-            None     => self.dump_all_tables(&mut conn, &mut writer, &mut is_first)?,
-        }
+        self.dump_all_tables(&mut conn, &mut writer, &mut is_first)?;
 
         writer.write_all(b"\n]")?;
         writer.flush()?;
@@ -104,13 +98,9 @@ impl DumpData {
         Ok(())
     }
 
-    fn dump_one_table(&self, conn: &mut PooledConn, writer: &mut BufWriter<File>, table: &str, is_first: &mut bool) -> Result<(), Box<dyn Error>> {
-        self.dump_rows(conn, writer, table, is_first)
-    }
-
     fn dump_rows(&self, conn: &mut PooledConn, writer: &mut BufWriter<File>, table: &str, is_first: &mut bool) -> Result<(), Box<dyn Error>> {
         let pk = self.get_primary_key(conn, table)?;
-        let rows: Vec<Row> = conn.exec(format!("SELECT * FROM `{table}`"), ())?;
+        let rows: Vec<Row> = conn.exec(MySqlQueriesBuilders.select(table, None, None), ())?;
 
         for row in rows {
             let obj = self.row_to_django_obj("app", table, &pk, &row)?;

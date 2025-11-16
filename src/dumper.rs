@@ -71,13 +71,12 @@ impl DumpSyncDumper {
         Env::new();
         UI::header();
 
-        let table = options.table;
-        let dump_file_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
+        let dump_file_path = options.file.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
         let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
         UI::section_header("Dumping the database", "info");
 
         let _ = DumpData::new(
-            &host, port, &user, &password, &dbname, &dump_file_path, table,
+            &host, port, &user, &password, &dbname, &dump_file_path,
         ).export();
     }
 

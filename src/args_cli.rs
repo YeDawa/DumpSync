@@ -118,12 +118,8 @@ pub struct ExportOptions {
 #[derive(Parser)]
 pub struct DumpDataOptions {
     #[arg(short, long)]
-    /// Backup path
-    pub folder: Option<String>,
-
-    #[arg(short, long)]
-    /// Dump only a specific table
-    pub table: Option<String>,
+    /// Backup file path
+    pub file: Option<String>,
 }
 
 #[derive(Parser)]
