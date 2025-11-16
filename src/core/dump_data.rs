@@ -87,7 +87,6 @@ impl DumpData {
 
         for row in rows {
             let table: String = row.get(0).unwrap();
-
             if ignore_tables.contains(&serde_yaml::Value::String(table.clone())) {
                 continue;
             }
@@ -109,8 +108,8 @@ impl DumpData {
             if !*is_first {
                 writer.write_all(b",\n")?;
             }
-            *is_first = false;
 
+            *is_first = false;
             writer.write_all(js.as_bytes())?;
         }
 
@@ -118,8 +117,7 @@ impl DumpData {
     }
 
     fn get_primary_key(&self, conn: &mut PooledConn, table: &str) -> Result<String, Box<dyn Error>> {
-        let sql = format!("SHOW KEYS FROM `{}` WHERE Key_name='PRIMARY'", table);
-
+        let sql = MySqlQueriesBuilders.get_primary_key(table);
         let rows: Vec<Row> = conn.query(sql)?;
 
         let col = rows.first()

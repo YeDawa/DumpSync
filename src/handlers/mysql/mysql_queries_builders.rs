@@ -105,6 +105,10 @@ impl MySqlQueriesBuilders {
             column_name
         )
     }
+    
+    pub fn get_primary_key(&self, table: &str) -> String {
+        format!("{} `{}` {}", MySQLKeywords::ShowKeysFrom.as_str(), table, MySQLKeywords::WherePrimaryKey.as_str())
+    }
 
     pub fn insert_into_start(&self, table: &str, columns: &[String], values: &[String], insert_ignore: bool) -> String {
         let prefix = if insert_ignore { 
