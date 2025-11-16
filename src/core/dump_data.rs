@@ -13,7 +13,11 @@ use crate::{
     helpers::configs::Configs,
     cmd::connection::Connection,
     ui::success_alerts::SuccessAlerts,
-    handlers::dump_handlers::DumpHandlers,
+
+    handlers::{
+        dump_handlers::DumpHandlers,
+        mysql::mysql_queries_builders::MySqlQueriesBuilders,
+    },
 };
 
 pub struct DumpData {
@@ -88,13 +92,9 @@ impl DumpData {
     fn dump_all_tables(
         &self,
         conn: &mut PooledConn,
-        writer: &mut BufWriter<File>,
-        is_first: &mut bool,
+        writer: &mut BufWriter<File>, is_first: &mut bool,
     ) -> Result<(), Box<dyn Error>> {
-
-        // CORRETO: MySQL → Vec<Row>
-        let rows: Vec<Row> = conn.query("SHOW TABLES")?;
-
+        let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.show_tables())?;
         let ignore_tables = Configs.list("exports", "ignore_tables").unwrap_or_default();
 
         for row in rows {
@@ -110,25 +110,11 @@ impl DumpData {
         Ok(())
     }
 
-    fn dump_one_table(
-        &self,
-        conn: &mut PooledConn,
-        writer: &mut BufWriter<File>,
-        table: &str,
-        is_first: &mut bool,
-    ) -> Result<(), Box<dyn Error>> {
-
+    fn dump_one_table(&self, conn: &mut PooledConn, writer: &mut BufWriter<File>, table: &str, is_first: &mut bool) -> Result<(), Box<dyn Error>> {
         self.dump_rows(conn, writer, table, is_first)
     }
 
-    fn dump_rows(
-        &self,
-        conn: &mut PooledConn,
-        writer: &mut BufWriter<File>,
-        table: &str,
-        is_first: &mut bool,
-    ) -> Result<(), Box<dyn Error>> {
-
+    fn dump_rows(&self, conn: &mut PooledConn, writer: &mut BufWriter<File>, table: &str, is_first: &mut bool) -> Result<(), Box<dyn Error>> {
         let pk = self.get_primary_key(conn, table)?;
         let rows: Vec<Row> = conn.exec(format!("SELECT * FROM `{table}`"), ())?;
 
@@ -139,23 +125,16 @@ impl DumpData {
             if !*is_first {
                 writer.write_all(b",\n")?;
             }
-            *is_first = false;
 
+            *is_first = false;
             writer.write_all(js.as_bytes())?;
         }
 
         Ok(())
     }
 
-    fn get_primary_key(
-        &self,
-        conn: &mut PooledConn,
-        table: &str
-    ) -> Result<String, Box<dyn Error>> {
-
-        // CORRETO: sem placeholder ??, MySQL não suporta
-        let sql = format!("SHOW KEYS FROM `{}` WHERE Key_name='PRIMARY'", table);
-
+    fn get_primary_key(&self, conn: &mut PooledConn, table: &str) -> Result<String, Box<dyn Error>> {
+        let sql = MySqlQueriesBuilders.show_keys_from(table);
         let rows: Vec<Row> = conn.query(sql)?;
 
         let col = rows.first()
@@ -165,13 +144,7 @@ impl DumpData {
         Ok(col)
     }
 
-    fn row_to_django_obj(
-        &self,
-        app: &str,
-        table: &str,
-        pk_column: &str,
-        row: &Row
-    ) -> Result<Value, Box<dyn Error>> {
+    fn row_to_django_obj(&self, app: &str, table: &str, pk_column: &str, row: &Row) -> Result<Value, Box<dyn Error>> {
         let mut fields = serde_json::Map::new();
         let mut pk_value = Value::Null;
 

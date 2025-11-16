@@ -16,6 +16,16 @@ impl MySqlQueriesBuilders {
         format!("{} `{}`;", MySQLKeywords::LockTables.as_str(), table)
     }
 
+    pub fn show_keys_from(&self, table: &str) -> String {
+        format!(
+            "{} `{}` {} Key_name='{}';", 
+            MySQLKeywords::ShowKeysFrom.as_str(), 
+            MySQLKeywords::Where.as_str(), 
+            table,
+            MySQLKeywords::Primary.as_str(), 
+        )
+    }
+
     pub fn unlock_tables(&self, table: &str) -> String {
         format!("{} `{}`;", MySQLKeywords::UnlockTables.as_str(), table)
     }
