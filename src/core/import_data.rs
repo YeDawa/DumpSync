@@ -53,6 +53,33 @@ impl ImportDumpData {
         }
     }
 
+    fn extract_tables(&self, array: &[Value]) -> Vec<String> {
+        use std::collections::HashSet;
+        let mut set = HashSet::new();
+
+        for entry in array {
+            if let Some(model) = entry.get("model").and_then(|v| v.as_str()) {
+                if let Some(table) = model.split('.').nth(1) {
+                    set.insert(table.to_string());
+                }
+            }
+        }
+
+        set.into_iter().collect()
+    }
+
+    fn truncate_all_tables(&self, tables: &[String], pool: &Arc<Pool>) -> Result<(), Box<dyn Error>> {
+        let mut conn = pool.get_conn()?;
+        conn.query_drop(MySqlQueriesBuilders.use_db(&self.dbname))?;
+
+        for table in tables {
+            let sql = MySqlQueriesBuilders.truncate_table(table);
+            conn.query_drop(sql)?;
+        }
+
+        Ok(())
+    }
+
     fn fix_datetime_format(&self, s: &str) -> String {
         if let Ok(dt) = DateTime::parse_from_rfc3339(s) {
             return dt.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string();
@@ -158,6 +185,9 @@ impl ImportDumpData {
             }
             .create_mysql_pool()?,
         );
+
+        let tables = self.extract_tables(array);
+        self.truncate_all_tables(&tables, &pool)?;
 
         array
             .par_chunks(self.chunk_size)
