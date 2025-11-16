@@ -164,7 +164,7 @@ impl ImportDumpData {
             values.push(self.json_to_mysql(value));
         }
 
-        let sql = MySqlQueriesBuilders.insert_into_start(table, &columns, &values, false);
+        let sql = MySqlQueriesBuilders.insert_into_start_json(table, &columns, &values, false);
         conn.query_drop(sql)?;
         Ok(())
     }
