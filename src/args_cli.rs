@@ -29,6 +29,9 @@ pub struct Cli {
 pub enum Commands {
     /// Make the database dump
     Export(ExportOptions),
+
+    /// Make the database dump in JSON format
+    DumpData(DumpDataOptions),
     
     /// Import the database dump
     Import(ImportOptions),
@@ -107,6 +110,17 @@ pub struct ExportOptions {
     #[arg(long)]
     /// Generate a pdf report
     pub pdf: bool,
+}
+
+#[derive(Parser)]
+pub struct DumpDataOptions {
+    #[arg(short, long)]
+    /// Backup path
+    pub folder: Option<String>,
+
+    #[arg(short, long)]
+    /// Dump only a specific table
+    pub table: Option<String>,
 }
 
 #[derive(Parser)]

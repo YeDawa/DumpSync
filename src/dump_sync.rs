@@ -21,6 +21,7 @@ impl DumpSync {
             Commands::Init => DumpSyncInit.initialize().await?,
             
             Commands::Export(options) => DumpSyncDumper.export(options),
+            Commands::DumpData(options) => DumpSyncDumper.export_dumpdata(options),
             Commands::Import(options) => DumpSyncDumper.import(options),
             Commands::Transfer(options) => DumpSyncDumper.transfer(options),
             Commands::Truncate(options) => DumpSyncDumper.truncate(options),

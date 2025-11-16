@@ -9,6 +9,7 @@ use crate::{
     core::{
         dump::Dump,
         truncate::Truncate,
+        dump_data::DumpData,
     },
 };
 
@@ -50,6 +51,20 @@ impl DumpSyncDumper {
 
         Dump::new(
             &host, port, &user, &password, &dbname, &backup_path, Some(interval), &backup_path, Some(encrypt), None, Some(once), retain, Some(pdf),
+        ).export();
+    }
+    
+    pub fn export_dumpdata(&self, options: DumpDataOptions) {
+        Env::new();
+        UI::header();
+
+        let table = options.table;
+        let dump_file_path = options.folder.unwrap_or_else(|| Env::get_var("DS_DUMP_PATH"));
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
+        UI::section_header("Dumping the database", "info");
+
+        let _ = DumpData::new(
+            &host, port, &user, &password, &dbname, &dump_file_path, table,
         ).export();
     }
 

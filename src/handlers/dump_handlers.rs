@@ -36,6 +36,20 @@ impl DumpHandlers {
         Path::new(&folder).join(&filename).to_str().unwrap().to_string()
     }
 
+    pub fn generate_dump_json_file_path(&self, dbname: &str, dump_file_path: &str) -> String {
+        let sanitized = dbname.replace(|c: char| !c.is_alphanumeric(), "_");
+        let folder = Path::new(dump_file_path).join(&sanitized);
+        fs::create_dir_all(&folder).expect("Failed to create dump folder");
+
+        let filename = format!(
+            "{}_{}.json",
+            Local::now().format("%Y_%m_%d_%H%M%S"),
+            Generate.random_string(6)
+        );
+
+        Path::new(&folder).join(&filename).to_str().unwrap().to_string()
+    }
+
     pub fn generate_dump_file_truncate_path(&self, dbname: &str, table: &str, dump_file_path: &str) -> String {
         let sanitized = dbname.replace(|c: char| !c.is_alphanumeric(), "_");
         let folder = Path::new(dump_file_path).join(&sanitized);
