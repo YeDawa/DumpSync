@@ -4,6 +4,10 @@ pub struct MySqlQueriesBuilders;
 
 impl MySqlQueriesBuilders {    
 
+    pub fn use_db(&self, dbname: &str) -> String {
+        format!("{} `{}`;", MySQLKeywords::Use.as_str(), dbname)
+    }
+
     pub fn show_tables(&self) -> String {
         MySQLKeywords::ShowTables.as_str().to_string()
     }

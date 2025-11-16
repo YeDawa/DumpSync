@@ -32,7 +32,10 @@ pub enum Commands {
 
     /// Make the database dump in JSON format
     DumpData(DumpDataOptions),
-    
+
+    /// Import the database dump in JSON format
+    ImportData(ImportDataOptions),
+
     /// Import the database dump
     Import(ImportOptions),
 
@@ -121,6 +124,13 @@ pub struct DumpDataOptions {
     #[arg(short, long)]
     /// Dump only a specific table
     pub table: Option<String>,
+}
+
+#[derive(Parser)]
+pub struct ImportDataOptions {
+    #[arg(short, long)]
+    /// Backup file path
+    pub file: String,
 }
 
 #[derive(Parser)]

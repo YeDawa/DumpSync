@@ -31,6 +31,19 @@ impl DumpSyncDumper {
         ).import();
     }
 
+    pub fn import_json(&self, options: ImportDataOptions) {
+        Env::new();
+        UI::header();
+
+        let backup_path = options.file;
+        let (dbname, host, user, password, port) = DumpSyncInit.load_db_config();
+
+        UI::section_header("Importing JSON dump to server", "info");
+        Dump::new(
+            &host, port, &user, &password, &dbname, &backup_path, None, &backup_path, None, None, None, None, None,
+        ).import_json();
+    }
+
     pub fn export(&self, options: ExportOptions) {
         Env::new();
         UI::header();

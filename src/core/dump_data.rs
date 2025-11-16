@@ -1,6 +1,5 @@
 use std::{
-    fs::File,
-    error::Error,
+    error::Error, fs::File, io::Write
 };
 
 use mysql::{
@@ -57,9 +56,18 @@ impl DumpData {
     }
 
     pub fn export_full(&self) -> Result<(), Box<dyn Error>> {
-        let dump_file_path = DumpHandlers.generate_dump_json_file_path(&self.dbname, &self.dump_file_path);
+        let dump_file_path = DumpHandlers.generate_dump_json_file_path(
+            &self.dbname, 
+            &self.dump_file_path
+        );
+
+        FileUtils::create_path(&dump_file_path);
+
+        let file = File::create(&dump_file_path)?;
+        let mut main_writer = std::io::BufWriter::new(file);
+
         let export_handlers = ExportHandlers::new(
-            File::create(dump_file_path.clone())?, 
+            File::open(&dump_file_path)?, 
             &self.dbname
         );
 
@@ -71,21 +79,42 @@ impl DumpData {
             dbname: Some(self.dbname.clone()),
         }.create_mysql_pool()?;
 
-        FileUtils::create_path(&dump_file_path.clone());
-
         let mut conn = pool.get_conn()?;
-        let mut writer = export_handlers.create_writer()?;
 
         let tables: Vec<String> = conn.query(MySqlQueriesBuilders.show_tables())?;
         let ignore_tables = Configs.list("exports", "ignore_tables").unwrap_or_default();
+
+        main_writer.write_all(b"[")?;
+        let mut first = true;
 
         for table in tables {
             if ignore_tables.contains(&serde_yaml::Value::String(table.clone())) {
                 continue;
             }
+            
+            let mut buffer: Vec<u8> = Vec::new();
+            {
+                let mut temp_writer = std::io::Cursor::new(&mut buffer);
+                export_handlers.write_json_for_table(&table, &mut conn, &mut temp_writer)?;
+            }
+            
+            let mut json = String::from_utf8(buffer)?;
+            json = json.trim().trim_start_matches('[').trim_end_matches(']').trim().to_string();
 
-            export_handlers.write_json_for_table(&table, &mut conn, writer.as_write())?;
+            if json.is_empty() {
+                continue;
+            }
+            
+            if !first {
+                main_writer.write_all(b",")?;
+            }
+
+            first = false;
+            main_writer.write_all(json.as_bytes())?;
         }
+
+        main_writer.write_all(b"]")?;
+        main_writer.flush()?;
 
         SuccessAlerts::dump(&dump_file_path);
         Ok(())

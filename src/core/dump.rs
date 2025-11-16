@@ -26,6 +26,7 @@ use crate::{
         export::Export,
         import::Import,
         transfer::Transfer,
+        import_data::ImportDumpData,
     },
 
     handlers::{
@@ -233,6 +234,17 @@ impl Dump {
             Some(self.path.as_str()),
             None,
         ).dump().expect("Failed to import dump");
+    }
+
+    pub fn import_json(&self) {
+        ImportDumpData::new(
+            &self.host,
+            self.port,
+            &self.user,
+            &self.password,
+            &self.dbname,
+            self.dump_file_path.as_str(),
+        ).import_parallel().expect("Failed to import JSON dump");
     }
 
     pub fn transfer(&self) {
