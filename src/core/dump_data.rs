@@ -102,7 +102,7 @@ impl DumpData {
         let rows: Vec<Row> = conn.exec(MySqlQueriesBuilders.select(table, None, None), ())?;
 
         for row in rows {
-            let obj = self.row_to_django_obj("app", table, &pk, &row)?;
+            let obj = self.row_to_django_obj(&self.dbname, table, &pk, &row)?;
             let js = serde_json::to_string(&obj)?;
 
             if !*is_first {
