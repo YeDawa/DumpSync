@@ -20,12 +20,6 @@ use flate2::{
     write::GzEncoder,
 };
 
-use serde_json::{
-    json, 
-    to_writer_pretty, 
-    Value as JsonValue
-};
-
 use crate::{
     helpers::configs::Configs,
 
@@ -108,19 +102,6 @@ impl ExportHandlers {
         Ok(())
     }
 
-    fn mysql_to_json(value: &Value) -> JsonValue {
-        match value {
-            Value::NULL => JsonValue::Null,
-            Value::Bytes(bytes) => {
-                JsonValue::String(String::from_utf8_lossy(bytes).to_string())
-            }
-            Value::Int(i) => json!(i),
-            Value::UInt(u) => json!(u),
-            Value::Float(f) => json!(f),
-            _ => JsonValue::Null,
-        }
-    }
-
     pub fn write_inserts_for_table(&self,  table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
         if !self.dump_data {
             return Ok(());
@@ -174,52 +155,6 @@ impl ExportHandlers {
         if self.lock_tables {
             writeln!(writer, "{}", MySqlQueriesBuilders.unlock_tables(table))?;
         }
-
-        Ok(())
-    }
-
-    pub fn write_json_for_table(&self, table: &str, conn: &mut PooledConn, writer: &mut dyn Write) -> Result<(), Box<dyn Error>> {
-        if !self.dump_data {
-            return Ok(());
-        }
-
-        let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.select(table, None, None))?;
-
-        let columns: Vec<(String, bool)> = conn.query_map(
-            MySqlQueriesBuilders.show_columns(table),
-            |row: Row| {
-                let field: String = row.get("Field").unwrap();
-                let key_type = row.get_opt::<String,_>("Key").and_then(|r| r.ok());
-                (field, key_type.as_deref() == Some("PRI"))
-            }
-        )?;
-
-        let mut json_rows = Vec::new();
-
-        for row in rows {
-            let mut fields = serde_json::Map::new();
-            let mut pk_value = JsonValue::Null;
-
-            for (idx, (col, is_pk)) in columns.iter().enumerate() {
-                let val = row.as_ref(idx).unwrap();
-                let json_val = Self::mysql_to_json(val);
-
-                if *is_pk {
-                    pk_value = json_val.clone();
-                }
-
-                fields.insert(col.clone(), json_val);
-            }
-
-            json_rows.push(json!({
-                "model": format!("{}.{}", self.dbname, table),
-                "pk": pk_value,
-                "fields": fields
-            }));
-        }
-
-        to_writer_pretty(&mut *writer, &json_rows)?;
-        writeln!(writer)?;
 
         Ok(())
     }

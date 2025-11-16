@@ -5,6 +5,11 @@ use std::{
     io::BufReader,
 };
 
+use chrono::{
+    DateTime, 
+    NaiveDateTime
+};
+
 use mysql::{
     *, 
     prelude::*,
@@ -48,11 +53,24 @@ impl ImportDumpData {
         }
     }
 
-    fn json_to_mysql(v: &Value) -> String {
+    fn fix_datetime_format(&self, s: &str) -> String {
+        if let Ok(dt) = DateTime::parse_from_rfc3339(s) {
+            return dt.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string();
+        }
+
+        if let Ok(dt) = NaiveDateTime::parse_from_str(s, "%Y-%m-%d %H:%M:%S") {
+            return dt.format("%Y-%m-%d %H:%M:%S").to_string();
+        }
+
+        s.to_string()
+    }
+
+    fn json_to_mysql(&self, v: &Value) -> String {
         match v {
             Value::Null => MySQLKeywords::Null.as_str().to_string(),
             Value::String(s) => {
-                let escaped = s.replace('\\', "\\\\")
+                let fixed = self.fix_datetime_format(s);
+                let escaped = fixed.replace('\\', "\\\\")
                     .replace('\'', "\\'")
                     .replace('"', "\\\"")
                     .replace('\n', "\\n")
@@ -104,11 +122,11 @@ impl ImportDumpData {
 
         for (field, value) in fields {
             columns.push(format!("`{}`", field));
-            values.push(Self::json_to_mysql(value));
+            values.push(self.json_to_mysql(value));
         }
 
         let mut columns = vec!["id".to_string()];
-        let mut values = vec![Self::json_to_mysql(pk)];
+        let mut values = vec![self.json_to_mysql(pk)];
 
         for (field, value) in fields {
             if field == "id" {
@@ -116,7 +134,7 @@ impl ImportDumpData {
             }
 
             columns.push(format!("`{}`", field));
-            values.push(Self::json_to_mysql(value));
+            values.push(self.json_to_mysql(value));
         }
 
         let sql = MySqlQueriesBuilders.insert_into_start(table, &columns, &values, false);
