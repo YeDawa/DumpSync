@@ -2,8 +2,8 @@ use crate::handlers::mysql::mysql_keywords::MySQLKeywords;
 
 pub struct MySqlQueriesBuilders;
 
-impl MySqlQueriesBuilders {    
-
+impl MySqlQueriesBuilders {
+    
     pub fn use_db(&self, dbname: &str) -> String {
         format!("{} `{}`;", MySQLKeywords::Use.as_str(), dbname)
     }
