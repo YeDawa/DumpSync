@@ -59,7 +59,6 @@ impl DumpData {
         );
 
         FileUtils::create_path(&dump_file_path);
-
         let file = File::create(&dump_file_path)?;
         let mut writer = BufWriter::new(file);
 
@@ -76,7 +75,6 @@ impl DumpData {
         writer.write_all(b"[\n")?;
 
         let mut is_first = true;
-
         match &self.table {
             Some(t) => self.dump_one_table(&mut conn, &mut writer, t, &mut is_first)?,
             None     => self.dump_all_tables(&mut conn, &mut writer, &mut is_first)?,
@@ -89,11 +87,7 @@ impl DumpData {
         Ok(())
     }
 
-    fn dump_all_tables(
-        &self,
-        conn: &mut PooledConn,
-        writer: &mut BufWriter<File>, is_first: &mut bool,
-    ) -> Result<(), Box<dyn Error>> {
+    fn dump_all_tables(&self, conn: &mut PooledConn, writer: &mut BufWriter<File>, is_first: &mut bool) -> Result<(), Box<dyn Error>> {
         let rows: Vec<Row> = conn.query(MySqlQueriesBuilders.show_tables())?;
         let ignore_tables = Configs.list("exports", "ignore_tables").unwrap_or_default();
 
