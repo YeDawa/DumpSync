@@ -118,13 +118,12 @@ impl MySqlQueriesBuilders {
         };
 
         format!(
-            "{} `{}` ({}) {} ({}) {} id=id;",
+            "{} `{}` ({}) {} ({});",
             prefix,
             table,
             columns.join(", "),
             MySQLKeywords::Values.as_str(),
-            values.join(", "),
-            MySQLKeywords::OnDuplicateKeyUpdate.as_str()
+            values.join(", ")
         )
     }
 

@@ -33,7 +33,6 @@ pub enum MySQLKeywords {
     ShowCreateTable,
     WherePrimaryKey,
     ReferencedTableName,
-    OnDuplicateKeyUpdate,
     ReferencedColumnName,
     AndReferencedIsNotNull,
 
@@ -76,7 +75,6 @@ impl MySQLKeywords {
             MySQLKeywords::WherePrimaryKey => "WHERE Key_name='PRIMARY'",
             MySQLKeywords::ReferencedTableName => "REFERENCED_TABLE_NAME",
             MySQLKeywords::ReferencedColumnName => "REFERENCED_COLUMN_NAME",
-            MySQLKeywords::OnDuplicateKeyUpdate => "ON DUPLICATE KEY UPDATE",
             MySQLKeywords::AndReferencedIsNotNull => "AND REFERENCED_TABLE_NAME IS NOT NULL",
             MySQLKeywords::GetTableNames => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE()",
             MySQLKeywords::TableInfo => "SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_KEY FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME",
