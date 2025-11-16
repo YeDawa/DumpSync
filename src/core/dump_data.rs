@@ -1,5 +1,7 @@
 use std::{
-    error::Error, fs::File, io::Write
+    fs::File, 
+    io::Write,
+    error::Error, 
 };
 
 use mysql::{
